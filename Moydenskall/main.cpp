@@ -29,5 +29,6 @@ int main(int argc, char* argv[]) {
 	Enumerator en;
 	std::vector<Plane> init;
 	en.create_partition(init, p);
+	en.print_result();
 	return 0;
 }

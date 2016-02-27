@@ -71,3 +71,10 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 	// restore
 	left.push_back(current);
 }
+
+void Enumerator::print_result() {
+	std::cout << "best result: " << std::endl;
+	for (auto cen : best_sites) {
+		std::cout << cen.X << " / " << cen.Y << std::endl;
+	}
+}
