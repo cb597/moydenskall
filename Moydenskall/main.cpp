@@ -10,7 +10,7 @@
 
 int main(int argc, char* argv[]) {
 
-	int f = 0;
+	double f = 50;
 	std::string instance_filename = "inst1.tsp";
 
 	if (argc >= 2) {
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
 	
 	Plane p = fr.plane;
 
-	Enumerator en;
+	Enumerator en(f);
 	std::vector<Plane> init;
 	en.create_partition(init, p);
 	en.print_result();
