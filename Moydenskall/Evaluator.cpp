@@ -5,12 +5,17 @@ double Evaluator::evaluate(std::vector<Plane> partition, Plane sites) {
 		throw "incompatible amount of sites and partitions";
 	}
 
-	double sum = 0.0;
+	double sum = sites.size() * fix_costs;
 	for (int i = 0; i < sites.size(); ++i) {
 		sum += eucl2dist(partition[i], sites[i]);
 	}
 	
 	return sum;
+}
+
+void Evaluator::set_fix_costs(double _f) {
+	fix_costs = _f;
+	return;
 }
 
 double Evaluator::eucl2dist(Plane plane, Point site) {

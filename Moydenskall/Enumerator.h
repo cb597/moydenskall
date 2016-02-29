@@ -5,9 +5,10 @@
 typedef std::vector<Point> Plane;
 class Enumerator {
 public:
-	Enumerator();
+	Enumerator(double f);
 	void create_partition_of_n(std::vector<int>&, int, int);
 	void create_partition(std::vector<Plane>&, Plane&);
+	void print_result();
 
 private:
 	Plane plane;

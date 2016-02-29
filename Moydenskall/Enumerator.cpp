@@ -23,8 +23,9 @@ std::ostream& operator<<(std::ostream& stream, const std::vector<Plane>& partiti
 	return stream;
 }
 
-Enumerator::Enumerator() {
-	best_costs = std::numeric_limits<int>::max();
+Enumerator::Enumerator(double f) {
+	best_costs = std::numeric_limits<double>::max();
+	eval.set_fix_costs(f);
 }
 
 void Enumerator::create_partition_of_n(std::vector<int>& until, int last, int left) {
@@ -70,4 +71,11 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 
 	// restore
 	left.push_back(current);
+}
+
+void Enumerator::print_result() {
+	std::cout << "best result: " << std::endl;
+	for (auto cen : best_sites) {
+		std::cout << cen.X << " / " << cen.Y << std::endl;
+	}
 }
