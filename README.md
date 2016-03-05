@@ -20,14 +20,14 @@ developed and tested with Microsoft Visual C++ Compiler
 tested with g++ (Ubuntu 14.04)
 
 compile command for linux systems:  
-`g++ ./*.cpp ./*.h -o moydenskall -O3 -std=C++11`
+`g++ ./*.cpp ./*.h -o moydenskall -O3 -std=c++11`
 
 
 
 
 ###Execution and command line parameter
-for both linux and windows systems:
-./moydenskall instance.tsp 5
+for both linux and windows systems:  
+`./moydenskall instance.tsp 5`
 
 * parameter 1: filename of an instance in the tsplib format
-* parameter 2: integer indicating fixed site costs (optional parameter, default: 0)
+* parameter 2: double indicating fixed site costs (optional parameter, default: 0)
