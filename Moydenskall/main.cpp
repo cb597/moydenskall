@@ -3,7 +3,8 @@
 #include "Enumerator.h"
 #include "Point.h"
 #include "Filereader.h"
-
+#include <time.h>
+#include <iostream>
 
 
 
@@ -28,7 +29,11 @@ int main(int argc, char* argv[]) {
 
 	Enumerator en(f);
 	std::vector<Plane> init;
+
+	double tstart = clock();
 	en.create_partition(init, p);
+	double tstop = clock();
+	//std::cout << "needed " << (tstop - tstart) / CLOCKS_PER_SEC << " seconds" << std::endl;
 	en.print_result();
 	return 0;
 }
