@@ -49,7 +49,7 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 			best_costs = costs;
 			best_sites = cen;
 			best_partition = partition;
-			std::cout << "current best value = " << costs << std::endl;
+			//std::cout << "current best value = " << costs << std::endl;
 		}
 		return;
 	}
@@ -76,10 +76,18 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 }
 
 void Enumerator::print_result() {
-	std::cout << "best result: " << std::endl;
+	std::cout << "OBJECTIVE" << std::endl << best_costs << std::endl;
+	std::cout << "FACILITY" << std::endl;
 	for (auto cen : best_sites) {
-		std::cout << cen.X << " / " << cen.Y << std::endl;
+		std::cout << cen << std::endl;
 	}
+	std::cout << "ASSIGN" << std::endl;
+	for (int part = 0; part < best_partition.size(); ++part) {
+		for (auto point : best_partition[part]) {
+			std::cout << point.ID << " " << part+1 << std::endl;
+		}
+	}
+
 	svg_output();
 }
 
@@ -101,10 +109,10 @@ void Enumerator::svg_output() {
 	xmin -= 2; ymin -= 2; xmax += 2; ymax += 2;
 	double scale = 20;
 
-	svgfile << "<?xml version=\"1.0\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"	\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">"<<std::endl;
+	svgfile << "<?xml version=\"1.0\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"	\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" << std::endl;
 	svgfile << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"960\" height=\"700\" viewBox = \""
-		<<scale*xmin << " "<< scale*ymin << " " << scale*(xmax-xmin) << " " << scale*(ymax-ymin)
-		<<"\" preserveAspectRatio = \"xMidYMid meet\">" << std::endl;
+		<< scale*xmin << " " << scale*ymin << " " << scale*(xmax - xmin) << " " << scale*(ymax - ymin)
+		<< "\" preserveAspectRatio = \"xMidYMid meet\">" << std::endl;
 	//svgfile << "<rect x = \"0\" y = \"0\" width = \"500\" height = \"500\" style = \"stroke:black;stroke-width:3;fill:white\"/>" << std::endl;
 
 

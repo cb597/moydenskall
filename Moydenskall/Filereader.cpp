@@ -16,9 +16,10 @@ void Filereader::readfile() {
 	file >> line;
 	
 	double x, y;
+	int counter = 1;
 	for (std::string k = line; k!="EOF"; file>>k) {
 		file >> x >> y;
-		Point p(x, y);
+		Point p(x, y, counter++);
 		plane.push_back(p);
 	}
 }

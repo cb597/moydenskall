@@ -17,8 +17,10 @@ Point centroid(const Plane& plane) {
 
 Plane centroid(const std::vector<Plane>& partition) {
 	Plane centroids;
+	int counter = 1;
 	for (auto plane : partition) {
 		centroids.push_back(centroid(plane));
+		centroids.back().ID = counter++;
 	}
 	return centroids;
 }
