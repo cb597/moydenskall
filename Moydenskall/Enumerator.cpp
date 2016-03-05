@@ -26,25 +26,12 @@ std::ostream& operator<<(std::ostream& stream, const std::vector<Plane>& partiti
 
 Enumerator::Enumerator(double f) {
 	best_costs = std::numeric_limits<double>::max();
-	eval.set_fix_costs(f);
 }
 
-void Enumerator::create_partition_of_n(std::vector<int>& until, int last, int left) {
-	if (left == 0) {
-		return;
-	}
-	for (int next = std::min(last, left); next > 0; --next) {
-		until.push_back(next);
-		create_partition_of_n(until, next, left - next);
-		until.pop_back();
-	}
-
-}
-
-void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
+void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left, double fix_costs) {
 	if (left.size() == 0) {
 		Plane cen = centroid(partition);
-		double costs = eval.evaluate(partition, cen);
+		double costs = evaluate_partition(partition, cen, fix_costs);
 		if (costs < best_costs) {
 			best_costs = costs;
 			best_sites = cen;
@@ -60,7 +47,7 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 	// insert into each existing subset
 	for (int i = 0; i < partition.size(); ++i) {
 		partition[i].push_back(current);
-		create_partition(partition, left);
+		create_partition(partition, left, fix_costs);
 
 		partition[i].pop_back();
 	}
@@ -68,7 +55,7 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 	// deal with case: new subset for current element
 	partition.push_back(Plane());
 	partition.back().push_back(current);
-	create_partition(partition, left);
+	create_partition(partition, left, fix_costs);
 	partition.pop_back();
 
 	// restore
