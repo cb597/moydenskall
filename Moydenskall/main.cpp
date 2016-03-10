@@ -6,7 +6,10 @@
 #include <iostream>
 #include "Tools.h"
 #include <string>
+#include "KMeans.h"
 
+#define KMEANS
+//#define ENTRYEXERCISE
 
 int main(int argc, char* argv[]) {
 
@@ -23,15 +26,23 @@ int main(int argc, char* argv[]) {
 
 
 	
-	Plane p = readfile(instance_filename);
+	Plane customers = readfile(instance_filename);
+#ifdef KMEANS
+	KMeans lloyd;
+	lloyd.seed_static_and_run(customers);
 
+#endif
+
+#ifdef ENTRYEXERCISE
 	Enumerator en(f);
-	std::vector<Plane> init;
+	Partition partition;
 
 	double tstart = clock();
-	en.create_partition(init, p, f);
+	en.create_partition(partition, customers, f);
 	double tstop = clock();
 	//std::cout << "needed " << (tstop - tstart) / CLOCKS_PER_SEC << " seconds" << std::endl;
 	en.print_result();
+#endif
+
 	return 0;
 }

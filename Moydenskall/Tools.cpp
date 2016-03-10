@@ -3,7 +3,9 @@
 #include <string>
 
 Point centroid(const Plane& plane) {
-
+	if (plane.size() == 0) {
+		return(Point(0, 0));
+	}
 	double x = 0.;
 	double y = 0.;
 	for (auto p : plane) {
@@ -30,14 +32,18 @@ Plane centroid(const std::vector<Plane>& partition) {
 double eucl2dist(Plane plane, Point site) {
 	double sum = 0.0;
 	for (Point p : plane) {
-		double xdiff = site.X - p.X;
-		double ydiff = site.Y - p.Y;
-		sum += xdiff*xdiff + ydiff*ydiff;
+		sum += eucl2dist(site, p);
 	}
 	return sum;
 }
 
-double evaluate_partition(std::vector<Plane> partition, Plane sites, double fix_costs) {
+double eucl2dist(Point a, Point b) {
+	double xdiff = a.X - b.X;
+	double ydiff = a.Y - b.Y;
+	return xdiff*xdiff + ydiff*ydiff;
+}
+
+double evaluate_partition(Partition partition, Plane sites, double fix_costs) {
 	if (sites.size() != partition.size()) {
 		throw "incompatible amount of sites and partitions";
 	}
