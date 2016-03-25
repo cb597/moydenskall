@@ -43,3 +43,22 @@ filename is an instance in the tsplib format
 ###Code Analysis
 * Clang analyzer states some warnings, which is a bug in clang (see: https://llvm.org/bugs/show_bug.cgi?id=16686)
 * Valgrind: `All heap blocks were freed -- no leaks are possible`
+
+## Source Overview
+* `main.cpp` provides command line argument interpretation, runtime measurement, and runs the show  
+* `Point.cpp` representation of points (x,y coordinates, ID)
+* `Enumerator.cpp` implements a class which organizes the enumerating process
+* `Tools.cpp` collection of useful functions, see below
+
+### Tools.cpp
+
+* `Plane readfile(std::string filename);` read a file in tsp format 
+* `Point centroid(const Plane&);` get centroid of points 
+* `Plane centroid(const std::vector<Plane>&);` get all centroids for a given partition
+* `double eucl2dist(Plane, Point);` sum euclidean square distances from a site to all customers
+* `double evaluate_partition(std::vector<Plane>, Plane, double);` get costs for a given partition and sites and fix_costs 
+
+### Enumerator.cpp
+* `void create_partition(std::vector<Plane>& partition, Plane& left)` recursive approach to create all possible partitions
+* `void print_result(bool svg)` print best partition to cout in required format (and toggle svg output if svg is true)
+* `void svg_output()` best partition visualized in svg (creates a .svg file)
