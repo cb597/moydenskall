@@ -6,7 +6,7 @@ class Enumerator {
 public:
 	Enumerator(double, int);
 	void create_partition(std::vector<Plane>&, Plane&);
-	void print_result();
+	void print_result(bool);
 	void svg_output();
 
 private:
