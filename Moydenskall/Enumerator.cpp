@@ -67,7 +67,7 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 }
 
 void Enumerator::print_result(bool svg) {
-	std::cout << "OBJECTIVE" << std::endl << best_costs << std::endl;
+	std::cout << "OBJECTIVE " << best_costs << std::endl;
 	for (auto cen : best_sites) {
 		std::cout << "FACILITY " << cen << std::endl;
 	}
