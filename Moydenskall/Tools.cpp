@@ -43,7 +43,7 @@ double evaluate_partition(std::vector<Plane> partition, Plane sites, double fix_
 	}
 
 	double sum = sites.size() * fix_costs;
-	for (int i = 0; i < sites.size(); ++i) {
+	for (unsigned int i = 0; i < sites.size(); ++i) {
 		sum += eucl2dist(partition[i], sites[i]);
 	}
 
