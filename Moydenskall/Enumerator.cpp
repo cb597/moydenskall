@@ -64,14 +64,12 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left, do
 
 void Enumerator::print_result() {
 	std::cout << "OBJECTIVE" << std::endl << best_costs << std::endl;
-	std::cout << "FACILITY" << std::endl;
 	for (auto cen : best_sites) {
-		std::cout << cen << std::endl;
+		std::cout << "FACILITY " << cen << std::endl;
 	}
-	std::cout << "ASSIGN" << std::endl;
 	for (int part = 0; part < best_partition.size(); ++part) {
 		for (auto point : best_partition[part]) {
-			std::cout << point.ID << " " << part+1 << std::endl;
+			std::cout << "ASSIGN " << point.ID << " " << part+1 << std::endl;
 		}
 	}
 
