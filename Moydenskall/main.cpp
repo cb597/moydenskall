@@ -42,11 +42,11 @@ int main(int argc, char* argv[]) {
 #endif
 
 #ifdef ENTRYEXERCISE
-	Enumerator en(f);
+	Enumerator en(f, u);
 	Partition partition;
 
 	double tstart = clock();
-	en.create_partition(partition, customers, f);
+	en.create_partition(partition, customers);
 	double tstop = clock();
 	//std::cout << "needed " << (tstop - tstart) / CLOCKS_PER_SEC << " seconds" << std::endl;
 	en.print_result();

@@ -4,8 +4,8 @@
 typedef std::vector<Point> Plane;
 class Enumerator {
 public:
-	Enumerator(double f);
-	void create_partition(std::vector<Plane>&, Plane&, double);
+	Enumerator(double, int);
+	void create_partition(std::vector<Plane>&, Plane&);
 	void print_result();
 	void svg_output();
 
@@ -14,4 +14,6 @@ private:
 	double best_costs;
 	Plane best_sites;
 	std::vector<Plane> best_partition;
+	double fix_costs;
+	int capacity;
 };
