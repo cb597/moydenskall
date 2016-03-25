@@ -6,6 +6,7 @@
 #include "Tools.h"
 #include <limits>
 #include <fstream>
+#include <math.h>
 
 std::ostream& operator<<(std::ostream& stream, const Plane& plane) {
 	stream << "{ ";
@@ -93,6 +94,7 @@ void Enumerator::svg_output() {
 
 	xmin -= 2; ymin -= 2; xmax += 2; ymax += 2;
 	double scale = 20;
+	int pointsize = ceil(std::max((xmax-xmin)/10.,(ymax-ymin)/10.));
 
 	svgfile << "<?xml version=\"1.0\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"	\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" << std::endl;
 	svgfile << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"960\" height=\"700\" viewBox = \""
@@ -106,12 +108,12 @@ void Enumerator::svg_output() {
 	for (int part = 0; part < best_partition.size(); ++part) {
 		auto cen = best_sites[part];
 		svgfile << "<circle cx = \"" << scale * cen.X << "\" cy = \"" << scale * cen.Y << "\" r = \""
-			<< 2 << "\" style = \"fill:green\" />" << std::endl;
+			<< pointsize << "\" style = \"fill:green\" />" << std::endl;
 		for (auto p : best_partition[part]) {
 			svgfile << "<line x1=\"" << scale * p.X << "\" y1=\"" << scale*p.Y << "\" x2=\"" << scale * cen.X << "\" y2=\"" << scale * cen.Y
-				<< "\" style=\"stroke:#aaa; stroke-width:1; \" stroke-dasharray=\"1, 1\"/>";
+				<< "\" style=\"stroke:#aaa; stroke-width:"<< pointsize <<"; \" stroke-dasharray=\"1, 1\"/>";
 			svgfile << "<circle cx = \"" << scale * p.X << "\" cy = \"" << scale*p.Y << "\" r = \""
-				<< 1 << "\" style = \"fill:red\" />" << std::endl;
+				<< pointsize << "\" style = \"fill:red\" />" << std::endl;
 		}
 	}
 
