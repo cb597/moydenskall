@@ -1,10 +1,10 @@
 //#include "Filereader.cpp"
 #include <vector>
-#include "Enumerator.h"
-#include "Point.h"
+#include "Enumerator.hpp"
+#include "Point.hpp"
 #include <time.h>
 #include <iostream>
-#include "Tools.h"
+#include "Tools.hpp"
 #include <string>
 #include <limits>
 

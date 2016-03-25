@@ -1,9 +1,9 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include "Point.h"
-#include "Enumerator.h"
-#include "Tools.h"
+#include "Point.hpp"
+#include "Enumerator.hpp"
+#include "Tools.hpp"
 #include <limits>
 #include <fstream>
 #include <math.h>

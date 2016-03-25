@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Point.h"
+#include "Point.hpp"
 typedef std::vector<Point> Plane;
 class Enumerator {
 public:

@@ -1,5 +1,5 @@
 #pragma once
-#include "Point.h"
+#include "Point.hpp"
 #include <vector>
 typedef std::vector<Point> Plane;
 
