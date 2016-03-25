@@ -31,13 +31,13 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	
-	Plane p = readfile(instance_filename);
+	Plane customers = readfile(instance_filename);
 
-	Enumerator en(f);
-	std::vector<Plane> init;
+	Enumerator en(f, u);
+	std::vector<Plane> partition;
 
 	double tstart = clock();
-	en.create_partition(init, p, f);
+	en.create_partition(partition, customers);
 	double tstop = clock();
 	//std::cout << "needed " << (tstop - tstart) / CLOCKS_PER_SEC << " seconds" << std::endl;
 	en.print_result();

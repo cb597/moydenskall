@@ -25,11 +25,13 @@ std::ostream& operator<<(std::ostream& stream, const std::vector<Plane>& partiti
 	return stream;
 }
 
-Enumerator::Enumerator(double f) {
+Enumerator::Enumerator(double f, int u) {
 	best_costs = std::numeric_limits<double>::max();
+	fix_costs = f;
+	capacity = u;
 }
 
-void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left, double fix_costs) {
+void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 	if (left.size() == 0) {
 		Plane cen = centroid(partition);
 		double costs = evaluate_partition(partition, cen, fix_costs);
@@ -47,16 +49,17 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left, do
 
 	// insert into each existing subset
 	for (int i = 0; i < partition.size(); ++i) {
-		partition[i].push_back(current);
-		create_partition(partition, left, fix_costs);
-
-		partition[i].pop_back();
+		if (partition[i].size() < capacity) { //only if <capacity
+			partition[i].push_back(current);
+			create_partition(partition, left);
+			partition[i].pop_back();
+		}
 	}
 
 	// deal with case: new subset for current element
 	partition.push_back(Plane());
 	partition.back().push_back(current);
-	create_partition(partition, left, fix_costs);
+	create_partition(partition, left);
 	partition.pop_back();
 
 	// restore
