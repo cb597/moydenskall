@@ -1,4 +1,4 @@
-# moydenskall
+# Moydenskall (Lloyd's k-means)
 
 ###Project Moydenskall
 
@@ -32,7 +32,7 @@ sample execution for both linux and windows systems:
 `./moydenskall instance.tsp -f 50 -u 5`
 
 #### Synopsis
-`./progamname <filename> [options]`
+`./programname <filename> [options]`
 filename is an instance in the tsplib format
 #### Options
 * `-f <int>` double indicating fixed site costs (optional parameter, default: 0)
