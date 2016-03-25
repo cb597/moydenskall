@@ -14,33 +14,43 @@ int main(int argc, char* argv[]) {
 	double f = 50;
 	std::string instance_filename = "inst1.tsp";
 	int u = std::numeric_limits<int>::max();
+	bool time_measurement = false;
 
-	if (argc >= 2 && argc%2==0) {
+	if (argc >= 2 && argc % 2 == 0) {
 		instance_filename = argv[1];
 	}
 	else {
-		throw "invalid parameter count, usage: program filename {-f Facilities} {-u Capacity}";
+		throw "invalid parameter count, usage: program filename {-f facilities} {-u capacity} {-t bool_time_measurement}";
 	}
 
-	for (int i = 2; i < argc-1; i+=2) {
-		std::string test = argv[i];
+	for (int i = 2; i < argc - 1; i += 2) {
+		std::string test = argv[i + 1];
 		if (std::string(argv[i]) == "-f") {
-			f = std::stoi(argv[i+1]); //fix costs
+			f = std::stoi(argv[i + 1]); //fix costs
 		}
 		if (std::string(argv[i]) == "-u") {
-			u = std::stoi(argv[i+1]); //capacity
+			u = std::stoi(argv[i + 1]); //capacity
+		}
+		if (std::string(argv[i]) == "-t") {
+			time_measurement = std::string(argv[i + 1]) == "true" ? true : false; //capacity
 		}
 	}
-	
+
 	Plane customers = readfile(instance_filename);
 
 	Enumerator en(f, u);
 	std::vector<Plane> partition;
 
-	double tstart = clock();
-	en.create_partition(partition, customers);
-	double tstop = clock();
-	//std::cout << "needed " << (tstop - tstart) / CLOCKS_PER_SEC << " seconds" << std::endl;
+	if (time_measurement) {
+		double tstart = clock();
+		en.create_partition(partition, customers);
+		double tstop = clock();
+		std::cout << "needed " << (tstop - tstart) / CLOCKS_PER_SEC << " seconds" << std::endl;
+	}
+	else {
+		en.create_partition(partition, customers);
+	}
+
 	en.print_result();
 	return 0;
 }
