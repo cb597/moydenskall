@@ -1,4 +1,4 @@
-#include "Tools.h"
+#include "Tools.hpp"
 #include <fstream>
 #include <string>
 
@@ -49,7 +49,7 @@ double evaluate_partition(Partition partition, Plane sites, double fix_costs) {
 	}
 
 	double sum = sites.size() * fix_costs;
-	for (int i = 0; i < sites.size(); ++i) {
+	for (unsigned int i = 0; i < sites.size(); ++i) {
 		sum += eucl2dist(partition[i], sites[i]);
 	}
 

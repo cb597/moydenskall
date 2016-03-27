@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "Point.h"
-#include "Tools.h"
+#include "Point.hpp"
+#include "Tools.hpp"
 
 
 class KMeans {

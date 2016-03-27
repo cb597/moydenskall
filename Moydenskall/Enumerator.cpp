@@ -1,11 +1,12 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include "Point.h"
-#include "Enumerator.h"
-#include "Tools.h"
+#include "Point.hpp"
+#include "Enumerator.hpp"
+#include "Tools.hpp"
 #include <limits>
 #include <fstream>
+#include <math.h>
 
 std::ostream& operator<<(std::ostream& stream, const Plane& plane) {
 	stream << "{ ";
@@ -47,8 +48,8 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 	left.pop_back();
 
 	// insert into each existing subset
-	for (int i = 0; i < partition.size(); ++i) {
-		if (partition[i].size() < capacity) { //only if <capacity
+	for (unsigned int i = 0; i < partition.size(); ++i) {
+		if ((int) partition[i].size() < capacity) { //only if <capacity
 			partition[i].push_back(current);
 			create_partition(partition, left);
 			partition[i].pop_back();
@@ -65,18 +66,20 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 	left.push_back(current);
 }
 
-void Enumerator::print_result() {
-	std::cout << "OBJECTIVE" << std::endl << best_costs << std::endl;
+void Enumerator::print_result(bool svg) {
+	std::cout << "OBJECTIVE " << best_costs << std::endl;
 	for (auto cen : best_sites) {
 		std::cout << "FACILITY " << cen << std::endl;
 	}
-	for (int part = 0; part < best_partition.size(); ++part) {
+	for (unsigned int part = 0; part < best_partition.size(); ++part) {
 		for (auto point : best_partition[part]) {
 			std::cout << "ASSIGN " << point.ID << " " << part+1 << std::endl;
 		}
 	}
 
-	svg_output();
+	if (svg) {
+		svg_output();
+	}
 }
 
 void Enumerator::svg_output() {
@@ -96,6 +99,7 @@ void Enumerator::svg_output() {
 
 	xmin -= 2; ymin -= 2; xmax += 2; ymax += 2;
 	double scale = 20;
+	int pointsize = (int) ceil(std::max((xmax-xmin)/10.,(ymax-ymin)/10.));
 
 	svgfile << "<?xml version=\"1.0\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"	\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" << std::endl;
 	svgfile << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"960\" height=\"700\" viewBox = \""
@@ -106,15 +110,15 @@ void Enumerator::svg_output() {
 
 
 
-	for (int part = 0; part < best_partition.size(); ++part) {
+	for (unsigned int part = 0; part < best_partition.size(); ++part) {
 		auto cen = best_sites[part];
 		svgfile << "<circle cx = \"" << scale * cen.X << "\" cy = \"" << scale * cen.Y << "\" r = \""
-			<< 2 << "\" style = \"fill:green\" />" << std::endl;
+			<< pointsize << "\" style = \"fill:green\" />" << std::endl;
 		for (auto p : best_partition[part]) {
 			svgfile << "<line x1=\"" << scale * p.X << "\" y1=\"" << scale*p.Y << "\" x2=\"" << scale * cen.X << "\" y2=\"" << scale * cen.Y
-				<< "\" style=\"stroke:#aaa; stroke-width:1; \" stroke-dasharray=\"1, 1\"/>";
+				<< "\" style=\"stroke:#aaa; stroke-width:"<< pointsize <<"; \" stroke-dasharray=\"1, 1\"/>";
 			svgfile << "<circle cx = \"" << scale * p.X << "\" cy = \"" << scale*p.Y << "\" r = \""
-				<< 1 << "\" style = \"fill:red\" />" << std::endl;
+				<< pointsize << "\" style = \"fill:red\" />" << std::endl;
 		}
 	}
 
