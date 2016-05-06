@@ -32,8 +32,14 @@ void KMeans::assign(Plane& sites) {
 }
 
 // assign customers to sites if in ball
-void KMeans::assign_ball2(Plane & sites) {
-	double rad = eucl2dist(sites[0], sites[1])/9.;
+void KMeans::assign_ball(Plane& sites) {
+	double rad = std::numeric_limits<double>::max();
+	for (int i = 0; i < sites.size() - 1; ++i) {
+		for (int j = i + 1; j < sites.size(); ++j) {
+			rad = std::min(rad, eucl2dist(sites[i], sites[j]) / 9.);
+		}
+	}
+
 	partition.clear();
 	for (int i = 0; i < sites.size(); ++i) {
 		partition.push_back(Plane());
@@ -52,7 +58,7 @@ void KMeans::swamy2() {
 	// sampling 2 initial sites according to algo
 	Plane sites = swamy2_sampling();
 	// assign customers within ball to one of the two sites
-	assign_ball2(sites);
+	assign_ball(sites);
 	print_to_svg(partition, sites, "swamy2_init.svg");
 	// move sites to centroid of points within ball
 	sites = centroid(partition);
