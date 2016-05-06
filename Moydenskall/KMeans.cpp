@@ -69,6 +69,20 @@ void KMeans::swamy2() {
 	print_to_svg(partition, sites, "swamy2_final.svg");
 }
 
+void KMeans::swamyk(int k) {
+	Plane sites = swamyk_sampling(k);
+	// assign customers within ball to one of the two sites
+	assign_ball(sites);
+	print_to_svg(partition, sites, "swamy2_init.svg");
+	// move sites to centroid of points within ball
+	sites = centroid(partition);
+	print_to_svg(partition, sites, "swamy2_result.svg");
+
+	// no longer relevant for algorithm, but nice and complete graphical output:
+	assign(sites);
+	print_to_svg(partition, sites, "swamy2_final.svg");
+}
+
 
 
 Plane KMeans::swamy2_sampling() {
@@ -76,14 +90,8 @@ Plane KMeans::swamy2_sampling() {
 	Point cen = centroid(customers);
 	d1 = eucl2dist(customers, cen);
 
-	double random1, random2;
-#ifdef _WIN32
-	random1 = (double) rand() / (double) RAND_MAX;
-	random2 = (double) rand() / (double) RAND_MAX;
-#else
-	random1 = drand48();
-	random2 = drand48();
-#endif
+	double random1 = drand();
+	double random2 = drand();
 
 	double sum = 0.;
 	Plane sites = Plane();
@@ -108,6 +116,47 @@ Plane KMeans::swamy2_sampling() {
 	return sites;
 }
 
+Plane KMeans::swamyk_sampling(int k) {
+	Plane sites = swamy2_sampling();
+
+	std::vector<double> probability(customers.size(), std::numeric_limits<int>::max());
+	double probability_sum = 0.;
+	// init probability
+	for (int i = 0; i < customers.size();++i) {
+		for (auto s : sites) {
+			probability[i] = std::min(probability[i], eucl2dist(customers[i], s));
+		}
+		probability_sum += probability[i];
+	}
+
+	// add k-2 sites
+	for (int i = 2; i < k; ++i) {
+		double sum = 0;
+		double rand = drand();
+
+		sites.push_back(customers[0]);
+
+		for (int i = 0; i < customers.size();++i) {
+			sum += probability[i]/probability_sum;
+			if (sum > rand) {
+				break;
+			}
+			sites.back() = customers[i];
+		}
+		sites.back().ID = i+1;
+		// update probabilities
+		for (int i = 0; i < customers.size(); ++i) {
+			double d = eucl2dist(customers[i], sites.back());
+			if (probability[i] > d) {
+				probability_sum + d - probability[i];
+				probability[i] = d;
+			}
+		}
+
+	}
+	return sites;
+}
+
 double KMeans::swamy2_probability_first(Point p, Point centroid) {
 	// fancy math stuff as described in the paper
 	return ((d1 + (double)n*eucl2dist(p, centroid)) / (2.*(double)n*d1));
@@ -116,6 +165,16 @@ double KMeans::swamy2_probability_first(Point p, Point centroid) {
 double KMeans::swamy2_probability_second(Point first, Point p, Point cen) {
 	// fancy math stuff as described in the paper
 	return (eucl2dist(first, p)/(d1+(double)n*eucl2dist(cen,first)));
+}
+
+double KMeans::drand() {
+	double d = 0.;
+#ifdef _WIN32
+	d = (double)rand() / (double)RAND_MAX;
+#else
+	random2 = drand48();
+#endif
+	return d;
 }
 
 void KMeans::kmeansstep(Plane& customers, Plane& sites) {

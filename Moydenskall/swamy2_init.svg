@@ -1,0 +1,55 @@
+<?xml version="1.0"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"	"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="700" viewBox = "-40 120 2220 1540" preserveAspectRatio = "xMidYMid meet">
+<circle cx = "40" cy = "1480" r = "12" style = "fill:green" />
+<line x1="0" y1="1620" x2="40" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "0" cy = "1620" r = "12" style = "fill:red" />
+<line x1="40" y1="1340" x2="40" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "40" cy = "1340" r = "12" style = "fill:red" />
+<line x1="40" y1="1400" x2="40" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "40" cy = "1400" r = "12" style = "fill:red" />
+<line x1="40" y1="1440" x2="40" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "40" cy = "1440" r = "12" style = "fill:red" />
+<line x1="40" y1="1480" x2="40" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "40" cy = "1480" r = "12" style = "fill:red" />
+<line x1="40" y1="1520" x2="40" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "40" cy = "1520" r = "12" style = "fill:red" />
+<line x1="100" y1="1600" x2="40" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "100" cy = "1600" r = "12" style = "fill:red" />
+<line x1="160" y1="1540" x2="40" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "160" cy = "1540" r = "12" style = "fill:red" />
+<circle cx = "960" cy = "300" r = "12" style = "fill:green" />
+<line x1="960" y1="220" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "960" cy = "220" r = "12" style = "fill:red" />
+<line x1="960" y1="300" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "960" cy = "300" r = "12" style = "fill:red" />
+<line x1="960" y1="340" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "960" cy = "340" r = "12" style = "fill:red" />
+<line x1="960" y1="380" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "960" cy = "380" r = "12" style = "fill:red" />
+<line x1="960" y1="420" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "960" cy = "420" r = "12" style = "fill:red" />
+<line x1="1020" y1="220" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "1020" cy = "220" r = "12" style = "fill:red" />
+<line x1="1020" y1="260" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "1020" cy = "260" r = "12" style = "fill:red" />
+<line x1="1020" y1="320" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "1020" cy = "320" r = "12" style = "fill:red" />
+<line x1="1020" y1="400" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "1020" cy = "400" r = "12" style = "fill:red" />
+<line x1="1020" y1="160" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "1020" cy = "160" r = "12" style = "fill:red" />
+<line x1="1100" y1="280" x2="960" y2="300" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "1100" cy = "280" r = "12" style = "fill:red" />
+<circle cx = "2140" cy = "1480" r = "12" style = "fill:green" />
+<line x1="2020" y1="1500" x2="2140" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2020" cy = "1500" r = "12" style = "fill:red" />
+<line x1="2040" y1="1500" x2="2140" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2040" cy = "1500" r = "12" style = "fill:red" />
+<line x1="2060" y1="1480" x2="2140" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2060" cy = "1480" r = "12" style = "fill:red" />
+<line x1="2060" y1="1500" x2="2140" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2060" cy = "1500" r = "12" style = "fill:red" />
+<line x1="2080" y1="1600" x2="2140" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2080" cy = "1600" r = "12" style = "fill:red" />
+<line x1="2140" y1="1480" x2="2140" y2="1480" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2140" cy = "1480" r = "12" style = "fill:red" />
+<circle cx = "500" cy = "1400" r = "12" style = "fill:green" />
+<line x1="360" y1="1340" x2="500" y2="1400" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "360" cy = "1340" r = "12" style = "fill:red" />
+<line x1="500" y1="1360" x2="500" y2="1400" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "500" cy = "1360" r = "12" style = "fill:red" />
+<line x1="500" y1="1380" x2="500" y2="1400" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "500" cy = "1380" r = "12" style = "fill:red" />
+<line x1="500" y1="1400" x2="500" y2="1400" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "500" cy = "1400" r = "12" style = "fill:red" />
+<line x1="560" y1="1260" x2="500" y2="1400" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "560" cy = "1260" r = "12" style = "fill:red" />
+<line x1="560" y1="1500" x2="500" y2="1400" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "560" cy = "1500" r = "12" style = "fill:red" />
+<line x1="640" y1="1440" x2="500" y2="1400" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "640" cy = "1440" r = "12" style = "fill:red" />
+<circle cx = "2040" cy = "420" r = "12" style = "fill:green" />
+<line x1="1940" y1="400" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "1940" cy = "400" r = "12" style = "fill:red" />
+<line x1="1940" y1="480" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "1940" cy = "480" r = "12" style = "fill:red" />
+<line x1="2000" y1="560" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2000" cy = "560" r = "12" style = "fill:red" />
+<line x1="2020" y1="420" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2020" cy = "420" r = "12" style = "fill:red" />
+<line x1="2020" y1="560" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2020" cy = "560" r = "12" style = "fill:red" />
+<line x1="2040" y1="380" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2040" cy = "380" r = "12" style = "fill:red" />
+<line x1="2040" y1="420" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2040" cy = "420" r = "12" style = "fill:red" />
+<line x1="2040" y1="560" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2040" cy = "560" r = "12" style = "fill:red" />
+<line x1="2060" y1="380" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2060" cy = "380" r = "12" style = "fill:red" />
+<line x1="2060" y1="420" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2060" cy = "420" r = "12" style = "fill:red" />
+<line x1="2060" y1="560" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2060" cy = "560" r = "12" style = "fill:red" />
+<line x1="2080" y1="420" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2080" cy = "420" r = "12" style = "fill:red" />
+<line x1="2080" y1="560" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2080" cy = "560" r = "12" style = "fill:red" />
+<line x1="2140" y1="400" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2140" cy = "400" r = "12" style = "fill:red" />
+<line x1="2140" y1="480" x2="2040" y2="420" style="stroke:#aaa; stroke-width:12; " stroke-dasharray="1, 1"/><circle cx = "2140" cy = "480" r = "12" style = "fill:red" />
+</svg>
