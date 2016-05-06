@@ -1,11 +1,12 @@
 #include "KMeans.h"
 #include <limits>
+#include <string>
 
 KMeans::KMeans() {
 }
 
 void KMeans::kmeansstep(Plane& customers, Plane& sites) {
-	Partition partition;
+	partition.clear();
 	for (int i = 0; i < sites.size(); ++i) {
 		partition.push_back(Plane());
 	}
@@ -36,10 +37,12 @@ Plane KMeans::seed_static(int n) {
 void KMeans::seed_static_and_run(Plane customers) {
 	Plane sites = seed_static(2);
 	run(customers, sites, 5);
+	print_to_svg(partition, sites, "result.svg");
 }
 
 void KMeans::run(Plane customers, Plane sites, int n) {
 	for (int i = 0; i < n; ++i) {
 		kmeansstep(customers, sites);
+		print_to_svg(partition, sites, std::to_string(i).append(".svg"));
 	}
 }

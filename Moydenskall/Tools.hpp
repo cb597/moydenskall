@@ -11,3 +11,4 @@ Plane centroid(const std::vector<Plane>&); // get all centroids for a given part
 double eucl2dist(Plane, Point); // get sum of euclidean square distances from a site to all customers
 double eucl2dist(Point, Point); // get euclidean square distance from two points
 double evaluate_partition(Partition, Plane, double); // get costs for a given partition and sites and fix_costs
+void print_to_svg(Partition partition, Plane sites, std::string filename);

@@ -12,4 +12,5 @@ public:
 	void run(Plane, Plane, int);
 private:
 	void kmeansstep(Plane&, Plane&);
+	Partition partition;
 };
