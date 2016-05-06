@@ -69,6 +69,20 @@ void KMeans::swamy2() {
 	print_to_svg(partition, sites, "swamy2_final.svg");
 }
 
+void KMeans::swamyk(int k) {
+	Plane sites = swamyk_sampling(k);
+	// assign customers within ball to one of the two sites
+	assign_ball(sites);
+	print_to_svg(partition, sites, "swamy2_init.svg");
+	// move sites to centroid of points within ball
+	sites = centroid(partition);
+	print_to_svg(partition, sites, "swamy2_result.svg");
+
+	// no longer relevant for algorithm, but nice and complete graphical output:
+	assign(sites);
+	print_to_svg(partition, sites, "swamy2_final.svg");
+}
+
 
 
 Plane KMeans::swamy2_sampling() {
@@ -99,6 +113,47 @@ Plane KMeans::swamy2_sampling() {
 		}
 	}
 
+	return sites;
+}
+
+Plane KMeans::swamyk_sampling(int k) {
+	Plane sites = swamy2_sampling();
+
+	std::vector<double> probability(customers.size(), std::numeric_limits<int>::max());
+	double probability_sum = 0.;
+	// init probability
+	for (int i = 0; i < customers.size();++i) {
+		for (auto s : sites) {
+			probability[i] = std::min(probability[i], eucl2dist(customers[i], s));
+		}
+		probability_sum += probability[i];
+	}
+
+	// add k-2 sites
+	for (int i = 2; i < k; ++i) {
+		double sum = 0;
+		double rand = drand();
+
+		sites.push_back(customers[0]);
+
+		for (int i = 0; i < customers.size();++i) {
+			sum += probability[i]/probability_sum;
+			if (sum > rand) {
+				break;
+			}
+			sites.back() = customers[i];
+		}
+		sites.back().ID = i+1;
+		// update probabilities
+		for (int i = 0; i < customers.size(); ++i) {
+			double d = eucl2dist(customers[i], sites.back());
+			if (probability[i] > d) {
+				probability_sum + d - probability[i];
+				probability[i] = d;
+			}
+		}
+
+	}
 	return sites;
 }
 
