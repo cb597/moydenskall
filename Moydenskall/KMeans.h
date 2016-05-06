@@ -23,4 +23,5 @@ private:
 	double d1; //square error of optimal solution for 1 site
 	int n; // number of customers
 	Plane customers;
+	double drand();
 };

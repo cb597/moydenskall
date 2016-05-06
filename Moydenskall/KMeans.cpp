@@ -76,14 +76,8 @@ Plane KMeans::swamy2_sampling() {
 	Point cen = centroid(customers);
 	d1 = eucl2dist(customers, cen);
 
-	double random1, random2;
-#ifdef _WIN32
-	random1 = (double) rand() / (double) RAND_MAX;
-	random2 = (double) rand() / (double) RAND_MAX;
-#else
-	random1 = drand48();
-	random2 = drand48();
-#endif
+	double random1 = drand();
+	double random2 = drand();
 
 	double sum = 0.;
 	Plane sites = Plane();
@@ -116,6 +110,16 @@ double KMeans::swamy2_probability_first(Point p, Point centroid) {
 double KMeans::swamy2_probability_second(Point first, Point p, Point cen) {
 	// fancy math stuff as described in the paper
 	return (eucl2dist(first, p)/(d1+(double)n*eucl2dist(cen,first)));
+}
+
+double KMeans::drand() {
+	double d = 0.;
+#ifdef _WIN32
+	d = (double)rand() / (double)RAND_MAX;
+#else
+	random2 = drand48();
+#endif
+	return d;
 }
 
 void KMeans::kmeansstep(Plane& customers, Plane& sites) {
