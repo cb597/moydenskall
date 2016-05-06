@@ -8,7 +8,7 @@
 KMeans::KMeans() {
 }
 
-void KMeans::kmeansstep(Plane& customers, Plane& sites) {
+void KMeans::assign(Plane& customers, Plane& sites) {
 	partition.clear();
 	for (int i = 0; i < sites.size(); ++i) {
 		partition.push_back(Plane());
@@ -22,13 +22,18 @@ void KMeans::kmeansstep(Plane& customers, Plane& sites) {
 				best_id = site.ID;
 			}
 		}
-		if (best_id == -1) 
+		if (best_id == -1)
 			throw "couldn't assign site in kmeansstep()";
-		partition[best_id-1].push_back(customer);
+		partition[best_id - 1].push_back(customer);
 	}
+}
+
+void KMeans::kmeansstep(Plane& customers, Plane& sites) {
+	assign(customers, sites);
 	sites = centroid(partition);
 }
 
+// choose (0,0), (1,1), (2,2) as init sites
 Plane KMeans::seed_static(int n) {
 	Plane centers;
 	for (int i = 1; i <= n; ++i) {
@@ -37,11 +42,12 @@ Plane KMeans::seed_static(int n) {
 	return centers;
 }
 
-Plane KMeans::seed_random_subset(Plane customers, int n) {
+// select a random subset of the customers as init sites
+Plane KMeans::seed_random_subset(Plane customers, int num_of_sites) {
 	std::srand(unsigned(std::time(0)));
 	std::random_shuffle(customers.begin(), customers.end());
 	Plane centers;
-	for (int i = 1; i <= n; ++i) {
+	for (int i = 1; i <= num_of_sites; ++i) {
 		customers[i].ID = i;
 		centers.push_back(customers[i]);
 	}
@@ -50,7 +56,9 @@ Plane KMeans::seed_random_subset(Plane customers, int n) {
 
 void KMeans::seed_static_and_run(Plane customers) {
 	//Plane sites = seed_static(2);
-	Plane sites = seed_random_subset(customers, 2);
+	Plane sites = seed_random_subset(customers, 3);
+	assign(customers, sites);
+	print_to_svg(partition, sites, "init.svg");
 	run(customers, sites, 5);
 	print_to_svg(partition, sites, "result.svg");
 }

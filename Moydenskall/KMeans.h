@@ -13,5 +13,6 @@ public:
 	void run(Plane&, Plane&, int);
 private:
 	void kmeansstep(Plane&, Plane&);
+	void KMeans::assign(Plane& customers, Plane& sites);
 	Partition partition;
 };
