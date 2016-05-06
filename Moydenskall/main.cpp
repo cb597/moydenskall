@@ -46,8 +46,9 @@ int main(int argc, char* argv[]) {
 	
 	Plane customers = readfile(instance_filename);
 #ifdef KMEANS
-	KMeans lloyd;
-	lloyd.seed_static_and_run(customers);
+	KMeans lloyd (customers);
+	lloyd.swamy2();
+	//lloyd.seed_static_and_run();
 
 #endif
 #ifdef ENTRYEXERCISE
