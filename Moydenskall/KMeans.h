@@ -9,7 +9,8 @@ public:
 	KMeans();
 	Plane seed_static(int);
 	void seed_static_and_run(Plane);
-	void run(Plane, Plane, int);
+	Plane seed_random_subset(Plane, int n);
+	void run(Plane&, Plane&, int);
 private:
 	void kmeansstep(Plane&, Plane&);
 	Partition partition;
