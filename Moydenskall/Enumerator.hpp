@@ -1,19 +1,19 @@
 #pragma once
 #include <vector>
 #include "Point.hpp"
-typedef std::vector<Point> Plane;
+typedef std::vector<Point> Pointset;
 class Enumerator {
 public:
 	Enumerator(double, int);
-	void create_partition(std::vector<Plane>&, Plane&);
+	void create_partition(std::vector<Pointset>&, Pointset&);
 	void print_result(bool);
 	void svg_output();
 
 private:
-	Plane plane;
+	Pointset plane;
 	double best_costs;
-	Plane best_sites;
-	std::vector<Plane> best_partition;
+	Pointset best_sites;
+	std::vector<Pointset> best_partition;
 	double fix_costs;
 	int capacity;
 };

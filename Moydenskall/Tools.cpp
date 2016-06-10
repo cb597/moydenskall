@@ -3,7 +3,7 @@
 #include <string>
 #include <algorithm>
 
-Point centroid(const Plane& plane) {
+Point centroid(const Pointset& plane) {
 	if (plane.size() == 0) {
 		return(Point(0, 0));
 	}
@@ -20,8 +20,8 @@ Point centroid(const Plane& plane) {
 	return Point(x,y);
 }
 
-Plane centroid(const std::vector<Plane>& partition) {
-	Plane centroids;
+Pointset centroid(const std::vector<Pointset>& partition) {
+	Pointset centroids;
 	int counter = 1;
 	for (auto plane : partition) {
 		centroids.push_back(centroid(plane));
@@ -30,7 +30,7 @@ Plane centroid(const std::vector<Plane>& partition) {
 	return centroids;
 }
 
-double eucl2dist(Plane plane, Point site) {
+double eucl2dist(Pointset plane, Point site) {
 	double sum = 0.0;
 	for (Point p : plane) {
 		sum += eucl2dist(site, p);
@@ -44,7 +44,7 @@ double eucl2dist(Point a, Point b) {
 	return xdiff*xdiff + ydiff*ydiff;
 }
 
-double evaluate_partition(Partition partition, Plane sites, double fix_costs) {
+double evaluate_partition(Partition partition, Pointset sites, double fix_costs) {
 	if (sites.size() != partition.size()) {
 		throw "incompatible amount of sites and partitions";
 	}
@@ -58,11 +58,11 @@ double evaluate_partition(Partition partition, Plane sites, double fix_costs) {
 }
 
 
-Plane readfile(std::string filename) {
+Pointset readfile(std::string filename) {
 	
 	std::ifstream file(filename);
 	std::string line = "";
-	Plane plane;
+	Pointset plane;
 
 	while (line != "NODE_COORD_SECTION") {
 		file >> line;
@@ -80,7 +80,7 @@ Plane readfile(std::string filename) {
 	return plane;
 }
 
-void print_to_svg(Partition partition, Plane sites, std::string filename) {
+void print_to_svg(Partition partition, Pointset sites, std::string filename) {
 	std::ofstream svgfile(filename);
 
 	double xmin = 99999, ymin = 99999;

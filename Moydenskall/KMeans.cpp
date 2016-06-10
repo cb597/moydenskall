@@ -6,15 +6,15 @@
 #include <string>
 #include <random>
 
-KMeans::KMeans(Plane _customers) {
+KMeans::KMeans(Pointset _customers) {
 	customers = _customers;
 	n = customers.size();
 }
 
-void KMeans::assign(Plane& sites) {
+void KMeans::assign(Pointset& sites) {
 	partition.clear();
 	for (int i = 0; i < sites.size(); ++i) {
-		partition.push_back(Plane());
+		partition.push_back(Pointset());
 	}
 	for (auto customer : customers) {
 		double best_val = std::numeric_limits<double>::max();
@@ -32,7 +32,7 @@ void KMeans::assign(Plane& sites) {
 }
 
 // assign customers to sites if in ball
-void KMeans::assign_ball(Plane& sites) {
+void KMeans::assign_ball(Pointset& sites) {
 	double rad = std::numeric_limits<double>::max();
 	for (int i = 0; i < sites.size() - 1; ++i) {
 		for (int j = i + 1; j < sites.size(); ++j) {
@@ -42,7 +42,7 @@ void KMeans::assign_ball(Plane& sites) {
 
 	partition.clear();
 	for (int i = 0; i < sites.size(); ++i) {
-		partition.push_back(Plane());
+		partition.push_back(Pointset());
 	}
 	for (auto customer : customers) {
 		for (auto site : sites) {
@@ -56,7 +56,7 @@ void KMeans::assign_ball(Plane& sites) {
 // run seeding strategy for two sites and a single ball-2-means step
 void KMeans::swamy2() {
 	// sampling 2 initial sites according to algo
-	Plane sites = swamy2_sampling();
+	Pointset sites = swamy2_sampling();
 	// assign customers within ball to one of the two sites
 	assign_ball(sites);
 	print_to_svg(partition, sites, "swamy2_init.svg");
@@ -70,7 +70,7 @@ void KMeans::swamy2() {
 }
 
 void KMeans::swamyk(int k) {
-	Plane sites = swamyk_sampling(k);
+	Pointset sites = swamyk_sampling(k);
 	// assign customers within ball to one of the two sites
 	assign_ball(sites);
 	print_to_svg(partition, sites, "swamy2_init.svg");
@@ -85,7 +85,7 @@ void KMeans::swamyk(int k) {
 
 
 
-Plane KMeans::swamy2_sampling() {
+Pointset KMeans::swamy2_sampling() {
 	std::srand(unsigned(std::time(0)));
 	Point cen = centroid(customers);
 	d1 = eucl2dist(customers, cen);
@@ -94,7 +94,7 @@ Plane KMeans::swamy2_sampling() {
 	double random2 = drand();
 
 	double sum = 0.;
-	Plane sites = Plane();
+	Pointset sites = Pointset();
 	for (auto c : customers) {
 		sum += swamy2_probability_first(c, cen);
 		if (sum > random1) {
@@ -116,8 +116,8 @@ Plane KMeans::swamy2_sampling() {
 	return sites;
 }
 
-Plane KMeans::swamyk_sampling(int k) {
-	Plane sites = swamy2_sampling();
+Pointset KMeans::swamyk_sampling(int k) {
+	Pointset sites = swamy2_sampling();
 
 	std::vector<double> probability(customers.size(), std::numeric_limits<int>::max());
 	double probability_sum = 0.;
@@ -177,14 +177,14 @@ double KMeans::drand() {
 	return d;
 }
 
-void KMeans::kmeansstep(Plane& customers, Plane& sites) {
+void KMeans::kmeansstep(Pointset& customers, Pointset& sites) {
 	assign(sites);
 	sites = centroid(partition);
 }
 
 // choose (0,0), (1,1), (2,2) as init sites
-Plane KMeans::seed_static(int n) {
-	Plane centers;
+Pointset KMeans::seed_static(int n) {
+	Pointset centers;
 	for (int i = 1; i <= n; ++i) {
 		centers.push_back(Point(i, i, i));
 	}
@@ -192,10 +192,10 @@ Plane KMeans::seed_static(int n) {
 }
 
 // select a random subset of the customers as init sites
-Plane KMeans::seed_random_subset(int num_of_sites) {
+Pointset KMeans::seed_random_subset(int num_of_sites) {
 	std::srand(unsigned(std::time(0)));
 	std::random_shuffle(customers.begin(), customers.end());
-	Plane centers;
+	Pointset centers;
 	for (int i = 1; i <= num_of_sites; ++i) {
 		customers[i].ID = i;
 		centers.push_back(customers[i]);
@@ -204,16 +204,16 @@ Plane KMeans::seed_random_subset(int num_of_sites) {
 }
 
 void KMeans::seed_static_and_run() {
-	//Plane sites = seed_static(2);
-	//Plane sites = seed_random_subset(customers, 3);
-	Plane sites = swamy2_sampling();
+	//Pointset sites = seed_static(2);
+	//Pointset sites = seed_random_subset(customers, 3);
+	Pointset sites = swamy2_sampling();
 	assign(sites);
 	print_to_svg(partition, sites, "init.svg");
 	run(sites, 5);
 	print_to_svg(partition, sites, "result.svg");
 }
 
-void KMeans::run(Plane& sites, int steps) {
+void KMeans::run(Pointset& sites, int steps) {
 	for (int i = 0; i < steps; ++i) {
 		kmeansstep(customers, sites);
 		print_to_svg(partition, sites, std::to_string(i).append(".svg"));

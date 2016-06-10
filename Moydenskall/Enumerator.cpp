@@ -8,7 +8,7 @@
 #include <fstream>
 #include <math.h>
 
-std::ostream& operator<<(std::ostream& stream, const Plane& plane) {
+std::ostream& operator<<(std::ostream& stream, const Pointset& plane) {
 	stream << "{ ";
 	for (auto p : plane) {
 		stream << p << (p == plane.back() ? " }" : ", ");
@@ -16,7 +16,7 @@ std::ostream& operator<<(std::ostream& stream, const Plane& plane) {
 	return stream;
 }
 
-std::ostream& operator<<(std::ostream& stream, const std::vector<Plane>& partition) {
+std::ostream& operator<<(std::ostream& stream, const std::vector<Pointset>& partition) {
 	stream << "{";
 	for (auto part : partition) {
 		stream << part;
@@ -31,9 +31,9 @@ Enumerator::Enumerator(double f, int u) {
 	capacity = u;
 }
 
-void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
+void Enumerator::create_partition(std::vector<Pointset>& partition, Pointset& left) {
 	if (left.size() == 0) {
-		Plane cen = centroid(partition);
+		Pointset cen = centroid(partition);
 		double costs = evaluate_partition(partition, cen, fix_costs);
 		if (costs < best_costs) {
 			best_costs = costs;
@@ -57,7 +57,7 @@ void Enumerator::create_partition(std::vector<Plane>& partition, Plane& left) {
 	}
 
 	// deal with case: new subset for current element
-	partition.push_back(Plane());
+	partition.push_back(Pointset());
 	partition.back().push_back(current);
 	create_partition(partition, left);
 	partition.pop_back();

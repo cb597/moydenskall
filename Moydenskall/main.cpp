@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	
-	Plane customers = readfile(instance_filename);
+	Pointset customers = readfile(instance_filename);
 #ifdef KMEANS
 	KMeans lloyd (customers);
 	lloyd.swamyk(5);
@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
 
 #endif
 #ifdef ENTRYEXERCISE
-	std::vector<Plane> partition;
+	std::vector<Pointset> partition;
 	Enumerator en(f, u);
 	Partition partition;
 
