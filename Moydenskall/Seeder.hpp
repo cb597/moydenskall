@@ -1,5 +1,5 @@
 #pragma once
-#include "KMeans.h"
+#include "kmeans.hpp"
 #include <limits>
 #include <algorithm>
 #include <ctime>        // std::time

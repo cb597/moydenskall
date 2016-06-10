@@ -1,11 +1,11 @@
-#include "KMeans.h"
+#include "KMeans.hpp"
 #include <limits>
 #include <algorithm>
 #include <ctime>        // std::time
 #include <cstdlib>      // std::rand, std::srand
 #include <string>
 #include <random>
-#include "Seeder.h"
+#include "Seeder.hpp"
 
 
 
