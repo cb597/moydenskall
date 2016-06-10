@@ -6,9 +6,9 @@
 #include <iostream>
 #include "Tools.hpp"
 #include <string>
-#include "kmeans.h"
+#include "kmeans.hpp"
 #include <limits>
-#include "Seeder.h"
+#include "Seeder.hpp"
 
 #define KMEANS
 //#define ENTRYEXERCISE

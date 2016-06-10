@@ -1,4 +1,4 @@
-#include "KMeans.hpp"
+#include "kmeans.hpp"
 #include <limits>
 #include <algorithm>
 #include <ctime>        // std::time

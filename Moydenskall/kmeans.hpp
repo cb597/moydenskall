@@ -2,7 +2,7 @@
 #include <vector>
 #include "Point.hpp"
 #include "Tools.hpp"
-#include "Seeder.h"
+#include "Seeder.hpp"
 
 
 class KMeans {
