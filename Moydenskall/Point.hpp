@@ -8,8 +8,9 @@ public:
 	};
 	double X;
 	double Y;
-	int ID;
 	friend std::ostream& operator<<(std::ostream&, const Point&);
+	int getId();
+	void setId(int _id);
 private:
-
+	int ID;
 };

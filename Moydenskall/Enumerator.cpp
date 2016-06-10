@@ -73,7 +73,7 @@ void Enumerator::print_result(bool svg) {
 	}
 	for (unsigned int part = 0; part < best_partition.size(); ++part) {
 		for (auto point : best_partition[part]) {
-			std::cout << "ASSIGN " << point.ID << " " << part+1 << std::endl;
+			std::cout << "ASSIGN " << point.getId() << " " << part+1 << std::endl;
 		}
 	}
 

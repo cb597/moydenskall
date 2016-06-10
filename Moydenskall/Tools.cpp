@@ -25,7 +25,7 @@ Pointset centroid(const std::vector<Pointset>& partition) {
 	int counter = 1;
 	for (auto plane : partition) {
 		centroids.push_back(centroid(plane));
-		centroids.back().ID = counter++;
+		centroids.back().setId(counter++);
 	}
 	return centroids;
 }
@@ -128,4 +128,15 @@ void print_to_svg(Partition partition, Pointset sites, std::string filename) {
 
 
 	svgfile << "</svg>";
+}
+
+
+double drand() {
+	double d = 0.;
+#ifdef _WIN32
+	d = (double)rand() / (double)RAND_MAX;
+#else
+	random2 = drand48();
+#endif
+	return d;
 }

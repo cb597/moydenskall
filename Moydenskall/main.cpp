@@ -8,6 +8,7 @@
 #include <string>
 #include "kmeans.h"
 #include <limits>
+#include "Seeder.h"
 
 #define KMEANS
 //#define ENTRYEXERCISE
@@ -47,7 +48,9 @@ int main(int argc, char* argv[]) {
 	Pointset customers = readfile(instance_filename);
 #ifdef KMEANS
 	KMeans lloyd (customers);
-	lloyd.swamyk(5);
+	Swamy2Seeder s2(customers);
+	//SwamykSeeder sk(customers, 5);
+	lloyd.swamy(s2);
 	//lloyd.seed_static_and_run();
 
 #endif

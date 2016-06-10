@@ -12,3 +12,4 @@ double eucl2dist(Pointset, Point); // get sum of euclidean square distances from
 double eucl2dist(Point, Point); // get euclidean square distance from two points
 double evaluate_partition(Partition, Pointset, double); // get costs for a given partition and sites and fix_costs
 void print_to_svg(Partition partition, Pointset sites, std::string filename);
+double drand(); //random double in [0,1]
