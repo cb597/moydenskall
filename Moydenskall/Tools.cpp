@@ -124,7 +124,7 @@ void print_to_svg(Pointset customers, Partition partition, Pointset sites, std::
 	}
 
 	double sum = 0;
-	for (int i = 0; i < partition.size(); ++i) {
+	for (unsigned int i = 0; i < partition.size(); ++i) {
 		sum += eucl2dist(partition[i], sites[i]);
 	}
 	svgfile << "<text x = \""<< xmin <<"\" y = \""<< ymin <<"\" fill = \"black\"  style=\"font-size:"<<3*pointsize<<"px\">" << filename << " - " << sum << "</text>\n";

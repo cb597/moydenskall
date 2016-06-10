@@ -23,7 +23,7 @@ Pointset StaticSeeder::seed() const {
 Pointset SubsetSeeder::seed() const {
 	std::srand(unsigned(std::time(NULL)));
 	std::vector<int> permutation;
-	for (int i = 0; i < customers.size(); permutation.push_back(i++));
+	for (unsigned int i = 0; i < customers.size(); permutation.push_back(i++));
 	std::random_shuffle(permutation.begin(), permutation.end());
 	Pointset sites;
 	for (int i = 1; i <= n; ++i) {
@@ -72,7 +72,7 @@ Pointset SwamykSeeder::seed() const{
 	std::vector<double> probability(customers.size(), std::numeric_limits<int>::max());
 	double probability_sum = 0.;
 	// init probability
-	for (int i = 0; i < customers.size(); ++i) {
+	for (unsigned int i = 0; i < customers.size(); ++i) {
 		for (auto s : sites) {
 			probability[i] = std::min(probability[i], eucl2dist(customers[i], s));
 		}
@@ -86,7 +86,7 @@ Pointset SwamykSeeder::seed() const{
 
 		sites.push_back(customers[0]);
 
-		for (int i = 0; i < customers.size(); ++i) {
+		for (unsigned int i = 0; i < customers.size(); ++i) {
 			sum += probability[i] / probability_sum;
 			if (sum > rand) {
 				break;
@@ -95,10 +95,10 @@ Pointset SwamykSeeder::seed() const{
 		}
 		sites.back().setId(i + 1);
 		// update probabilities
-		for (int i = 0; i < customers.size(); ++i) {
+		for (unsigned int i = 0; i < customers.size(); ++i) {
 			double d = eucl2dist(customers[i], sites.back());
 			if (probability[i] > d) {
-				probability_sum + d - probability[i];
+				probability_sum += d - probability[i];
 				probability[i] = d;
 			}
 		}

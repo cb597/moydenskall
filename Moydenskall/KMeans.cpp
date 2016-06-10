@@ -18,7 +18,7 @@ KMeans::KMeans(Pointset _customers) {
 
 void KMeans::assign(Pointset& sites) {
 	partition.clear();
-	for (int i = 0; i < sites.size(); ++i) {
+	for (unsigned int i = 0; i < sites.size(); ++i) {
 		partition.push_back(Pointset());
 	}
 	for (auto customer : customers) {
@@ -39,14 +39,14 @@ void KMeans::assign(Pointset& sites) {
 // assign customers to sites if in ball
 void KMeans::assign_ball(Pointset& sites) {
 	double rad = std::numeric_limits<double>::max();
-	for (int i = 0; i < sites.size() - 1; ++i) {
-		for (int j = i + 1; j < sites.size(); ++j) {
+	for (unsigned int i = 0; i < sites.size() - 1; ++i) {
+		for (unsigned int j = i + 1; j < sites.size(); ++j) {
 			rad = std::min(rad, eucl2dist(sites[i], sites[j]) / 9.);
 		}
 	}
 
 	partition.clear();
-	for (int i = 0; i < sites.size(); ++i) {
+	for (unsigned int i = 0; i < sites.size(); ++i) {
 		partition.push_back(Pointset());
 	}
 	for (auto customer : customers) {
