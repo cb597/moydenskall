@@ -1,4 +1,5 @@
-#pragma once
+#ifndef Point_hpp
+#define Point_hpp
 #include <iostream>
 class Point {
 public:
@@ -14,3 +15,5 @@ public:
 private:
 	int ID;
 };
+
+#endif

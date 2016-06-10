@@ -1,4 +1,5 @@
-#pragma once
+#ifndef KMeans_hpp
+#define KMeans_hpp
 #include <vector>
 #include "Point.hpp"
 #include "Tools.hpp"
@@ -19,3 +20,5 @@ private:
 	int n; // number of customers
 	Pointset customers;
 };
+
+#endif

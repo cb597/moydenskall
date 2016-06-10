@@ -1,4 +1,5 @@
-#pragma once
+#ifndef Seeder_hpp
+#define Seeder_hpp
 #include "kmeans.hpp"
 #include <limits>
 #include <algorithm>
@@ -55,3 +56,5 @@ public:
 private:
 	int k; // seed k centers
 };
+
+#endif

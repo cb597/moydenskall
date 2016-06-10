@@ -1,4 +1,5 @@
-#pragma once
+#ifndef Enumerator_hpp
+#define Enumerator_hpp
 #include <vector>
 #include "Point.hpp"
 typedef std::vector<Point> Pointset;
@@ -17,3 +18,5 @@ private:
 	double fix_costs;
 	int capacity;
 };
+
+#endif
