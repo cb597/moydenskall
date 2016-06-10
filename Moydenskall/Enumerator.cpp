@@ -83,5 +83,5 @@ void Enumerator::print_result(bool svg) {
 }
 
 void Enumerator::svg_output() {
-	print_to_svg(best_partition, best_sites, "result.svg");
+	//print_to_svg(c best_partition, best_sites, "result.svg");
 }

@@ -63,47 +63,32 @@ void KMeans::swamy(const Seeder& seeder) {
 	Pointset sites = seeder.seed();
 	// assign customers within ball to one of the two sites
 	assign_ball(sites);
-	print_to_svg(partition, sites, "swamy2_init.svg");
+	print_to_svg(customers, partition, sites, seeder.toString() + "_init.svg");
 	// move sites to centroid of points within ball
 	sites = centroid(partition);
-	print_to_svg(partition, sites, "swamy2_result.svg");
+	print_to_svg(customers, partition, sites, seeder.toString() + "_result.svg");
 
 	// no longer relevant for algorithm, but nice and complete graphical output:
 	assign(sites);
-	print_to_svg(partition, sites, "swamy2_final.svg");
+	print_to_svg(customers, partition, sites, seeder.toString() + "_final.svg");
 }
-
-
-
-
-
-
-
 
 void KMeans::kmeansstep(Pointset& customers, Pointset& sites) {
 	assign(sites);
 	sites = centroid(partition);
 }
 
-
-
-
-
-void KMeans::seed_static_and_run() {
-	//StaticSeeder s (customers);
-	//Pointset sites1 = s.seed();
-	////Pointset sites = seed_static(2);
-	////Pointset sites = seed_random_subset(customers, 3);
-	//Pointset sites = Swamy2Seeder(customers).seed();
-	//assign(sites);
-	//print_to_svg(partition, sites, "init.svg");
-	//run(sites, 5);
-	//print_to_svg(partition, sites, "result.svg");
+void KMeans::seed_and_run(const Seeder& seeder) {
+	Pointset sites = seeder.seed();
+	assign(sites);
+	print_to_svg(customers, partition, sites, seeder.toString()+"init.svg");
+	run(sites, 5);
+	print_to_svg(customers, partition, sites, seeder.toString() + "result.svg");
 }
 
 void KMeans::run(Pointset& sites, int steps) {
 	for (int i = 0; i < steps; ++i) {
 		kmeansstep(customers, sites);
-		print_to_svg(partition, sites, std::to_string(i).append(".svg"));
+		print_to_svg(customers, partition, sites, std::to_string(i).append(".svg"));
 	}
 }

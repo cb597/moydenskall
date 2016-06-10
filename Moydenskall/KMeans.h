@@ -8,10 +8,8 @@
 class KMeans {
 public:
 	KMeans(Pointset);
-	void seed_static_and_run();
+	void seed_and_run(const Seeder&);
 	void run(Pointset&, int);
-	void swamy2();
-	void swamyk(int k);
 	void swamy(const Seeder&);
 private:
 	void kmeansstep(Pointset&, Pointset&);

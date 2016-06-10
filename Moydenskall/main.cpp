@@ -48,10 +48,13 @@ int main(int argc, char* argv[]) {
 	Pointset customers = readfile(instance_filename);
 #ifdef KMEANS
 	KMeans lloyd (customers);
-	Swamy2Seeder s2(customers);
-	//SwamykSeeder sk(customers, 5);
-	lloyd.swamy(s2);
-	//lloyd.seed_static_and_run();
+	Swamy2Seeder swamy2(customers);
+	SwamykSeeder swamyk(customers, 5);
+	lloyd.swamy(swamyk);
+
+	StaticSeeder stat5(customers, 5);
+	SubsetSeeder subset(customers, 5);
+	lloyd.seed_and_run(subset);
 
 #endif
 #ifdef ENTRYEXERCISE

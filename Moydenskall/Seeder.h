@@ -11,6 +11,7 @@ class Seeder {
 public:
 	Seeder(const Pointset& _customers) { customers = _customers; }
 	virtual Pointset seed() const = 0;
+	virtual std::string toString() const = 0;
 protected:
 	Pointset customers;
 };
@@ -20,6 +21,7 @@ public:
 	StaticSeeder(Pointset _customers) : Seeder(_customers) { n = 2; };
 	StaticSeeder(Pointset _customers, int _n) : Seeder(_customers) { n = _n; };
 	Pointset seed() const;
+	std::string toString() const { return "static_seeder"; }
 private:
 	int n; //number of sites to be seeded
 };
@@ -30,6 +32,7 @@ public:
 	SubsetSeeder(Pointset _customers) : Seeder(_customers) { n = 2; };
 	SubsetSeeder(Pointset _customers, int _n) : Seeder(_customers) { n = _n; };
 	Pointset seed() const;
+	std::string toString() const { return "subset_seeder"; }
 private:
 	int n; //number of sites to be seeded
 };
@@ -40,6 +43,7 @@ class Swamy2Seeder : public Seeder {
 public:
 	Swamy2Seeder(Pointset _customers) : Seeder(_customers) {};
 	Pointset seed() const;
+	std::string toString() const { return "swamy2_seeder"; }
 };
 
 
@@ -47,6 +51,7 @@ class SwamykSeeder : public Seeder {
 public:
 	SwamykSeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
 	Pointset seed() const;
+	std::string toString() const { return "swamyk_seeder"; }
 private:
 	int k; // seed k centers
 };

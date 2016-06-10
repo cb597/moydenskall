@@ -21,7 +21,7 @@ Pointset StaticSeeder::seed() const {
 
 // select a random subset of the customers as init sites
 Pointset SubsetSeeder::seed() const {
-	std::srand(unsigned(std::time(0)));
+	std::srand(unsigned(std::time(NULL)));
 	std::vector<int> permutation;
 	for (int i = 0; i < customers.size(); permutation.push_back(i++));
 	std::random_shuffle(permutation.begin(), permutation.end());
@@ -36,7 +36,7 @@ Pointset SubsetSeeder::seed() const {
 
 
 Pointset Swamy2Seeder::seed() const {
-	std::srand(unsigned(std::time(0)));
+	std::srand(unsigned(std::time(NULL)));
 	Point cen = centroid(customers);
 	double d1 = eucl2dist(customers, cen);
 
