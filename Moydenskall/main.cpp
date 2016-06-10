@@ -1,6 +1,5 @@
 #include <vector>
 #include "Tools.hpp"
-#include "Enumerator.hpp"
 #include "Point.hpp"
 #include <time.h>
 #include <iostream>
@@ -8,9 +7,6 @@
 #include "Seeder.hpp"
 #include "kmeans.hpp"
 #include <limits>
-
-#define KMEANS
-//#define ENTRYEXERCISE
 
 int main(int argc, char* argv[]) {
 
@@ -43,34 +39,25 @@ int main(int argc, char* argv[]) {
 			svg_ouput = std::string(argv[i + 1]) == "true" ? true : false; //svg_ouput
 		}
 	}
-	
 	Pointset customers = readfile(instance_filename);
-#ifdef KMEANS
-	KMeans lloyd (customers);
+
+	KMeans lloyd(customers);
 	Swamy2Seeder swamy2(customers);
 	SwamykSeeder swamyk(customers, 5);
-	lloyd.swamy(swamyk);
-
 	StaticSeeder stat5(customers, 5);
 	SubsetSeeder subset(customers, 5);
-	lloyd.seed_and_run(subset);
-
-#endif
-#ifdef ENTRYEXERCISE
-	std::vector<Pointset> partition;
-	Enumerator en(f, u);
-	Partition partition;
 
 	if (time_measurement) {
 		double tstart = clock();
-		en.create_partition(partition, customers);
+		lloyd.swamy(swamyk);
+		lloyd.seed_and_run(subset);
 		double tstop = clock();
 		std::cout << "needed " << (tstop - tstart) / CLOCKS_PER_SEC << " seconds" << std::endl;
 	}
 	else {
-		en.create_partition(partition, customers);
+		lloyd.swamy(swamyk);
+		lloyd.seed_and_run(subset);
 	}
-	en.print_result(svg_ouput);
-#endif
+
 	return 0;
 }
