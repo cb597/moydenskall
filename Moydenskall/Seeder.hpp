@@ -1,5 +1,5 @@
-#ifndef Seeder_hpp
-#define Seeder_hpp
+#ifndef SEEDER_HPP
+#define SEEDER_HPP
 #include "kmeans.hpp"
 #include <limits>
 #include <algorithm>

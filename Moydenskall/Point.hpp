@@ -1,5 +1,5 @@
-#ifndef Point_hpp
-#define Point_hpp
+#ifndef POINT_HPP
+#define POINT_HPP
 #include <iostream>
 class Point {
 public:

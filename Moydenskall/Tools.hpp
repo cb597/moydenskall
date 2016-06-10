@@ -1,5 +1,5 @@
-#ifndef Tools_hpp
-#define Tools_hpp
+#ifndef TOOLS_HPP
+#define TOOLS_HPP
 
 #include "Point.hpp"
 #include <vector>

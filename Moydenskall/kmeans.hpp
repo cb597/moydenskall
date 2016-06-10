@@ -1,5 +1,5 @@
-#ifndef KMeans_hpp
-#define KMeans_hpp
+#ifndef KMEANS_HPP
+#define KMEANS_HPP
 #include <vector>
 #include "Point.hpp"
 #include "Tools.hpp"

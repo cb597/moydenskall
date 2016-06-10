@@ -1,5 +1,5 @@
-#ifndef Enumerator_hpp
-#define Enumerator_hpp
+#ifndef ENUM_HPP
+#define ENUM_HPP
 #include <vector>
 #include "Point.hpp"
 typedef std::vector<Point> Pointset;
