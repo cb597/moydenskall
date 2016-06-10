@@ -1,14 +1,13 @@
-//#include "Filereader.cpp"
 #include <vector>
+#include "Tools.hpp"
 #include "Enumerator.hpp"
 #include "Point.hpp"
 #include <time.h>
 #include <iostream>
-#include "Tools.hpp"
 #include <string>
+#include "Seeder.hpp"
 #include "kmeans.hpp"
 #include <limits>
-#include "Seeder.hpp"
 
 #define KMEANS
 //#define ENTRYEXERCISE

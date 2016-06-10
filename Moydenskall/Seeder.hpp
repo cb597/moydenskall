@@ -1,6 +1,6 @@
 #ifndef SEEDER_HPP
 #define SEEDER_HPP
-#include "kmeans.hpp"
+#include "Tools.hpp"
 #include <limits>
 #include <algorithm>
 #include <ctime>        // std::time
