@@ -70,11 +70,11 @@ private:
 
 
 
-class lsadskyfliusayre : public Seeder {
+class LTSeeder : public Seeder {
 public:
-	lsadskyfliusayre(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
+	LTSeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
 	Pointset seed() const;
-	std::string toString() const { return "lsadskyfliusayre"; }
+	std::string toString() const { return "LTSeeder"; }
 private:
 	int k; // seed k centers
 };
