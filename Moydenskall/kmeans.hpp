@@ -14,8 +14,8 @@ public:
 	void swamy(const Seeder&);
 private:
 	void kmeansstep(Pointset&, Pointset&);
-	void assign(Pointset& sites);
-	void assign_ball(Pointset& sites);
+	Partition cluster(const Pointset& customers, Pointset& sites);
+	void cluster_ball(Pointset& sites);
 	Partition partition;
 	int n; // number of customers
 	Pointset customers;

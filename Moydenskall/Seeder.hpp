@@ -57,4 +57,15 @@ private:
 	int k; // seed k centers
 };
 
+
+class GreedyDelSeeder : public Seeder {
+public:
+	GreedyDelSeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
+	Pointset seed() const;
+	std::string toString() const { return "GreedyDelSeeder"; }
+private:
+	int k; // seed k centers
+};
+
+
 #endif
