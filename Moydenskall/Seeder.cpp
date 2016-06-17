@@ -109,8 +109,11 @@ Pointset SwamykSeeder::seed() const{
 }
 
 Pointset GreedyDelSeeder::seed() const {
+	return seed(customers);
+}
+Pointset GreedyDelSeeder::seed(Pointset init) const {
 
-	Pointset sites = customers;
+	Pointset sites = init;
 
 	while (sites.size() > (unsigned int) k) {
 		// B1
@@ -170,3 +173,24 @@ Pointset GreedyDelSeeder::seed() const {
 
 	return sites;
 }
+
+Pointset LTSeeder::seed() const {
+
+	//C1
+	double e = 0.0123;
+	double p1 = sqrt(e);
+	int N = 2 * k / (1 - 5 * p1) + 2 * log(2 / p1) / pow((1 - 5 * p1), 2);
+	
+	SwamykSeeder swamykseeder(customers, k);
+	auto S = swamykseeder.seed();
+
+	//C2
+	auto partition = cluster(customers, S);
+	auto sdach = centroid(partition);
+
+
+	GreedyDelSeeder greedydelseeder(customers, k);
+
+	return greedydelseeder.seed(sdach);;
+}
+

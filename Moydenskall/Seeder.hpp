@@ -62,7 +62,19 @@ class GreedyDelSeeder : public Seeder {
 public:
 	GreedyDelSeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
 	Pointset seed() const;
+	Pointset seed(Pointset init) const;
 	std::string toString() const { return "GreedyDelSeeder"; }
+private:
+	int k; // seed k centers
+};
+
+
+
+class lsadskyfliusayre : public Seeder {
+public:
+	lsadskyfliusayre(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
+	Pointset seed() const;
+	std::string toString() const { return "lsadskyfliusayre"; }
 private:
 	int k; // seed k centers
 };

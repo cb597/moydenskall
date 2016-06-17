@@ -47,6 +47,7 @@ int main(int argc, char* argv[]) {
 	StaticSeeder stat5(customers, 5);
 	SubsetSeeder subset(customers, 5);
 	GreedyDelSeeder gredel(customers, 5);
+	LTSeeder lseed(customers, 10);
 
 	if (time_measurement) {
 		double tstart = clock();
@@ -57,7 +58,7 @@ int main(int argc, char* argv[]) {
 	}
 	else {
 		lloyd.swamy(swamyk);
-		lloyd.seed_and_run(gredel);
+		lloyd.seed_and_run(lseed);
 	}
 
 	return 0;
