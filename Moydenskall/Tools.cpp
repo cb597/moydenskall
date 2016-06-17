@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <tuple>
 
 Point centroid(const Pointset& plane) {
 	if (plane.size() == 0) {
@@ -57,6 +58,66 @@ double evaluate_partition(Partition partition, Pointset sites, double fix_costs)
 	return sum;
 }
 
+
+std::vector<double> evaluate_partition(std::tuple<Partition, std::vector<int> > partition, Pointset sites) {
+	if (sites.size() != std::get<0>(partition).size()) {
+		throw "incompatible amount of sites and partitions";
+	}
+
+	std::vector<double> stderrors = std::vector<double>();
+	for (unsigned int i = 0; i < sites.size(); ++i) {
+		stderrors.push_back(eucl2dist(std::get<0>(partition)[i], sites[i]));
+	}
+
+	std::vector<double> errors = std::vector<double>();
+
+	return errors;
+}
+Partition cluster(const Pointset& customers, const Pointset& sites) {
+	Partition partition = Partition();
+	for (unsigned int i = 0; i < sites.size(); ++i) {
+		partition.push_back(Pointset());
+	}
+	for (auto customer : customers) {
+		double best_val = std::numeric_limits<double>::max();
+		int best_id = -1;
+		for (auto site : sites) {
+			if (eucl2dist(site, customer) < best_val) {
+				best_val = eucl2dist(site, customer);
+				best_id = site.getId();
+			}
+		}
+		if (best_id == -1)
+			throw "couldn't cluster site in kmeansstep()";
+		partition[best_id - 1].push_back(customer);
+	}
+	return partition;
+}
+
+std::tuple<Partition, std::vector<int> > double_cluster(const Pointset& customers, const Pointset& sites) {
+	Partition partition = Partition();
+	std::vector<int> secondbest = std::vector<int>();
+	for (unsigned int i = 0; i < sites.size(); ++i) {
+		partition.push_back(Pointset());
+	}
+	for (auto customer : customers) {
+		double best_val = std::numeric_limits<double>::max();
+		int best_id = -1;
+		int second_best_id = -1;
+		for (auto site : sites) {
+			if (eucl2dist(site, customer) < best_val) {
+				second_best_id = best_id;
+				best_val = eucl2dist(site, customer);
+				best_id = site.getId();
+			}
+		}
+		if (best_id == -1)
+			throw "couldn't cluster site in kmeansstep()";
+		partition[best_id - 1].push_back(customer);
+		secondbest.push_back(second_best_id);
+	}
+	return std::make_tuple(partition, secondbest);
+}
 
 Pointset readfile(std::string filename) {
 	
