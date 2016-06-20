@@ -141,7 +141,7 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 		for (unsigned int i = 0; i < customers.size(); i++) {
 			T += val_1best[i];
 			for (unsigned int t = 0; t < sites.size(); ++t) {
-				Tx[t]+= t != id_1best[i]-1 ? val_1best[i] : val_2best[i];
+				Tx[t]+= (int)t != id_1best[i]-1 ? val_1best[i] : val_2best[i];
 			}
 		}
 
@@ -164,7 +164,6 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 		}
 		if (p[bestid-1].size()>0) {
 			throw "greedy delete has gone terribly wrong delete has failed";
-			int x = 0;
 		}
 		p.erase(p.begin() + bestid-1);
 		std::cout << "just erased " << bestid-1 << "\n";
@@ -180,8 +179,8 @@ Pointset LTSeeder::seed() const {
 	double e = 0.0123;
 	double p1 = sqrt(e);
 	int N = 2 * k / (1 - 5 * p1) + 2 * log(2 / p1) / pow((1 - 5 * p1), 2);
-	
-	SwamykSeeder swamykseeder(customers, k);
+
+	SwamykSeeder swamykseeder(customers, N);
 	auto S = swamykseeder.seed();
 
 	//C2
