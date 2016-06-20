@@ -1,10 +1,2 @@
 *.tlog
-Moydenskall/Debug/vc140.idb
-Moydenskall/Moydenskall.sdf
-Moydenskall/Moydenskall.vcxproj
-Moydenskall/Release/Moydenskall.iobj
-Moydenskall/Release/Moydenskall.ipdb
-Moydenskall/Moydenskall.opensdf
-Moydenskall/Moydenskall.vcxproj.filters
 *.svg
-Moydenskall/Debug/Moydenskall.bsc
