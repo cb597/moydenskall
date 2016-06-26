@@ -7,6 +7,7 @@
 #include <random>
 #include "Seeder.hpp"
 #include <tuple>
+#include <numeric>
 
 // Seeder Classes
 
@@ -29,7 +30,7 @@ Pointset SubsetSeeder::seed() const {
 	Pointset sites;
 	for (int i = 1; i <= n; ++i) {
 		sites.push_back(customers[permutation[i]]);
-		sites[sites.size()-1].setId(i);
+		sites[sites.size() - 1].setId(i);
 	}
 	return sites;
 }
@@ -67,7 +68,7 @@ Pointset Swamy2Seeder::seed() const {
 	return sites;
 }
 
-Pointset SwamykSeeder::seed() const{
+Pointset SwamykSeeder::seed() const {
 	Pointset sites = Swamy2Seeder(customers).seed();
 
 	std::vector<double> probability(customers.size(), std::numeric_limits<int>::max());
@@ -115,13 +116,13 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 
 	Pointset sites = init;
 
-	while (sites.size() > (unsigned int) k) {
+	while (sites.size() > (unsigned int)k) {
 		// B1
 		std::vector<int> id_1best = std::vector<int>(customers.size(), -1);
 		std::vector<double> val_1best = std::vector<double>(customers.size(), std::numeric_limits<int>::max());
 		std::vector<int> id_2best = std::vector<int>(customers.size(), -1);
 		std::vector<double> val_2best = std::vector<double>(customers.size(), std::numeric_limits<int>::max());
-		for (unsigned int c = 0; c < customers.size();++c) {
+		for (unsigned int c = 0; c < customers.size(); ++c) {
 			for (auto s : sites) {
 				double dist = eucl2dist(customers[c], s);
 				if (dist < val_1best[c]) {
@@ -141,7 +142,7 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 		for (unsigned int i = 0; i < customers.size(); i++) {
 			T += val_1best[i];
 			for (unsigned int t = 0; t < sites.size(); ++t) {
-				Tx[t]+= (int)t != id_1best[i]-1 ? val_1best[i] : val_2best[i];
+				Tx[t] += (int)t != id_1best[i] - 1 ? val_1best[i] : val_2best[i];
 			}
 		}
 
@@ -160,13 +161,13 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 		for (unsigned int i = 0; i < customers.size(); ++i) {
 			int topart = id_1best[i] != bestid ? id_1best[i] : id_2best[i];
 
-			p[topart-1].push_back(customers[i]);
+			p[topart - 1].push_back(customers[i]);
 		}
-		if (p[bestid-1].size()>0) {
+		if (p[bestid - 1].size()>0) {
 			throw "greedy delete has gone terribly wrong delete has failed";
 		}
-		p.erase(p.begin() + bestid-1);
-		std::cout << "just erased " << bestid-1 << "\n";
+		p.erase(p.begin() + bestid - 1);
+		std::cout << "just erased " << bestid - 1 << "\n";
 		sites = centroid(p);
 	}
 
@@ -178,7 +179,7 @@ Pointset LTSeeder::seed() const {
 	//C1
 	double e = 0.0123;
 	double p1 = sqrt(e);
-	int N = 2 * k / (1 - 5 * p1) + 2 * log(2 / p1) / pow((1 - 5 * p1), 2);
+	int N = (int)(2 * k / (1 - 5 * p1) + 2 * log(2 / p1) / pow((1 - 5 * p1), 2));
 
 	SwamykSeeder swamykseeder(customers, N);
 	auto S = swamykseeder.seed();
@@ -190,6 +191,153 @@ Pointset LTSeeder::seed() const {
 
 	GreedyDelSeeder greedydelseeder(customers, k);
 
-	return greedydelseeder.seed(sdach);;
+	return greedydelseeder.seed(sdach);
 }
 
+
+
+Pointset DSeeder::ballkmeansstep(Pointset& sites) const {
+	// cluster customers to sites if in ball
+	double rad = std::numeric_limits<double>::max();
+	for (unsigned int i = 0; i < sites.size() - 1; ++i) {
+		for (unsigned int j = i + 1; j < sites.size(); ++j) {
+			rad = std::min(rad, eucl2dist(sites[i], sites[j]) / 9.);
+		}
+	}
+
+	Partition partition;
+	for (unsigned int i = 0; i < sites.size(); ++i) {
+		partition.push_back(Pointset());
+	}
+	for (auto customer : customers) {
+		for (auto site : sites) {
+			if (eucl2dist(site, customer) < rad) {
+				partition[site.getId() - 1].push_back(customer);
+			}
+		}
+	}
+	return centroid(partition);
+	//TODO this function has code duplicate with KMeans::cluster_ball()
+}
+
+
+
+Pointset DSeeder::seed() const {
+
+	// D1 (obtain k initial centres using last seeding strategy)
+	Pointset init = (LTSeeder(customers, k)).seed();
+
+	// D2 (run a ball-k-means step)
+	return ballkmeansstep(init);
+}
+
+
+void subsetcentroids(Pointset& result, Pointset& set, Pointset& chosen, unsigned int position, unsigned int left) {
+	if (left == 0) {
+		result.push_back(centroid(chosen));
+		return;
+	}
+	else if (set.size()-position < left) {
+		return;
+	}
+	else {
+		chosen.push_back(set[position]);
+		subsetcentroids(result, set, chosen, position + 1, left - 1);
+		chosen.pop_back();
+		subsetcentroids(result, set, chosen, position + 1, left);
+	}
+}
+
+double get_optimal_candidates(const Pointset customers, Partition& p, Pointset& chosen, int cur_part, double bestval, Pointset& bestset) {
+	if (cur_part == p.size()) {
+		Partition part = cluster(customers, chosen);
+		double val = evaluate_partition(part, chosen, 0);
+		if (val < bestval) {
+			bestval = val;
+			bestset.clear();
+			for (unsigned int i = 0; i < bestset.size(); ++i) {
+				bestset.push_back(chosen[i]);
+			}
+		}
+		return bestval;
+	}
+	for (unsigned int i = 0; i < p[cur_part].size(); ++i) {
+		chosen.push_back(p[cur_part][i]);
+		bestval = get_optimal_candidates(customers, p, chosen, cur_part + 1, bestval, bestset);
+		chosen.pop_back();
+	}
+	return bestval;
+}
+
+
+Pointset ESeeder::centroid_estimation(Partition& partition, Pointset & init_centers) const {
+	Pointset centers;
+	double eps = 0.5; // ToDo get real value
+	double beta = 1 / (1 + 144 * eps*eps);
+	double omega = 0.5; // Todo get real value
+
+	Pointset assigned_center; //c_dach(x)
+	Partition exp_voronoi;
+
+
+	for (auto X : partition) {
+		for (auto x : X) {
+			Point* minp = &(init_centers[0]);
+			double best = 9999;//ToDo numeric limits;
+			for (auto c : init_centers) {
+				if(eucl2dist(c, x) < best) {
+					minp = &c;
+					best = eucl2dist(c,x);
+				}
+			}
+			assigned_center.push_back(*minp);
+		}
+	}
+
+	//set expanded voronoi region
+	int pidx = 0;
+	for (unsigned int i = 0; i < partition.size();++i) {
+		Pointset voro = Pointset();
+		auto X = partition[i];
+		for (unsigned int j = 0; j < X.size(); ++j) {
+			auto x = X[j];
+			for (auto c : init_centers) {
+				if(eucl2dist(c, x) <= eucl2dist(x, assigned_center[pidx]) + eucl2dist(init_centers[i], assigned_center[pidx])){
+					voro.push_back(x);
+				}
+			}
+		}
+		exp_voronoi.push_back(voro);
+	}
+
+	//random subset
+	Partition S;
+	int amount = (int) (4 / (beta*omega));
+	for(auto r : exp_voronoi) {
+		Pointset p = Pointset();
+		std::vector<unsigned int> indices(r.size());
+		std::iota(indices.begin(), indices.end(), 0);
+		std::random_shuffle(indices.begin(), indices.end());
+		for (int i = 0; i < amount; ++i) {
+			p.push_back(r[indices[i]]);
+		}
+		S.push_back(p);
+	}
+
+	// select centroids of all subsets of size 2/omega
+
+	Partition candidates;
+	for(auto s : S) {
+		Pointset blubb = Pointset();
+		subsetcentroids(blubb, s, Pointset(), 0, (int)(2 / omega));
+		candidates.push_back(blubb);
+	}
+
+	// select optimal candidate from each s \in subsetcentroid
+	Pointset chosen = Pointset();
+	Pointset bestset = Pointset();
+	get_optimal_candidates(customers, candidates, chosen, 0, 99999999., bestset);
+
+
+	return chosen;
+}

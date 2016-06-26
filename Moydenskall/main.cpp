@@ -48,6 +48,7 @@ int main(int argc, char* argv[]) {
 	SubsetSeeder subset(customers, 5);
 	GreedyDelSeeder gredel(customers, 5);
 	LTSeeder lseed(customers, 10);
+	DSeeder dseed(customers, 10);
 
 	if (time_measurement) {
 		double tstart = clock();
@@ -57,8 +58,8 @@ int main(int argc, char* argv[]) {
 		std::cout << "needed " << (tstop - tstart) / CLOCKS_PER_SEC << " seconds" << std::endl;
 	}
 	else {
-		lloyd.swamy(swamyk);
-		lloyd.seed_and_run(lseed);
+		//lloyd.swamy(swamyk);
+		lloyd.seed_and_run(dseed);
 	}
 
 	return 0;

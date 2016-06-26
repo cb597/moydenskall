@@ -80,4 +80,26 @@ private:
 };
 
 
+class DSeeder : public Seeder {
+public:
+	DSeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
+	Pointset seed() const;
+	std::string toString() const { return "DSeeder"; }
+private:
+	int k; // seed k centers
+	Pointset ballkmeansstep(Pointset& sites) const;
+};
+
+
+class ESeeder : public Seeder {
+public:
+	ESeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
+	Pointset seed() const;
+	std::string toString() const { return "ESeeder"; }
+private:
+	int k; // seed k centers
+	Pointset centroid_estimation(Partition& partition, Pointset& sites) const;
+};
+
+
 #endif
