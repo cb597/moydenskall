@@ -144,8 +144,8 @@ Pointset LTSeeder::seed() const {
 	auto S = swamykseeder.seed();
 
 	//C2
-	auto partition = cluster(customers, S);
-	auto sdach = centroid(partition);
+	ExtPartition partition = ExtPartition(customers, S);
+	Pointset sdach = partition.centroids(customers);
 
 
 	GreedyDelSeeder greedydelseeder(customers, k);
