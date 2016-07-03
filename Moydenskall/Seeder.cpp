@@ -8,6 +8,7 @@
 #include "Seeder.hpp"
 #include <tuple>
 #include <numeric>
+#include "ExtPartition.hpp"
 
 // Seeder Classes
 
@@ -117,41 +118,16 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 	Pointset sites = init;
 
 	while (sites.size() > (unsigned int)k) {
-		// B1
-		std::vector<unsigned int> id_1best = std::vector<unsigned int>(customers.size(), -1);
-		std::vector<double> val_1best = std::vector<double>(customers.size(), std::numeric_limits<int>::max());
-		std::vector<unsigned int> id_2best = std::vector<unsigned int>(customers.size(), -1);
-		std::vector<double> val_2best = std::vector<double>(customers.size(), std::numeric_limits<int>::max());
-		for (unsigned int c = 0; c < customers.size(); ++c) {
-			for (auto s : sites) {
-				double dist = eucl2dist(customers[c], s);
-				if (dist < val_1best[c]) {
-					id_2best[c] = id_1best[c];
-					val_2best[c] = val_1best[c];
-					id_1best[c] = s.getId();
-					val_1best[c] = dist;
-				}
-				else if (dist < val_2best[c]) {
-					id_2best[c] = s.getId();
-					val_2best[c] = dist;
-				}
-			}
-		}
-		double T = 0.;
-		std::vector<double> Tx = std::vector<double>(sites.size(), 0.); // cost of clustering customers around sites\{x}
-		for (unsigned int i = 0; i < customers.size(); i++) {
-			T += val_1best[i];
-			for (unsigned int t = 0; t < sites.size(); ++t) {
-				Tx[t] += t != id_1best[i] - 1 ? val_1best[i] : val_2best[i];
-			}
-		}
+		// B1 - get best and second best center for each customer
 
-		// B2
+		ExtPartition extpart = ExtPartition(customers, sites);
+
+		// B2 - pick the center for which Tx is minimum
 		double bestval = std::numeric_limits<double>::max();
 		int bestid = -1;
 		for (unsigned int i = 0; i < sites.size(); ++i) {
-			if (Tx[i] < bestval) {
-				bestval = Tx[i];
+			if (extpart.Tx[i] < bestval) {
+				bestval = extpart.Tx[i];
 				bestid = sites[i].getId();
 			}
 		}
@@ -159,15 +135,15 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 		// B3
 		Partition p = Partition(sites.size(), std::vector<Point>());
 		for (unsigned int i = 0; i < customers.size(); ++i) {
-			int topart = id_1best[i] != bestid ? id_1best[i] : id_2best[i];
+			int topart = extpart.id_1best[i] != bestid ? extpart.id_1best[i] : extpart.id_2best[i];
 
 			p[topart - 1].push_back(customers[i]);
 		}
 		if (p[bestid - 1].size()>0) {
-			throw "greedy delete has gone terribly wrong delete has failed";
+			throw std::range_error("greedy delete has gone terribly wrong delete has failed");
 		}
 		p.erase(p.begin() + bestid - 1);
-		std::cout << "just erased " << bestid - 1 << "\k";
+		std::cout << "just erased " << bestid - 1 << "\n";
 		sites = centroid(p);
 	}
 

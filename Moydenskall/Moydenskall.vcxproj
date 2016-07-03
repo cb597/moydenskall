@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ExtPartition.cpp" />
     <ClCompile Include="KMeans.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="Tools.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ExtPartition.hpp" />
     <ClInclude Include="kmeans.hpp" />
     <ClInclude Include="Point.hpp" />
     <ClInclude Include="Seeder.hpp" />

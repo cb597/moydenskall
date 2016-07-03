@@ -3,6 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <tuple>
+#include "ExtPartition.hpp"
 
 Point centroid(const Pointset& plane) {
 	if (plane.size() == 0) {
@@ -74,25 +75,8 @@ std::vector<double> evaluate_partition(std::tuple<Partition, std::vector<int> > 
 	return errors;
 }
 Partition cluster(const Pointset& customers, const Pointset& sites) {
-	Partition partition = Partition();
-	for (unsigned int i = 0; i < sites.size(); ++i) {
-		partition.push_back(Pointset());
-	}
-	for (auto customer : customers) {
-		double best_val = std::numeric_limits<double>::max();
-		int best_id = -1;
-		for (unsigned int i = 0; i < sites.size();++i) {
-			if (eucl2dist(sites[i], customer) < best_val) {
-				best_val = eucl2dist(sites[i], customer);
-				best_id = i;
-			}
-		}
-		if (best_id == -1) {
-			throw "could not cluster site in kmeansstep()";
-		}
-		partition[best_id].push_back(customer);
-	}
-	return partition;
+	ExtPartition part = ExtPartition(customers, sites);
+	return part.getOldPartition();
 }
 
 std::tuple<Partition, std::vector<int> > double_cluster(const Pointset& customers, const Pointset& sites) {
@@ -189,7 +173,7 @@ void print_to_svg(Pointset customers, Partition partition, Pointset sites, std::
 	for (unsigned int i = 0; i < partition.size(); ++i) {
 		sum += eucl2dist(partition[i], sites[i]);
 	}
-	svgfile << "<text x = \""<< xmin <<"\" y = \""<< ymin <<"\" fill = \"black\"  style=\"font-size:"<<3*pointsize<<"px\">" << filename << " - " << sum << "</text>\k";
+	svgfile << "<text x = \""<< xmin <<"\" y = \""<< ymin <<"\" fill = \"black\"  style=\"font-size:"<<3*pointsize<<"px\">" << filename << " - " << sum << "</text>\n";
 	svgfile << "</svg>";
 }
 
