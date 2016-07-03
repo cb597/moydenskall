@@ -11,6 +11,7 @@ public:
 	unsigned int assigned_alternative(unsigned int idx);
 	void delete_partition(unsigned int idx);
 	Pointset centroids(Pointset customers);
+	Pointset ballkmeans(const Pointset& _customers, const Pointset& _sites);
 private:
 	double T;
 	std::vector<double> Tx;

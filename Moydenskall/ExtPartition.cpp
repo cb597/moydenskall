@@ -45,6 +45,7 @@ Pointset ExtPartition::centroids(Pointset customers) {
 	std::vector<Point> centers(k, Point(0,0));
 	std::vector<unsigned int> counter(k, 0);
 	for (unsigned int i = 0; i < customers.size(); ++i) {
+		if (assigned(i) == k) continue;
 		centers[assigned(i)].X += customers[i].X;
 		centers[assigned(i)].Y += customers[i].Y;
 		counter[assigned(i)]++;
@@ -54,6 +55,34 @@ Pointset ExtPartition::centroids(Pointset customers) {
 		centers[i].Y /= counter[i];
 	}
 	return centers;
+}
+
+// ball-k-means step as described in 4.2 (A) 
+Pointset ExtPartition::ballkmeans(const Pointset & customers, const Pointset & sites) {
+	std::vector<double> ddach(k, std::numeric_limits<double>::infinity());
+	for (unsigned int i = 0; i < sites.size() - 1; ++i) {
+		for (unsigned int j = i + 1; j < sites.size(); ++j) {
+			double ndist = eucl2dist(sites[i], sites[j]);
+			ddach[i] = std::min(ddach[i], ndist);
+			ddach[j] = std::min(ddach[j], ndist);
+		}
+	}
+
+	auto backup = id_1best;
+	for (int i = 0; i < id_1best.size();++i) {
+		id_1best[i] = k;
+	}
+	
+	for (unsigned int c = 0; c < customers.size();++c) {
+		for (int s = 0; s < sites.size(); ++s) {
+			if (eucl2dist(sites[s], customers[c]) < ddach[s] / 3) {
+				id_1best[c] = s;
+			}
+		}
+	}
+	Pointset p = centroids(customers);
+	id_1best = backup;
+	return p;
 }
 
 //deals with legacy function calls, should be obsolete soon

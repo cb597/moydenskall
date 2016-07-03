@@ -156,26 +156,12 @@ Pointset LTSeeder::seed() const {
 
 
 Pointset DSeeder::ballkmeansstep(Pointset& sites) const {
-	// cluster customers to sites if in ball
-	double rad = std::numeric_limits<double>::max();
-	for (unsigned int i = 0; i < sites.size() - 1; ++i) {
-		for (unsigned int j = i + 1; j < sites.size(); ++j) {
-			rad = std::min(rad, eucl2dist(sites[i], sites[j]) / 9.);
-		}
-	}
+	//shall be obsolete through ExtPartition::ballkmeans
 
-	Partition partition;
-	for (unsigned int i = 0; i < sites.size(); ++i) {
-		partition.push_back(Pointset());
-	}
-	for (auto customer : customers) {
-		for (auto site : sites) {
-			if (eucl2dist(site, customer) < rad) {
-				partition[site.getId() - 1].push_back(customer);
-			}
-		}
-	}
-	return centroid(partition);
+	ExtPartition extpart = ExtPartition(customers, sites);
+	Pointset c1 = extpart.ballkmeans(customers, sites);
+
+	return c1;
 	//TODO this function has code duplicate with KMeans::cluster_ball()
 }
 
