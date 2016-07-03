@@ -255,7 +255,7 @@ double get_optimal_candidates(const Pointset customers, Partition& p, Pointset& 
 		if (val < bestval) {
 			bestval = val;
 			bestset.clear();
-			for (unsigned int i = 0; i < bestset.size(); ++i) {
+			for (unsigned int i = 0; i < chosen.size(); ++i) {
 				bestset.push_back(chosen[i]);
 			}
 		}
@@ -270,27 +270,34 @@ double get_optimal_candidates(const Pointset customers, Partition& p, Pointset& 
 }
 
 
+Pointset ESeeder::seed() const {
+	SwamykSeeder swamyk(customers, k);
+	Pointset p = swamyk.seed();
+	Partition part = cluster(customers, p);
+	return centroid_estimation(part, p);
+}
+
 Pointset ESeeder::centroid_estimation(Partition& partition, Pointset & init_centers) const {
 	Pointset centers;
 	double eps = 0.5; // ToDo get real value
 	double beta = 1 / (1 + 144 * eps*eps);
-	double omega = 0.5; // Todo get real value
+	double omega = 0.07; // Todo get real value
 
 	Pointset assigned_center; //c_dach(x)
-	Partition exp_voronoi;
+	Partition expanded_voronoi_regions;
 
 
 	for (auto X : partition) {
 		for (auto x : X) {
-			Point* minp = &(init_centers[0]);
-			double best = 9999;//ToDo numeric limits;
+			Point minp = init_centers[0];
+			double best = std::numeric_limits<double>::max();
 			for (auto c : init_centers) {
 				if(eucl2dist(c, x) < best) {
-					minp = &c;
+					minp = c;
 					best = eucl2dist(c,x);
 				}
 			}
-			assigned_center.push_back(*minp);
+			assigned_center.push_back(minp);
 		}
 	}
 
@@ -299,45 +306,53 @@ Pointset ESeeder::centroid_estimation(Partition& partition, Pointset & init_cent
 	for (unsigned int i = 0; i < partition.size();++i) {
 		Pointset voro = Pointset();
 		auto X = partition[i];
-		for (unsigned int j = 0; j < X.size(); ++j) {
-			auto x = X[j];
+		for (auto x : X) {
 			for (auto c : init_centers) {
-				if(eucl2dist(c, x) <= eucl2dist(x, assigned_center[pidx]) + eucl2dist(init_centers[i], assigned_center[pidx])){
+				if(eucl2dist(c, x) <= eucl2dist(x, assigned_center[pidx]) + eucl2dist(init_centers[i], assigned_center[pidx])/4.){
 					voro.push_back(x);
 				}
 			}
+			++pidx;
 		}
-		exp_voronoi.push_back(voro);
+		expanded_voronoi_regions.push_back(voro);
 	}
 
 	//random subset
-	Partition S;
-	int amount = (int) (4 / (beta*omega));
-	for(auto r : exp_voronoi) {
-		Pointset p = Pointset();
-		std::vector<unsigned int> indices(r.size());
+	Partition random_subsets; // denoted as "S" in paper
+	unsigned int amount = (int) (4 / (beta*omega));
+	//as this is pretty weird we choose (ToDo)
+	amount = 3;
+	for(auto region : expanded_voronoi_regions) {
+		Pointset subset = Pointset();
+		std::vector<unsigned int> indices(region.size());
 		std::iota(indices.begin(), indices.end(), 0);
 		std::random_shuffle(indices.begin(), indices.end());
-		for (int i = 0; i < amount; ++i) {
-			p.push_back(r[indices[i]]);
+		for (unsigned int i = 0; i < amount; ++i) {
+			if (i == region.size()) {
+				break;
+			}
+			subset.push_back(region[indices[i]]);
 		}
-		S.push_back(p);
+		random_subsets.push_back(subset);
 	}
 
 	// select centroids of all subsets of size 2/omega
 
 	Partition candidates;
-	for(auto s : S) {
+	for(auto s : random_subsets) {
 		Pointset blubb = Pointset();
-		subsetcentroids(blubb, s, Pointset(), 0, (int)(2 / omega));
+		unsigned int amount2 = (int)(2 / omega);
+		//as this does not make sense we choose:
+		amount2 = s.size() - 1;
+		subsetcentroids(blubb, s, Pointset(), 0, amount2);
 		candidates.push_back(blubb);
 	}
 
 	// select optimal candidate from each s \in subsetcentroid
 	Pointset chosen = Pointset();
 	Pointset bestset = Pointset();
-	get_optimal_candidates(customers, candidates, chosen, 0, 99999999., bestset);
+	get_optimal_candidates(customers, candidates, chosen, 0, std::numeric_limits<double>::infinity() , bestset);
 
 
-	return chosen;
+	return bestset;
 }

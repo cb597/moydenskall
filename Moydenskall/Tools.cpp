@@ -81,15 +81,16 @@ Partition cluster(const Pointset& customers, const Pointset& sites) {
 	for (auto customer : customers) {
 		double best_val = std::numeric_limits<double>::max();
 		int best_id = -1;
-		for (auto site : sites) {
-			if (eucl2dist(site, customer) < best_val) {
-				best_val = eucl2dist(site, customer);
-				best_id = site.getId();
+		for (unsigned int i = 0; i < sites.size();++i) {
+			if (eucl2dist(sites[i], customer) < best_val) {
+				best_val = eucl2dist(sites[i], customer);
+				best_id = i;
 			}
 		}
-		if (best_id == -1)
-			throw "couldn't cluster site in kmeansstep()";
-		partition[best_id - 1].push_back(customer);
+		if (best_id == -1) {
+			throw "could not cluster site in kmeansstep()";
+		}
+		partition[best_id].push_back(customer);
 	}
 	return partition;
 }
