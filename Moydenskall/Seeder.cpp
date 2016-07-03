@@ -118,33 +118,16 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 	Pointset sites = init;
 
 	while (sites.size() > (unsigned int)k) {
-		// B1 - get best and second best center for each customer
 
+		// B1 - get best and second best center for each customer
 		ExtPartition extpart = ExtPartition(customers, sites);
 
 		// B2 - pick the center for which Tx is minimum
-		double bestval = std::numeric_limits<double>::max();
-		int bestid = -1;
-		for (unsigned int i = 0; i < sites.size(); ++i) {
-			if (extpart.Tx[i] < bestval) {
-				bestval = extpart.Tx[i];
-				bestid = sites[i].getId();
-			}
-		}
+		int bestid = extpart.getMinTx();
 
-		// B3
-		Partition p = Partition(sites.size(), std::vector<Point>());
-		for (unsigned int i = 0; i < customers.size(); ++i) {
-			int topart = extpart.id_1best[i] != bestid ? extpart.id_1best[i] : extpart.id_2best[i];
-
-			p[topart - 1].push_back(customers[i]);
-		}
-		if (p[bestid - 1].size()>0) {
-			throw std::range_error("greedy delete has gone terribly wrong delete has failed");
-		}
-		p.erase(p.begin() + bestid - 1);
-		std::cout << "just erased " << bestid - 1 << "\n";
-		sites = centroid(p);
+		// B3 - delete chosen partition and move points to centroid of voronoi region
+		extpart.delete_partition(bestid);
+		sites = extpart.centroids(customers);
 	}
 
 	return sites;
@@ -153,7 +136,7 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 Pointset LTSeeder::seed() const {
 
 	//C1
-	double e = 0.0123;
+	double e = 0.0123; //ToDo get real value
 	double p1 = sqrt(e);
 	int N = (int)(2 * k / (1 - 5 * p1) + 2 * log(2 / p1) / pow((1 - 5 * p1), 2));
 

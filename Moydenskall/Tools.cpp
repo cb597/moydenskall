@@ -76,7 +76,7 @@ std::vector<double> evaluate_partition(std::tuple<Partition, std::vector<int> > 
 }
 Partition cluster(const Pointset& customers, const Pointset& sites) {
 	ExtPartition part = ExtPartition(customers, sites);
-	return part.getOldPartition();
+	return part.getOldPartition(customers);
 }
 
 std::tuple<Partition, std::vector<int> > double_cluster(const Pointset& customers, const Pointset& sites) {
