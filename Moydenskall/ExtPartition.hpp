@@ -5,7 +5,8 @@
 class ExtPartition {
 public:
 	ExtPartition(const Pointset* _customers, const Pointset& _sites);
-	ExtPartition(const Pointset* _customers);
+	ExtPartition(Pointset* _customers);
+	ExtPartition();
 	Partition getOldPartition(Pointset customers);
 	unsigned int getMinTx();
 	unsigned int assigned(unsigned int idx);
@@ -14,6 +15,7 @@ public:
 	Pointset centroids();
 	Pointset ballkmeans(const Pointset& _sites);
 	void createNewPartition(const Pointset& _sites);
+	void print_to_svg(Pointset customers, ExtPartition partition, Pointset sites, std::string filename);
 private:
 	const Pointset* customers;
 	double T;

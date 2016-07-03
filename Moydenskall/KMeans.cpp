@@ -6,6 +6,7 @@
 #include <string>
 #include <random>
 #include "Seeder.hpp"
+#include "ExtPartition.hpp"
 
 
 
@@ -22,10 +23,10 @@ void KMeans::swamy(const Seeder& seeder) {
 	Pointset sites = seeder.seed();
 	p.createNewPartition(sites);
 	// cluster customers within ball to one of the two sites
-	print_to_svg(customers, p, sites, seeder.toString() + "_init.svg");
+	p.print_to_svg(customers, p, sites, seeder.toString() + "_init.svg");
 	// move sites to centroid of points within ball
 	sites = p.centroids();
-	print_to_svg(customers, p, sites, seeder.toString() + "_result.svg");
+	p.print_to_svg(customers, p, sites, seeder.toString() + "_result.svg");
 }
 
 void KMeans::kmeansstep(Pointset& customers, Pointset& sites) {
@@ -36,14 +37,14 @@ void KMeans::kmeansstep(Pointset& customers, Pointset& sites) {
 void KMeans::seed_and_run(const Seeder& seeder) {
 	Pointset sites = seeder.seed();
 	p.createNewPartition(sites);
-	print_to_svg(customers, p, sites, seeder.toString()+"init.svg");
+	p.print_to_svg(customers, p, sites, seeder.toString()+"init.svg");
 	run(sites, 5);
-	print_to_svg(customers, p, sites, seeder.toString() + "result.svg");
+	p.print_to_svg(customers, p, sites, seeder.toString() + "result.svg");
 }
 
 void KMeans::run(Pointset& sites, int steps) {
 	for (int i = 0; i < steps; ++i) {
 		kmeansstep(customers, sites);
-		print_to_svg(customers, p, sites, std::to_string(i).append(".svg"));
+		p.print_to_svg(customers, p, sites, std::to_string(i).append(".svg"));
 	}
 }

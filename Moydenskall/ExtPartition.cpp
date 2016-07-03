@@ -8,8 +8,11 @@ ExtPartition::ExtPartition(const Pointset* _customers, const Pointset& _sites) {
 	createNewPartition(_sites);
 }
 
-ExtPartition::ExtPartition(const Pointset* _customers) {
+ExtPartition::ExtPartition(Pointset* _customers) {
 	customers = _customers;
+}
+
+ExtPartition::ExtPartition() {
 }
 
 
@@ -141,4 +144,7 @@ void ExtPartition::createNewPartition(const Pointset& sites) {
 		}
 	}
 
+}
+
+void ExtPartition::print_to_svg(Pointset customers, ExtPartition partition, Pointset sites, std::string filename) {
 }

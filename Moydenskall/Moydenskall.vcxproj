@@ -158,8 +158,8 @@
     <ClCompile Include="Tools.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ExtPartition.hpp" />
     <ClInclude Include="kmeans.hpp" />
+    <ClInclude Include="ExtPartition.hpp" />
     <ClInclude Include="Point.hpp" />
     <ClInclude Include="Seeder.hpp" />
     <ClInclude Include="Tools.hpp" />
