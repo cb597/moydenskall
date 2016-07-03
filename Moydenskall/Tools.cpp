@@ -79,31 +79,6 @@ Partition cluster(const Pointset& customers, const Pointset& sites) {
 	return part.getOldPartition(customers);
 }
 
-std::tuple<Partition, std::vector<int> > double_cluster(const Pointset& customers, const Pointset& sites) {
-	Partition partition = Partition();
-	std::vector<int> secondbest = std::vector<int>();
-	for (unsigned int i = 0; i < sites.size(); ++i) {
-		partition.push_back(Pointset());
-	}
-	for (auto customer : customers) {
-		double best_val = std::numeric_limits<double>::max();
-		int best_id = -1;
-		int second_best_id = -1;
-		for (auto site : sites) {
-			if (eucl2dist(site, customer) < best_val) {
-				second_best_id = best_id;
-				best_val = eucl2dist(site, customer);
-				best_id = site.getId();
-			}
-		}
-		if (best_id == -1)
-			throw "couldn't cluster site in kmeansstep()";
-		partition[best_id - 1].push_back(customer);
-		secondbest.push_back(second_best_id);
-	}
-	return std::make_tuple(partition, secondbest);
-}
-
 Pointset readfile(std::string filename) {
 	
 	std::ifstream file(filename);

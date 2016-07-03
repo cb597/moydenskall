@@ -14,7 +14,6 @@ double eucl2dist(Point, Point); // get euclidean square distance from two points
 double evaluate_partition(Partition, Pointset, double); // get costs for a given partition and sites and fix_costs
 std::vector<double> evaluate_partition(Partition, Pointset); // get costs foreach given partition and site individually
 Partition cluster(const Pointset& customers, const Pointset& sites);
-std::tuple<Partition, std::vector<int> > double_cluster(const Pointset& customers, const Pointset& sites);
 void print_to_svg(Pointset customers, Partition partition, Pointset sites, std::string filename);
 double drand(); //random double in [0,1]
 

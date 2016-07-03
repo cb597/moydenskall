@@ -6,14 +6,14 @@ class ExtPartition {
 public:
 	ExtPartition(const Pointset& _customers, const Pointset& _sites);
 	Partition getOldPartition(Pointset customers);
-	double T;
-	std::vector<double> Tx;
 	unsigned int getMinTx();
 	unsigned int assigned(unsigned int idx);
 	unsigned int assigned_alternative(unsigned int idx);
 	void delete_partition(unsigned int idx);
 	Pointset centroids(Pointset customers);
 private:
+	double T;
+	std::vector<double> Tx;
 	unsigned int k;
 	std::vector<unsigned int> id_1best;
 	std::vector<double> val_1best;
