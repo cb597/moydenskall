@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
 	}
 	else {
 		//lloyd.swamy(swamyk);
-		lloyd.seed_and_run(gredel);
+		lloyd.seed_and_run(dseed);
 	}
 
 	return 0;

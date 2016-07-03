@@ -120,14 +120,14 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 	while (sites.size() > (unsigned int)k) {
 
 		// B1 - get best and second best center for each customer
-		ExtPartition extpart = ExtPartition(customers, sites);
+		ExtPartition extpart = ExtPartition(&customers, sites);
 
 		// B2 - pick the center for which Tx is minimum
 		int bestid = extpart.getMinTx();
 
 		// B3 - delete chosen partition and move points to centroid of voronoi region
 		extpart.delete_partition(bestid);
-		sites = extpart.centroids(customers);
+		sites = extpart.centroids();
 	}
 
 	return sites;
@@ -144,8 +144,8 @@ Pointset LTSeeder::seed() const {
 	auto S = swamykseeder.seed();
 
 	//C2
-	ExtPartition partition = ExtPartition(customers, S);
-	Pointset sdach = partition.centroids(customers);
+	ExtPartition partition = ExtPartition(&customers, S);
+	Pointset sdach = partition.centroids();
 
 
 	GreedyDelSeeder greedydelseeder(customers, k);
@@ -158,11 +158,10 @@ Pointset LTSeeder::seed() const {
 Pointset DSeeder::ballkmeansstep(Pointset& sites) const {
 	//shall be obsolete through ExtPartition::ballkmeans
 
-	ExtPartition extpart = ExtPartition(customers, sites);
-	Pointset c1 = extpart.ballkmeans(customers, sites);
+	ExtPartition extpart = ExtPartition(&customers, sites);
+	Pointset c1 = extpart.ballkmeans(sites);
 
 	return c1;
-	//TODO this function has code duplicate with KMeans::cluster_ball()
 }
 
 

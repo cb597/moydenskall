@@ -4,15 +4,18 @@
 
 class ExtPartition {
 public:
-	ExtPartition(const Pointset& _customers, const Pointset& _sites);
+	ExtPartition(const Pointset* _customers, const Pointset& _sites);
+	ExtPartition(const Pointset* _customers);
 	Partition getOldPartition(Pointset customers);
 	unsigned int getMinTx();
 	unsigned int assigned(unsigned int idx);
 	unsigned int assigned_alternative(unsigned int idx);
 	void delete_partition(unsigned int idx);
-	Pointset centroids(Pointset customers);
-	Pointset ballkmeans(const Pointset& _customers, const Pointset& _sites);
+	Pointset centroids();
+	Pointset ballkmeans(const Pointset& _sites);
+	void createNewPartition(const Pointset& _sites);
 private:
+	const Pointset* customers;
 	double T;
 	std::vector<double> Tx;
 	unsigned int k;
@@ -21,7 +24,6 @@ private:
 	std::vector<unsigned int> id_2best;
 	std::vector<double> val_2best;
 	Partition createOldPartition(const Pointset& _customers);
-	void createNewPartition(const Pointset& _customers, const Pointset& _sites);
 };
 
 #endif

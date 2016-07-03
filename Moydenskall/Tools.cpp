@@ -75,7 +75,7 @@ std::vector<double> evaluate_partition(std::tuple<Partition, std::vector<int> > 
 	return errors;
 }
 Partition cluster(const Pointset& customers, const Pointset& sites) {
-	ExtPartition part = ExtPartition(customers, sites);
+	ExtPartition part = ExtPartition(&customers, sites);
 	return part.getOldPartition(customers);
 }
 
@@ -101,6 +101,8 @@ Pointset readfile(std::string filename) {
 	return input_points;
 }
 
+void print_to_svg(Pointset customers, ExtPartition partition, Pointset sites, std::string filename) {
+}
 void print_to_svg(Pointset customers, Partition partition, Pointset sites, std::string filename) {
 	std::ofstream svgfile(filename);
 

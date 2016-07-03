@@ -2,10 +2,17 @@
 #include <algorithm>
 #include <vector>
 
-ExtPartition::ExtPartition(const Pointset& _customers, const Pointset& _sites) {
+ExtPartition::ExtPartition(const Pointset* _customers, const Pointset& _sites) {
+	customers = _customers;
 	k = _sites.size();
-	createNewPartition(_customers, _sites);
+	createNewPartition(_sites);
 }
+
+ExtPartition::ExtPartition(const Pointset* _customers) {
+	customers = _customers;
+}
+
+
 
 Partition ExtPartition::getOldPartition(Pointset customers) {
 	return createOldPartition(customers);
@@ -41,13 +48,13 @@ void ExtPartition::delete_partition(unsigned int idx) {
 	--k;
 }
 
-Pointset ExtPartition::centroids(Pointset customers) {
+Pointset ExtPartition::centroids() {
 	std::vector<Point> centers(k, Point(0,0));
 	std::vector<unsigned int> counter(k, 0);
-	for (unsigned int i = 0; i < customers.size(); ++i) {
+	for (unsigned int i = 0; i < (*customers).size(); ++i) {
 		if (assigned(i) == k) continue;
-		centers[assigned(i)].X += customers[i].X;
-		centers[assigned(i)].Y += customers[i].Y;
+		centers[assigned(i)].X += (*customers)[i].X;
+		centers[assigned(i)].Y += (*customers)[i].Y;
 		counter[assigned(i)]++;
 	}
 	for (unsigned int i = 0; i < k; ++i) {
@@ -58,7 +65,7 @@ Pointset ExtPartition::centroids(Pointset customers) {
 }
 
 // ball-k-means step as described in 4.2 (A) 
-Pointset ExtPartition::ballkmeans(const Pointset & customers, const Pointset & sites) {
+Pointset ExtPartition::ballkmeans(const Pointset & sites) {
 	std::vector<double> ddach(k, std::numeric_limits<double>::infinity());
 	for (unsigned int i = 0; i < sites.size() - 1; ++i) {
 		for (unsigned int j = i + 1; j < sites.size(); ++j) {
@@ -69,18 +76,18 @@ Pointset ExtPartition::ballkmeans(const Pointset & customers, const Pointset & s
 	}
 
 	auto backup = id_1best;
-	for (int i = 0; i < id_1best.size();++i) {
+	for (unsigned int i = 0; i < id_1best.size();++i) {
 		id_1best[i] = k;
 	}
 	
-	for (unsigned int c = 0; c < customers.size();++c) {
-		for (int s = 0; s < sites.size(); ++s) {
-			if (eucl2dist(sites[s], customers[c]) < ddach[s] / 3) {
+	for (unsigned int c = 0; c < (*customers).size();++c) {
+		for (unsigned int s = 0; s < sites.size(); ++s) {
+			if (eucl2dist(sites[s], (*customers)[c]) < ddach[s] / 3) {
 				id_1best[c] = s;
 			}
 		}
 	}
-	Pointset p = centroids(customers);
+	Pointset p = centroids();
 	id_1best = backup;
 	return p;
 }
@@ -99,16 +106,16 @@ Partition ExtPartition::createOldPartition(const Pointset& customers) {
 }
 
 // calculate Voronoi regions and errors 
-void ExtPartition::createNewPartition(const Pointset& customers, const Pointset& sites) {
+void ExtPartition::createNewPartition(const Pointset& sites) {
 
 	//init all vectors
-	id_1best = std::vector<unsigned int>(customers.size(), 0);
-	val_1best = std::vector<double>(customers.size(), std::numeric_limits<int>::max());
-	id_2best = std::vector<unsigned int>(customers.size(), 0);
-	val_2best = std::vector<double>(customers.size(), std::numeric_limits<int>::max());
+	id_1best = std::vector<unsigned int>((*customers).size(), 0);
+	val_1best = std::vector<double>((*customers).size(), std::numeric_limits<int>::max());
+	id_2best = std::vector<unsigned int>((*customers).size(), 0);
+	val_2best = std::vector<double>((*customers).size(), std::numeric_limits<int>::max());
 
-	// loop over all customers and sites and determine best and secondbest site per customer
-	for (unsigned int c = 0; c < customers.size(); ++c) {
+	// loop over all (*customers) and sites and determine best and secondbest site per customer
+	for (unsigned int c = 0; c < (*customers).size(); ++c) {
 		for (unsigned int s = 0; s < sites.size(); ++s) {
 			double dist = eucl2dist(customers[c], sites[s]);
 			if (dist < val_1best[c]) {
@@ -127,7 +134,7 @@ void ExtPartition::createNewPartition(const Pointset& customers, const Pointset&
 	// calculate costs
 	T = 0.; //cost of clustering customers around sites
 	Tx = std::vector<double>(sites.size(), 0.); // cost of clustering customers around sites\{x}
-	for (unsigned int i = 0; i < customers.size(); i++) {
+	for (unsigned int i = 0; i < (*customers).size(); i++) {
 		T += val_1best[i];
 		for (unsigned int t = 0; t < sites.size(); ++t) {
 			Tx[t] += t != id_1best[i] ? val_1best[i] : val_2best[i];
