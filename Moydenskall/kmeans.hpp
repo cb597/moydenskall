@@ -16,7 +16,7 @@ private:
 	void kmeansstep(Pointset&, Pointset&);
 	void cluster_ball(Pointset& sites);
 	Partition partition;
-	int n; // number of customers
+	int k; // number of customers
 	Pointset customers;
 };
 

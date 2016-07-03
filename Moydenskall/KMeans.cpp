@@ -13,7 +13,7 @@
 
 KMeans::KMeans(Pointset _customers) {
 	customers = _customers;
-	n = customers.size();
+	k = customers.size();
 }
 
 

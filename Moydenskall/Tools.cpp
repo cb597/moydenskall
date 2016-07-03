@@ -124,7 +124,7 @@ Pointset readfile(std::string filename) {
 	
 	std::ifstream file(filename);
 	std::string line = "";
-	Pointset plane;
+	Pointset input_points;
 
 	while (line != "NODE_COORD_SECTION") {
 		file >> line;
@@ -136,10 +136,10 @@ Pointset readfile(std::string filename) {
 	for (std::string k = line; k != "EOF"; file >> k) {
 		file >> x >> y;
 		Point p(x, y, counter++);
-		plane.push_back(p);
+		input_points.push_back(p);
 	}
 
-	return plane;
+	return input_points;
 }
 
 void print_to_svg(Pointset customers, Partition partition, Pointset sites, std::string filename) {
@@ -189,7 +189,7 @@ void print_to_svg(Pointset customers, Partition partition, Pointset sites, std::
 	for (unsigned int i = 0; i < partition.size(); ++i) {
 		sum += eucl2dist(partition[i], sites[i]);
 	}
-	svgfile << "<text x = \""<< xmin <<"\" y = \""<< ymin <<"\" fill = \"black\"  style=\"font-size:"<<3*pointsize<<"px\">" << filename << " - " << sum << "</text>\n";
+	svgfile << "<text x = \""<< xmin <<"\" y = \""<< ymin <<"\" fill = \"black\"  style=\"font-size:"<<3*pointsize<<"px\">" << filename << " - " << sum << "</text>\k";
 	svgfile << "</svg>";
 }
 

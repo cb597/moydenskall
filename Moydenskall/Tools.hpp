@@ -3,9 +3,8 @@
 
 #include "Point.hpp"
 #include <vector>
-typedef std::vector<Point> Pointset;
-typedef std::vector<Pointset> Partition;
-//typedef std::pair<Partition, Pointset> Solution;
+using Pointset = std::vector<Point>;
+using Partition = std::vector<Pointset>;
 
 Pointset readfile(std::string filename); // read a file in tsp format
 Point centroid(const Pointset&); // get centroid of points

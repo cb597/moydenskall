@@ -15,7 +15,7 @@
 // choose (0,0), (1,1),... as init sites
 Pointset StaticSeeder::seed() const {
 	Pointset sites;
-	for (int i = 1; i <= n; ++i) {
+	for (int i = 1; i <= k; ++i) {
 		sites.push_back(Point(i, i, i));
 	}
 	return sites;
@@ -28,7 +28,7 @@ Pointset SubsetSeeder::seed() const {
 	for (unsigned int i = 0; i < customers.size(); permutation.push_back(i++));
 	std::random_shuffle(permutation.begin(), permutation.end());
 	Pointset sites;
-	for (int i = 1; i <= n; ++i) {
+	for (int i = 1; i <= k; ++i) {
 		sites.push_back(customers[permutation[i]]);
 		sites[sites.size() - 1].setId(i);
 	}
@@ -37,7 +37,7 @@ Pointset SubsetSeeder::seed() const {
 
 
 
-Pointset Swamy2Seeder::seed() const {
+Pointset Sample2Seeder::seed() const {
 	std::srand(unsigned(std::time(NULL)));
 	Point cen = centroid(customers);
 	double d1 = eucl2dist(customers, cen);
@@ -68,8 +68,8 @@ Pointset Swamy2Seeder::seed() const {
 	return sites;
 }
 
-Pointset SwamykSeeder::seed() const {
-	Pointset sites = Swamy2Seeder(customers).seed();
+Pointset SampleKSeeder::seed() const {
+	Pointset sites = Sample2Seeder(customers).seed();
 
 	std::vector<double> probability(customers.size(), std::numeric_limits<int>::max());
 	double probability_sum = 0.;
@@ -118,9 +118,9 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 
 	while (sites.size() > (unsigned int)k) {
 		// B1
-		std::vector<int> id_1best = std::vector<int>(customers.size(), -1);
+		std::vector<unsigned int> id_1best = std::vector<unsigned int>(customers.size(), -1);
 		std::vector<double> val_1best = std::vector<double>(customers.size(), std::numeric_limits<int>::max());
-		std::vector<int> id_2best = std::vector<int>(customers.size(), -1);
+		std::vector<unsigned int> id_2best = std::vector<unsigned int>(customers.size(), -1);
 		std::vector<double> val_2best = std::vector<double>(customers.size(), std::numeric_limits<int>::max());
 		for (unsigned int c = 0; c < customers.size(); ++c) {
 			for (auto s : sites) {
@@ -142,7 +142,7 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 		for (unsigned int i = 0; i < customers.size(); i++) {
 			T += val_1best[i];
 			for (unsigned int t = 0; t < sites.size(); ++t) {
-				Tx[t] += (int)t != id_1best[i] - 1 ? val_1best[i] : val_2best[i];
+				Tx[t] += t != id_1best[i] - 1 ? val_1best[i] : val_2best[i];
 			}
 		}
 
@@ -167,7 +167,7 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 			throw "greedy delete has gone terribly wrong delete has failed";
 		}
 		p.erase(p.begin() + bestid - 1);
-		std::cout << "just erased " << bestid - 1 << "\n";
+		std::cout << "just erased " << bestid - 1 << "\k";
 		sites = centroid(p);
 	}
 
@@ -181,7 +181,7 @@ Pointset LTSeeder::seed() const {
 	double p1 = sqrt(e);
 	int N = (int)(2 * k / (1 - 5 * p1) + 2 * log(2 / p1) / pow((1 - 5 * p1), 2));
 
-	SwamykSeeder swamykseeder(customers, N);
+	SampleKSeeder swamykseeder(customers, N);
 	auto S = swamykseeder.seed();
 
 	//C2
@@ -231,13 +231,14 @@ Pointset DSeeder::seed() const {
 	return ballkmeansstep(init);
 }
 
-
-void subsetcentroids(Pointset& result, Pointset& set, Pointset& chosen, unsigned int position, unsigned int left) {
+//recursive function to determine all subsetsand get their centroids
+void ESeeder::subsetcentroids(Pointset& result, Pointset& set, Pointset& chosen, unsigned int position, unsigned int left) const{
 	if (left == 0) {
 		result.push_back(centroid(chosen));
 		return;
 	}
 	else if (set.size()-position < left) {
+		//cut this recursion branch if not enough items left
 		return;
 	}
 	else {
@@ -248,8 +249,9 @@ void subsetcentroids(Pointset& result, Pointset& set, Pointset& chosen, unsigned
 	}
 }
 
-double get_optimal_candidates(const Pointset customers, Partition& p, Pointset& chosen, int cur_part, double bestval, Pointset& bestset) {
-	if (cur_part == p.size()) {
+// recursive function to select best elements of candidates
+double get_optimal_candidates(const Pointset customers, Partition& candidates, Pointset& chosen, int cur_part, double bestval, Pointset& bestset) {
+	if (cur_part == candidates.size()) {
 		Partition part = cluster(customers, chosen);
 		double val = evaluate_partition(part, chosen, 0);
 		if (val < bestval) {
@@ -261,9 +263,9 @@ double get_optimal_candidates(const Pointset customers, Partition& p, Pointset& 
 		}
 		return bestval;
 	}
-	for (unsigned int i = 0; i < p[cur_part].size(); ++i) {
-		chosen.push_back(p[cur_part][i]);
-		bestval = get_optimal_candidates(customers, p, chosen, cur_part + 1, bestval, bestset);
+	for (unsigned int i = 0; i < candidates[cur_part].size(); ++i) {
+		chosen.push_back(candidates[cur_part][i]);
+		bestval = get_optimal_candidates(customers, candidates, chosen, cur_part + 1, bestval, bestset);
 		chosen.pop_back();
 	}
 	return bestval;
@@ -271,7 +273,7 @@ double get_optimal_candidates(const Pointset customers, Partition& p, Pointset& 
 
 
 Pointset ESeeder::seed() const {
-	SwamykSeeder swamyk(customers, k);
+	SampleKSeeder swamyk(customers, k);
 	Pointset p = swamyk.seed();
 	Partition part = cluster(customers, p);
 	return centroid_estimation(part, p);

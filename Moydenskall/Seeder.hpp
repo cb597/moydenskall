@@ -10,96 +10,84 @@
 
 class Seeder {
 public:
-	Seeder(const Pointset& _customers) { customers = _customers; }
+	Seeder(const Pointset& _customers, int _k) { customers = _customers; k = _k; }
 	virtual Pointset seed() const = 0;
 	virtual std::string toString() const = 0;
 protected:
 	Pointset customers;
+	int k; //number of sites to be seeded
 };
 
+// trivial demo seeding strategy for testing purposes
 class StaticSeeder : public Seeder {
 public:
-	StaticSeeder(Pointset _customers) : Seeder(_customers) { n = 2; };
-	StaticSeeder(Pointset _customers, int _n) : Seeder(_customers) { n = _n; };
+	StaticSeeder(Pointset _customers) : Seeder(_customers, 2) { };
+	StaticSeeder(Pointset _customers, int _k) : Seeder(_customers, _k) { };
 	Pointset seed() const;
 	std::string toString() const { return "static_seeder"; }
-private:
-	int n; //number of sites to be seeded
 };
 
-
+// intuitive seeding strategy: choose a random subset
 class SubsetSeeder : public Seeder {
 public:
-	SubsetSeeder(Pointset _customers) : Seeder(_customers) { n = 2; };
-	SubsetSeeder(Pointset _customers, int _n) : Seeder(_customers) { n = _n; };
+	SubsetSeeder(Pointset _customers) : Seeder(_customers, 2) {};
+	SubsetSeeder(Pointset _customers, int _k) : Seeder(_customers, _k) {};
 	Pointset seed() const;
 	std::string toString() const { return "subset_seeder"; }
-private:
-	int n; //number of sites to be seeded
 };
 
-
-
-class Swamy2Seeder : public Seeder {
+// sample algorithm for the 2-means problem (chapter 3)
+class Sample2Seeder : public Seeder {
 public:
-	Swamy2Seeder(Pointset _customers) : Seeder(_customers) {};
+	Sample2Seeder(Pointset _customers) : Seeder(_customers, 2) {};
 	Pointset seed() const;
-	std::string toString() const { return "swamy2_seeder"; }
+	std::string toString() const { return "Sample2Seeder"; }
 };
 
-
-class SwamykSeeder : public Seeder {
+// Stage I Seeding procedure (described in chapter 4.1.1)
+class SampleKSeeder : public Seeder {
 public:
-	SwamykSeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
+	SampleKSeeder(Pointset _customers, int _k) : Seeder(_customers, _k) {};
 	Pointset seed() const;
-	std::string toString() const { return "swamyk_seeder"; }
-private:
-	int k; // seed k centers
+	std::string toString() const { return "SampleKSeeder"; }
 };
 
-
+// greedy deletion seeder, given a init Pointset delete successively
 class GreedyDelSeeder : public Seeder {
 public:
-	GreedyDelSeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
+	GreedyDelSeeder(Pointset _customers, int _k) : Seeder(_customers, _k) {};
 	Pointset seed() const;
 	Pointset seed(Pointset init) const;
 	std::string toString() const { return "GreedyDelSeeder"; }
-private:
-	int k; // seed k centers
 };
 
-
-
+// seeding algo in linear time (chapter 4.1.3)
 class LTSeeder : public Seeder {
 public:
-	LTSeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
+	LTSeeder(Pointset _customers, int _k) : Seeder(_customers, _k) {};
 	Pointset seed() const;
 	std::string toString() const { return "LTSeeder"; }
-private:
-	int k; // seed k centers
 };
 
-
+// linear time constant factor approximation algorithm (chapter 4.3)
 class DSeeder : public Seeder {
 public:
-	DSeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
+	DSeeder(Pointset _customers, int _k) : Seeder(_customers, _k) {};
 	Pointset seed() const;
 	std::string toString() const { return "DSeeder"; }
 private:
-	int k; // seed k centers
 	Pointset ballkmeansstep(Pointset& sites) const;
 };
 
-
+// PTAS (chapter 4.4)
 class ESeeder : public Seeder {
 public:
-	ESeeder(Pointset _customers, int _k) : Seeder(_customers) { k = _k; };
+	ESeeder(Pointset _customers, int _k) : Seeder(_customers, _k) {};
 	Pointset seed() const;
 	std::string toString() const { return "ESeeder"; }
 private:
-	int k; // seed k centers
 	Pointset centroid_estimation(Partition& partition, Pointset& sites) const;
+	void subsetcentroids(Pointset & result, Pointset & set, Pointset & chosen, unsigned int position, unsigned int left) const;
 };
-
 
 #endif

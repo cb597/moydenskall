@@ -42,8 +42,8 @@ int main(int argc, char* argv[]) {
 	Pointset customers = readfile(instance_filename);
 
 	KMeans lloyd(customers);
-	Swamy2Seeder swamy2(customers);
-	SwamykSeeder swamyk(customers, 5);
+	Sample2Seeder swamy2(customers);
+	SampleKSeeder swamyk(customers, 5);
 	StaticSeeder stat5(customers, 5);
 	SubsetSeeder subset(customers, 5);
 	GreedyDelSeeder gredel(customers, 5);
