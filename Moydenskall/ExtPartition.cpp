@@ -1,6 +1,8 @@
 #include "ExtPartition.hpp"
 #include <algorithm>
 #include <vector>
+#include <fstream>
+#include <string>
 
 ExtPartition::ExtPartition(const Pointset* _customers, const Pointset& _sites) {
 	customers = _customers;
@@ -111,6 +113,8 @@ Partition ExtPartition::createOldPartition(const Pointset& customers) {
 // calculate Voronoi regions and errors 
 void ExtPartition::createNewPartition(const Pointset& sites) {
 
+	k = sites.size();
+
 	//init all vectors
 	id_1best = std::vector<unsigned int>((*customers).size(), 0);
 	val_1best = std::vector<double>((*customers).size(), std::numeric_limits<int>::max());
@@ -120,7 +124,7 @@ void ExtPartition::createNewPartition(const Pointset& sites) {
 	// loop over all (*customers) and sites and determine best and secondbest site per customer
 	for (unsigned int c = 0; c < (*customers).size(); ++c) {
 		for (unsigned int s = 0; s < sites.size(); ++s) {
-			double dist = eucl2dist(customers[c], sites[s]);
+			double dist = eucl2dist((*customers)[c], sites[s]);
 			if (dist < val_1best[c]) {
 				id_2best[c] = id_1best[c];
 				val_2best[c] = val_1best[c];
@@ -146,5 +150,51 @@ void ExtPartition::createNewPartition(const Pointset& sites) {
 
 }
 
-void ExtPartition::print_to_svg(Pointset customers, ExtPartition partition, Pointset sites, std::string filename) {
+void ExtPartition::print_to_svg(Pointset sites, std::string filename) {
+	std::ofstream svgfile(filename);
+
+	// get bounding rectangle
+
+	double xmin = 99999, ymin = 99999;
+	double xmax = 0, ymax = 0;
+
+	for (auto c : (*customers)) {
+		xmin = std::min(xmin, c.X);
+		xmax = std::max(xmax, c.X);
+		ymin = std::min(ymin, c.Y);
+		ymax = std::max(ymax, c.Y);
+	}
+	for (auto s : sites) {
+		xmin = std::min(xmin, s.X);
+		xmax = std::max(xmax, s.X);
+		ymin = std::min(ymin, s.Y);
+		ymax = std::max(ymax, s.Y);
+	}
+
+	xmin -= 2; ymin -= 2; xmax += 2; ymax += 2;
+	double pointsize = (double)std::max((double)(xmax - xmin) / 100., (double)(ymax - ymin) / 600.);
+
+	svgfile << "<?xml version=\"1.0\"?><!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\"	\"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" << std::endl;
+	svgfile << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"900\" height=\"700\" viewBox = \""
+		<< xmin << " " << ymin << " " << (xmax - xmin) << " " << (ymax - ymin)
+		<< "\" preserveAspectRatio = \"xMidYMid meet\">" << std::endl;
+
+	for (unsigned int c = 0; c < (*customers).size(); ++c) {
+		//draw line to assigned site
+		svgfile << "<line x1=\"" << (*customers)[c].X << "\" y1=\"" << (*customers)[c].Y << "\" x2=\"" << sites[assigned(c)].X << "\" y2=\"" << sites[assigned(c)].Y
+			<< "\" style=\"stroke:#aaa; stroke-width:" << pointsize/2 << "; \" stroke-dasharray=\"0.1, 0.1\"/>";
+	}
+	for (unsigned int c = 0; c < (*customers).size(); ++c) {
+		//draw customer
+		svgfile << "<circle cx = \"" << (*customers)[c].X << "\" cy = \"" << (*customers)[c].Y << "\" r = \""
+			<< pointsize << "\" style = \"fill:red\" />" << std::endl;
+	}
+	for (unsigned int s=0; s < sites.size(); ++s) {
+		//draw site
+		svgfile << "<circle cx = \"" << sites[s].X << "\" cy = \"" << sites[s].Y << "\" r = \""
+			<< pointsize << "\" style = \"fill:green\" />" << std::endl;
+	}
+
+	svgfile << "<text x = \"" << xmin << "\" y = \"" << ymin << "\" fill = \"black\"  style=\"font-size:" << 3 * pointsize << "px\">" << filename << " - " << T << "</text>\n";
+	svgfile << "</svg>";
 }

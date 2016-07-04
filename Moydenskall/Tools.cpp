@@ -101,8 +101,6 @@ Pointset readfile(std::string filename) {
 	return input_points;
 }
 
-void print_to_svg(Pointset customers, ExtPartition partition, Pointset sites, std::string filename) {
-}
 void print_to_svg(Pointset customers, Partition partition, Pointset sites, std::string filename) {
 	std::ofstream svgfile(filename);
 

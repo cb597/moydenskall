@@ -15,7 +15,7 @@ public:
 	Pointset centroids();
 	Pointset ballkmeans(const Pointset& _sites);
 	void createNewPartition(const Pointset& _sites);
-	void print_to_svg(Pointset customers, ExtPartition partition, Pointset sites, std::string filename);
+	void print_to_svg(Pointset sites, std::string filename);
 private:
 	const Pointset* customers;
 	double T;

@@ -8,7 +8,7 @@
 
 class KMeans {
 public:
-	KMeans(Pointset);
+	KMeans(Pointset&);
 	void seed_and_run(const Seeder&);
 	void run(Pointset&, int);
 	void swamy(const Seeder&);
