@@ -40,6 +40,7 @@ void KMeans::seed_and_run(const Seeder& seeder) {
 	p.print_to_svg(sites, seeder.toString()+"init.svg");
 	run(sites, 5);
 	p.print_to_svg(sites, seeder.toString() + "result.svg");
+	p.print_to_console(sites);
 }
 
 void KMeans::run(Pointset& sites, int steps) {

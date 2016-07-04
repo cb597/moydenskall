@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <iostream>
 
 ExtPartition::ExtPartition(const Pointset* _customers, const Pointset& _sites) {
 	customers = _customers;
@@ -150,7 +151,7 @@ void ExtPartition::createNewPartition(const Pointset& sites) {
 
 }
 
-void ExtPartition::print_to_svg(Pointset sites, std::string filename) {
+void ExtPartition::print_to_svg(const Pointset& sites, std::string filename) {
 	std::ofstream svgfile(filename);
 
 	// get bounding rectangle
@@ -197,4 +198,14 @@ void ExtPartition::print_to_svg(Pointset sites, std::string filename) {
 
 	svgfile << "<text x = \"" << xmin << "\" y = \"" << ymin << "\" fill = \"black\"  style=\"font-size:" << 3 * pointsize << "px\">" << filename << " - " << T << "</text>\n";
 	svgfile << "</svg>";
+}
+
+void ExtPartition::print_to_console(const Pointset & sites) {
+	std::cout << "OBJECTIVE " << T << std::endl;
+	for (unsigned int s = 0; s < sites.size(); ++s) {
+		std::cout << "FACILITY " << s << " " << sites[s].X << " " << sites[s].Y << std::endl;
+	}
+	for (unsigned int c = 0; c < (*customers).size(); ++c) {
+		std::cout << "ASSIGN " << c << " " << assigned(c) << std::endl;
+	}
 }
