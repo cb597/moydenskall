@@ -17,9 +17,10 @@ public:
 	void createNewPartition(const Pointset& _sites);
 	void print_to_svg(const Pointset& sites, std::string filename);
 	void print_to_console(const Pointset& sites);
+	Pointset centroid_estimation(Pointset & init_centers);
 private:
 	const Pointset* customers;
-	double T;
+	double TotalError;
 	std::vector<double> Tx;
 	unsigned int k;
 	std::vector<unsigned int> id_1best;
@@ -27,6 +28,8 @@ private:
 	std::vector<unsigned int> id_2best;
 	std::vector<double> val_2best;
 	Partition createOldPartition(const Pointset& _customers);
+	void subsetcentroids(Pointset & result, Pointset & set, Pointset & chosen, unsigned int position, unsigned int left) const;
+	double get_optimal_candidates(Partition & candidates, Pointset & chosen, int cur_part, double bestval, Pointset & bestset);
 };
 
 #endif

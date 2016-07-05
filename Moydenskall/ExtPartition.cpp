@@ -4,6 +4,11 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <limits>
+#include <ctime>        // std::time
+#include <cstdlib>      // std::rand, std::srand
+#include <random>
+#include <numeric>
 
 ExtPartition::ExtPartition(const Pointset* _customers, const Pointset& _sites) {
 	customers = _customers;
@@ -140,10 +145,10 @@ void ExtPartition::createNewPartition(const Pointset& sites) {
 	}
 
 	// calculate costs
-	T = 0.; //cost of clustering customers around sites
+	TotalError = 0.; //cost of clustering customers around sites
 	Tx = std::vector<double>(sites.size(), 0.); // cost of clustering customers around sites\{x}
 	for (unsigned int i = 0; i < (*customers).size(); i++) {
-		T += val_1best[i];
+		TotalError += val_1best[i];
 		for (unsigned int t = 0; t < sites.size(); ++t) {
 			Tx[t] += t != id_1best[i] ? val_1best[i] : val_2best[i];
 		}
@@ -196,16 +201,122 @@ void ExtPartition::print_to_svg(const Pointset& sites, std::string filename) {
 			<< pointsize << "\" style = \"fill:green\" />" << std::endl;
 	}
 
-	svgfile << "<text x = \"" << xmin << "\" y = \"" << ymin << "\" fill = \"black\"  style=\"font-size:" << 3 * pointsize << "px\">" << filename << " - " << T << "</text>\n";
+	svgfile << "<text x = \"" << xmin << "\" y = \"" << ymin << "\" fill = \"black\"  style=\"font-size:" << 3 * pointsize << "px\">" << filename << " - " << TotalError << "</text>\n";
 	svgfile << "</svg>";
 }
 
 void ExtPartition::print_to_console(const Pointset & sites) {
-	std::cout << "OBJECTIVE " << T << std::endl;
+	std::cout << "OBJECTIVE " << TotalError << std::endl;
 	for (unsigned int s = 0; s < sites.size(); ++s) {
 		std::cout << "FACILITY " << s << " " << sites[s].X << " " << sites[s].Y << std::endl;
 	}
 	for (unsigned int c = 0; c < (*customers).size(); ++c) {
 		std::cout << "ASSIGN " << c << " " << assigned(c) << std::endl;
 	}
+}
+
+
+//recursive function to determine all subsetsand get their centroids
+void ExtPartition::subsetcentroids(Pointset& result, Pointset& set, Pointset& chosen, unsigned int position, unsigned int left) const {
+	if (left == 0) {
+		result.push_back(centroid(chosen));
+		return;
+	}
+	else if (set.size() - position < left) {
+		//cut this recursion branch if not enough items left
+		return;
+	}
+	else {
+		chosen.push_back(set[position]);
+		subsetcentroids(result, set, chosen, position + 1, left - 1);
+		chosen.pop_back();
+		subsetcentroids(result, set, chosen, position + 1, left);
+	}
+}
+
+// recursive function to select best elements of candidates, used in centroid_estimation
+double ExtPartition::get_optimal_candidates(std::vector<Pointset>& candidates, Pointset& chosen, int cur_part, double bestval, Pointset& bestset) {
+	if (cur_part == candidates.size()) {
+		ExtPartition part = ExtPartition(customers, chosen);
+		if (part.TotalError < bestval) {
+			bestval = part.TotalError;
+			bestset.clear();
+			for (unsigned int i = 0; i < chosen.size(); ++i) {
+				bestset.push_back(chosen[i]);
+			}
+		}
+		return bestval;
+	}
+	for (unsigned int i = 0; i < candidates[cur_part].size(); ++i) {
+		chosen.push_back(candidates[cur_part][i]);
+		bestval = get_optimal_candidates(candidates, chosen, cur_part + 1, bestval, bestset);
+		chosen.pop_back();
+	}
+	return bestval;
+}
+
+Pointset ExtPartition::centroid_estimation(Pointset& init_centers) {
+
+	double eps = 0.5; // ToDo get real value
+	double beta = 1 / (1 + 144 * eps*eps);
+	double omega = 0.07; // Todo get real value
+
+	// define ddach(i) = min_{j!=i}(||c_j = c_i||) where c_i are init_centers
+	std::vector<double> ddach = std::vector<double>(k, std::numeric_limits<double>::infinity());
+	for (unsigned int i = 0; i < k; ++i) {
+		for (unsigned int j = i+1; j < k; ++j) {
+			ddach[i] = std::min(ddach[i], eucl2dist(init_centers[i], init_centers[j]));
+			ddach[j] = std::min(ddach[j], eucl2dist(init_centers[i], init_centers[j]));
+		}
+	}
+
+	//calculate expanded voronoi regions
+	std::vector<Pointset> expanded_voronoi_regions = std::vector<Pointset>(init_centers.size(), Pointset());
+	for (unsigned int x = 0; x < (*customers).size(); ++x) {
+		for (unsigned int region_index = 0; region_index < k; ++region_index) {
+			if (eucl2dist((*customers)[x], init_centers[region_index]) <= eucl2dist((*customers)[x], (*customers)[assigned(x)]) + ddach[region_index] / 4) {
+				expanded_voronoi_regions[region_index].push_back((*customers)[x]);
+			}
+		}
+	}
+
+	//random subset
+	std::vector<Pointset> random_subsets; // denoted as "S" in paper
+	unsigned int amount = (int)(4 / (beta*omega));
+	//as this is pretty weird we choose (ToDo)
+	amount = 3;
+	for (auto region : expanded_voronoi_regions) {
+		Pointset subset = Pointset();
+		std::vector<unsigned int> indices(region.size());
+		std::iota(indices.begin(), indices.end(), 0);
+		std::random_shuffle(indices.begin(), indices.end());
+		for (unsigned int i = 0; i < amount; ++i) {
+			if (i == region.size()) {
+				break;
+			}
+			subset.push_back(region[indices[i]]);
+		}
+		random_subsets.push_back(subset);
+	}
+
+	// select centroids of all subsets of size 2/omega
+	Partition candidates;
+	for (auto s : random_subsets) {
+		Pointset blubb = Pointset();
+		unsigned int amount2 = (int)(2 / omega);
+		//as this does not make sense we choose: //ToDo
+		amount2 = s.size() - 1;
+		subsetcentroids(blubb, s, Pointset(), 0, amount2);
+		candidates.push_back(blubb);
+	}
+
+
+	// select optimal candidate from each s \in subsetcentroid
+	Pointset chosen = Pointset();
+	Pointset bestset = Pointset();
+	get_optimal_candidates(candidates, chosen, 0, std::numeric_limits<double>::infinity(), bestset);
+
+
+	return bestset;
+
 }
