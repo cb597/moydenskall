@@ -85,9 +85,6 @@ public:
 	ESeeder(Pointset _customers, int _k) : Seeder(_customers, _k) {};
 	Pointset seed() const;
 	std::string toString() const { return "ESeeder"; }
-private:
-	Pointset centroid_estimation(Partition& partition, Pointset& sites) const;
-	void subsetcentroids(Pointset & result, Pointset & set, Pointset & chosen, unsigned int position, unsigned int left) const;
 };
 
 #endif
