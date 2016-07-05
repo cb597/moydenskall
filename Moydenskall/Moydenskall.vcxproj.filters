@@ -30,7 +30,7 @@
     <ClCompile Include="Seeder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExtPartition.cpp">
+    <ClCompile Include="Partition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +47,7 @@
     <ClInclude Include="Seeder.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExtPartition.hpp">
+    <ClInclude Include="Partition.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

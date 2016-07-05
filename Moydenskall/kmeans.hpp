@@ -4,7 +4,7 @@
 #include "Point.hpp"
 #include "Tools.hpp"
 #include "Seeder.hpp"
-#include "ExtPartition.hpp"
+#include "Partition.hpp"
 
 class KMeans {
 public:
@@ -14,7 +14,7 @@ public:
 	void swamy(const Seeder&);
 private:
 	void kmeansstep(Pointset&, Pointset&);
-	ExtPartition p;
+	Partition p;
 	int k; // number of customers
 	Pointset customers;
 };

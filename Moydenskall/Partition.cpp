@@ -1,4 +1,4 @@
-#include "ExtPartition.hpp"
+#include "Partition.hpp"
 #include <algorithm>
 #include <vector>
 #include <fstream>
@@ -10,33 +10,33 @@
 #include <random>
 #include <numeric>
 
-ExtPartition::ExtPartition(const Pointset* _customers, const Pointset& _sites) {
+Partition::Partition(const Pointset* _customers, const Pointset& _sites) {
 	customers = _customers;
 	k = _sites.size();
 	createNewPartition(_sites);
 }
 
-ExtPartition::ExtPartition(Pointset* _customers) {
+Partition::Partition(Pointset* _customers) {
 	customers = _customers;
 }
 
-ExtPartition::ExtPartition() {
+Partition::Partition() {
 }
 
-unsigned int ExtPartition::getMinTx() {
+unsigned int Partition::getMinTx() {
 	std::vector<double>::iterator result = std::min_element(std::begin(Tx), std::end(Tx));
 	return std::distance(std::begin(Tx), result);
 }
 
-unsigned int ExtPartition::assigned(unsigned int idx) {
+unsigned int Partition::assigned(unsigned int idx) {
 	return id_1best[idx];
 }
 
-unsigned int ExtPartition::assigned_alternative(unsigned int idx) {
+unsigned int Partition::assigned_alternative(unsigned int idx) {
 	return id_2best[idx];
 }
 
-void ExtPartition::delete_partition(unsigned int idx) {
+void Partition::delete_partition(unsigned int idx) {
 	for (unsigned int i = 0; i < id_1best.size(); ++i) {
 		//reassign points assigned to the partition about to be deleted
 		if (id_1best[i] == idx) {
@@ -53,7 +53,7 @@ void ExtPartition::delete_partition(unsigned int idx) {
 	--k;
 }
 
-Pointset ExtPartition::centroids() {
+Pointset Partition::centroids() {
 	std::vector<Point> centers(k, Point(0,0));
 	std::vector<unsigned int> counter(k, 0);
 	for (unsigned int i = 0; i < (*customers).size(); ++i) {
@@ -70,7 +70,7 @@ Pointset ExtPartition::centroids() {
 }
 
 // ball-k-means step as described in 4.2 (A) 
-Pointset ExtPartition::ballkmeans(const Pointset & sites) {
+Pointset Partition::ballkmeans(const Pointset & sites) {
 	std::vector<double> ddach(k, std::numeric_limits<double>::infinity());
 	for (unsigned int i = 0; i < sites.size() - 1; ++i) {
 		for (unsigned int j = i + 1; j < sites.size(); ++j) {
@@ -98,7 +98,7 @@ Pointset ExtPartition::ballkmeans(const Pointset & sites) {
 }
 
 // calculate Voronoi regions and errors 
-void ExtPartition::createNewPartition(const Pointset& sites) {
+void Partition::createNewPartition(const Pointset& sites) {
 
 	k = sites.size();
 
@@ -137,7 +137,7 @@ void ExtPartition::createNewPartition(const Pointset& sites) {
 
 }
 
-void ExtPartition::print_to_svg(const Pointset& sites, std::string filename) {
+void Partition::print_to_svg(const Pointset& sites, std::string filename) {
 	std::ofstream svgfile(filename);
 
 	// get bounding rectangle
@@ -186,7 +186,7 @@ void ExtPartition::print_to_svg(const Pointset& sites, std::string filename) {
 	svgfile << "</svg>";
 }
 
-void ExtPartition::print_to_console(const Pointset & sites) {
+void Partition::print_to_console(const Pointset & sites) {
 	std::cout << "OBJECTIVE " << TotalError << std::endl;
 	for (unsigned int s = 0; s < sites.size(); ++s) {
 		std::cout << "FACILITY " << s << " " << sites[s].X << " " << sites[s].Y << std::endl;
@@ -198,7 +198,7 @@ void ExtPartition::print_to_console(const Pointset & sites) {
 
 
 //recursive function to determine all subsetsand get their centroids
-void ExtPartition::subsetcentroids(Pointset& result, Pointset& set, Pointset& chosen, unsigned int position, unsigned int left) const {
+void Partition::subsetcentroids(Pointset& result, Pointset& set, Pointset& chosen, unsigned int position, unsigned int left) const {
 	if (left == 0) {
 		result.push_back(centroid(chosen));
 		return;
@@ -216,9 +216,9 @@ void ExtPartition::subsetcentroids(Pointset& result, Pointset& set, Pointset& ch
 }
 
 // recursive function to select best elements of candidates, used in centroid_estimation
-double ExtPartition::get_optimal_candidates(std::vector<Pointset>& candidates, Pointset& chosen, int cur_part, double bestval, Pointset& bestset) {
+double Partition::get_optimal_candidates(std::vector<Pointset>& candidates, Pointset& chosen, int cur_part, double bestval, Pointset& bestset) {
 	if (cur_part == candidates.size()) {
-		ExtPartition part = ExtPartition(customers, chosen);
+		Partition part = Partition(customers, chosen);
 		if (part.TotalError < bestval) {
 			bestval = part.TotalError;
 			bestset.clear();
@@ -236,7 +236,7 @@ double ExtPartition::get_optimal_candidates(std::vector<Pointset>& candidates, P
 	return bestval;
 }
 
-Pointset ExtPartition::centroid_estimation(Pointset& init_centers) {
+Pointset Partition::centroid_estimation(Pointset& init_centers) {
 
 	double eps = 0.5; // ToDo get real value
 	double beta = 1 / (1 + 144 * eps*eps);

@@ -2,11 +2,11 @@
 #define EXTPART_HPP
 #include "Tools.hpp"
 
-class ExtPartition {
+class Partition {
 public:
-	ExtPartition(const Pointset* _customers, const Pointset& _sites);
-	ExtPartition(Pointset* _customers);
-	ExtPartition();
+	Partition(const Pointset* _customers, const Pointset& _sites);
+	Partition(Pointset* _customers);
+	Partition();
 	unsigned int getMinTx();
 	unsigned int assigned(unsigned int idx);
 	unsigned int assigned_alternative(unsigned int idx);

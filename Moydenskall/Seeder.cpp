@@ -8,7 +8,7 @@
 #include "Seeder.hpp"
 #include <tuple>
 #include <numeric>
-#include "ExtPartition.hpp"
+#include "Partition.hpp"
 
 // Seeder Classes
 
@@ -120,7 +120,7 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 	while (sites.size() > (unsigned int)k) {
 
 		// B1 - get best and second best center for each customer
-		ExtPartition extpart = ExtPartition(&customers, sites);
+		Partition extpart = Partition(&customers, sites);
 
 		// B2 - pick the center for which Tx is minimum
 		int bestid = extpart.getMinTx();
@@ -144,7 +144,7 @@ Pointset LTSeeder::seed() const {
 	auto S = swamykseeder.seed();
 
 	//C2
-	ExtPartition partition = ExtPartition(&customers, S);
+	Partition partition = Partition(&customers, S);
 	Pointset sdach = partition.centroids();
 
 
@@ -156,9 +156,9 @@ Pointset LTSeeder::seed() const {
 
 
 Pointset DSeeder::ballkmeansstep(Pointset& sites) const {
-	//shall be obsolete through ExtPartition::ballkmeans
+	//shall be obsolete through Partition::ballkmeans
 
-	ExtPartition extpart = ExtPartition(&customers, sites);
+	Partition extpart = Partition(&customers, sites);
 	Pointset c1 = extpart.ballkmeans(sites);
 
 	return c1;
@@ -179,6 +179,6 @@ Pointset DSeeder::seed() const {
 Pointset ESeeder::seed() const {
 	SampleKSeeder swamyk(customers, k);
 	Pointset p = swamyk.seed();
-	ExtPartition part = ExtPartition(&customers, p);
+	Partition part = Partition(&customers, p);
 	return part.centroid_estimation(p);
 }

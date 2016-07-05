@@ -6,14 +6,14 @@
 #include <string>
 #include <random>
 #include "Seeder.hpp"
-#include "ExtPartition.hpp"
+#include "Partition.hpp"
 
 
 
 
 
 KMeans::KMeans(Pointset& _customers) {
-	p = ExtPartition(&_customers);
+	p = Partition(&_customers);
 	customers = _customers;
 	k = customers.size();
 }

@@ -3,7 +3,7 @@
 #include <string>
 #include <algorithm>
 #include <tuple>
-#include "ExtPartition.hpp"
+#include "Partition.hpp"
 
 Point centroid(const Pointset& plane) {
 	if (plane.size() == 0) {
