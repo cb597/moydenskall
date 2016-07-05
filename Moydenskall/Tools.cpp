@@ -46,39 +46,6 @@ double eucl2dist(Point a, Point b) {
 	return xdiff*xdiff + ydiff*ydiff;
 }
 
-double evaluate_partition(Partition partition, Pointset sites, double fix_costs) {
-	if (sites.size() != partition.size()) {
-		throw "incompatible amount of sites and partitions";
-	}
-
-	double sum = sites.size() * fix_costs;
-	for (unsigned int i = 0; i < sites.size(); ++i) {
-		sum += eucl2dist(partition[i], sites[i]);
-	}
-
-	return sum;
-}
-
-
-std::vector<double> evaluate_partition(std::tuple<Partition, std::vector<int> > partition, Pointset sites) {
-	if (sites.size() != std::get<0>(partition).size()) {
-		throw "incompatible amount of sites and partitions";
-	}
-
-	std::vector<double> stderrors = std::vector<double>();
-	for (unsigned int i = 0; i < sites.size(); ++i) {
-		stderrors.push_back(eucl2dist(std::get<0>(partition)[i], sites[i]));
-	}
-
-	std::vector<double> errors = std::vector<double>();
-
-	return errors;
-}
-Partition cluster(const Pointset& customers, const Pointset& sites) {
-	ExtPartition part = ExtPartition(&customers, sites);
-	return part.getOldPartition(customers);
-}
-
 Pointset readfile(std::string filename) {
 	
 	std::ifstream file(filename);

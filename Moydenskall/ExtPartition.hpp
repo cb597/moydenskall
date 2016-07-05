@@ -7,7 +7,6 @@ public:
 	ExtPartition(const Pointset* _customers, const Pointset& _sites);
 	ExtPartition(Pointset* _customers);
 	ExtPartition();
-	Partition getOldPartition(Pointset customers);
 	unsigned int getMinTx();
 	unsigned int assigned(unsigned int idx);
 	unsigned int assigned_alternative(unsigned int idx);
@@ -27,9 +26,8 @@ private:
 	std::vector<double> val_1best;
 	std::vector<unsigned int> id_2best;
 	std::vector<double> val_2best;
-	Partition createOldPartition(const Pointset& _customers);
 	void subsetcentroids(Pointset & result, Pointset & set, Pointset & chosen, unsigned int position, unsigned int left) const;
-	double get_optimal_candidates(Partition & candidates, Pointset & chosen, int cur_part, double bestval, Pointset & bestset);
+	double get_optimal_candidates(std::vector<Pointset> & candidates, Pointset & chosen, int cur_part, double bestval, Pointset & bestset);
 };
 
 #endif

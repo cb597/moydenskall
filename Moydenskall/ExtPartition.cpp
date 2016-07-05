@@ -23,12 +23,6 @@ ExtPartition::ExtPartition(Pointset* _customers) {
 ExtPartition::ExtPartition() {
 }
 
-
-
-Partition ExtPartition::getOldPartition(Pointset customers) {
-	return createOldPartition(customers);
-}
-
 unsigned int ExtPartition::getMinTx() {
 	std::vector<double>::iterator result = std::min_element(std::begin(Tx), std::end(Tx));
 	return std::distance(std::begin(Tx), result);
@@ -101,19 +95,6 @@ Pointset ExtPartition::ballkmeans(const Pointset & sites) {
 	Pointset p = centroids();
 	id_1best = backup;
 	return p;
-}
-
-//deals with legacy function calls, should be obsolete soon
-Partition ExtPartition::createOldPartition(const Pointset& customers) {
-	Partition partition = Partition();
-	for (unsigned int i = 0; i < k; ++i) {
-		partition.push_back(Pointset());
-	}
-
-	for (unsigned int i = 0; i < customers.size(); ++i) {
-		partition[id_1best[i]].push_back(customers[i]);
-	}
-	return partition;
 }
 
 // calculate Voronoi regions and errors 
@@ -300,7 +281,7 @@ Pointset ExtPartition::centroid_estimation(Pointset& init_centers) {
 	}
 
 	// select centroids of all subsets of size 2/omega
-	Partition candidates;
+	std::vector<Pointset> candidates;
 	for (auto s : random_subsets) {
 		Pointset blubb = Pointset();
 		unsigned int amount2 = (int)(2 / omega);
