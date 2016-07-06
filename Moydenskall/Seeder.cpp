@@ -10,6 +10,17 @@
 #include <numeric>
 #include "Partition.hpp"
 
+// give a random double in [0,1] according to what current OS can do
+double drand() {
+	double d = 0.;
+#ifdef _WIN32
+	d = (double)rand() / (double)RAND_MAX;
+#else
+	d = drand48();
+#endif
+	return d;
+}
+
 // Seeder Classes
 
 
@@ -40,8 +51,21 @@ Pointset SubsetSeeder::seed() const {
 
 Pointset Sample2Seeder::seed() const {
 	std::srand(unsigned(std::time(NULL)));
-	Point cen = centroid(customers);
-	double d1 = eucl2dist(customers, cen);
+
+	// get centroid of all customers...
+	double x = 0, y = 0.;
+	for (auto p : customers) {
+		x += p.X;
+		y += p.Y;
+	}
+	x /= customers.size();
+	y /= customers.size();
+	Point cen = Point(x, y);
+	// ...and its error
+	double d1 = 0.0;
+	for (Point p : customers) {
+		d1 += eucl2dist(cen, p);
+	}
 
 	double random1 = drand();
 	double random2 = drand();

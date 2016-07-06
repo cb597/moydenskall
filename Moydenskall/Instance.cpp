@@ -3,14 +3,14 @@
 #include <string>
 #include <limits>
 #include <fstream>
-#include "Tools.hpp"
+
 
 Instance::Instance(int argc, char * argv[]) {
 
 	//default values for command line parameters
 	f = 50;
 	instance_filename = "inst1.tsp";
-	u = std::numeric_limits<int>::infinity();
+	u = std::numeric_limits<unsigned int>::max();
 	time_measurement = false;
 	svg_ouput = false;
 
@@ -37,6 +37,7 @@ Instance::Instance(int argc, char * argv[]) {
 		}
 	}
 	customers = readfile(instance_filename);
+	D = customers.size();
 }
 
 Pointset Instance::readfile(std::string filename) {

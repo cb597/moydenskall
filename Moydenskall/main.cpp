@@ -1,5 +1,4 @@
 #include <vector>
-#include "Tools.hpp"
 #include "Point.hpp"
 #include <time.h>
 #include <iostream>
@@ -8,14 +7,18 @@
 #include "kmeans.hpp"
 #include "Instance.hpp"
 #include <limits>
+#include <math.h>
 
 int main(int argc, char* argv[]) {
 
 	Instance instance = Instance(argc, argv);
-
-
-
 	KMeans lloyd(instance.customers);
+
+	for (unsigned int k = std::ceil(instance.D / instance.u); k <= std::log(instance.D); ++k) {
+		ESeeder eseed = ESeeder(instance.customers, k);
+		lloyd.lloyds_algo(eseed, instance.u, std::to_string(k));
+	}
+
 	Sample2Seeder swamy2(instance.customers);
 	SampleKSeeder swamyk(instance.customers, 5);
 	StaticSeeder stat5(instance.customers, 5);
@@ -34,7 +37,7 @@ int main(int argc, char* argv[]) {
 	}
 	else {
 		//lloyd.swamy(swamyk);
-		lloyd.lloyds_algo(eseed, 70);
+		lloyd.lloyds_algo(eseed, 70, "test");
 		//lloyd.seed_and_run(eseed);
 	}
 

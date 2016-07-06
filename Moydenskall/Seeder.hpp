@@ -1,6 +1,6 @@
 #ifndef SEEDER_HPP
 #define SEEDER_HPP
-#include "Tools.hpp"
+#include "Partition.hpp"
 #include <limits>
 #include <algorithm>
 #include <ctime>        // std::time

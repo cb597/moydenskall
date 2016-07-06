@@ -10,6 +10,12 @@
 #include <random>
 #include <numeric>
 
+double eucl2dist(Point a, Point b) {
+	double xdiff = a.X - b.X;
+	double ydiff = a.Y - b.Y;
+	return xdiff*xdiff + ydiff*ydiff;
+}
+
 Partition::Partition(const Pointset* _customers, const Pointset& _sites) {
 	customers = _customers;
 	k = _sites.size();
@@ -199,6 +205,22 @@ void Partition::print_to_console(const Pointset & sites) {
 	}
 }
 
+Point Partition::centroid(Pointset& points) const {
+	if (points.size() == 0) {
+		return(Point(0, 0));
+	}
+	double x = 0.;
+	double y = 0.;
+	for (auto p : points) {
+		x += p.X;
+		y += p.Y;
+	}
+
+	x /= points.size();
+	y /= points.size();
+
+	return Point(x, y);
+}
 
 //recursive function to determine all subsetsand get their centroids
 void Partition::subsetcentroids(Pointset& result, Pointset& set, Pointset& chosen, unsigned int position, unsigned int left) const {

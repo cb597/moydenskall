@@ -156,7 +156,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Seeder.cpp" />
-    <ClCompile Include="Tools.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Instance.hpp" />
@@ -164,7 +163,6 @@
     <ClInclude Include="Partition.hpp" />
     <ClInclude Include="Point.hpp" />
     <ClInclude Include="Seeder.hpp" />
-    <ClInclude Include="Tools.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="inst1.tsp" />

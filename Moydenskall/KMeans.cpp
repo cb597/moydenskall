@@ -32,7 +32,7 @@ void KMeans::swamy(const Seeder& seeder) {
 }
 
 // seed and run lloyds algo until capacity limit is repected
-void KMeans::lloyds_algo(const Seeder& seeder, unsigned int capacity_limit) {
+void KMeans::lloyds_algo(const Seeder& seeder, unsigned int capacity_limit, std::string filenamesuffix) {
 
 	//seed
 	Pointset sites = seeder.seed();
@@ -58,7 +58,7 @@ void KMeans::lloyds_algo(const Seeder& seeder, unsigned int capacity_limit) {
 		largest_partition = p.get_largest_partition();
 	}
 	//final output
-	p.print_to_svg(sites, "lloyd_" + seeder.toString() + "_final.svg");
+	p.print_to_svg(sites, "lloyd_" + seeder.toString() + "_final"+filenamesuffix+".svg");
 }
 
 void KMeans::kmeansstep(Pointset& sites) {

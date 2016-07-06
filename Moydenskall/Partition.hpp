@@ -1,7 +1,11 @@
-#ifndef EXTPART_HPP
-#define EXTPART_HPP
-#include "Tools.hpp"
+#ifndef PART_HPP
+#define PART_HPP
 #include <tuple>
+#include <vector>
+#include "Point.hpp"
+using Pointset = std::vector<Point>;
+
+double eucl2dist(Point a, Point b);
 
 class Partition {
 public:
@@ -21,6 +25,7 @@ public:
 	std::tuple<unsigned int, unsigned int> get_largest_partition();
 private:
 	const Pointset* customers;
+	Point centroid(Pointset & points) const;
 	double TotalError;
 	std::vector<double> Tx;
 	unsigned int k;
