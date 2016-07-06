@@ -60,7 +60,8 @@ int main(int argc, char* argv[]) {
 	}
 	else {
 		//lloyd.swamy(swamyk);
-		lloyd.seed_and_run(eseed);
+		lloyd.lloyds_algo(eseed, 70);
+		//lloyd.seed_and_run(eseed);
 	}
 
 	return 0;

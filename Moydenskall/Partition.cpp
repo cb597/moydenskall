@@ -125,7 +125,9 @@ void Partition::createNewPartition(const Pointset& sites) {
 		}
 	}
 
-	// calculate costs
+	// calculate costs and size of each partition
+	partition_size.clear();
+	partition_size.resize(k, 0);
 	TotalError = 0.; //cost of clustering customers around sites
 	Tx = std::vector<double>(sites.size(), 0.); // cost of clustering customers around sites\{x}
 	for (unsigned int i = 0; i < (*customers).size(); i++) {
@@ -133,6 +135,7 @@ void Partition::createNewPartition(const Pointset& sites) {
 		for (unsigned int t = 0; t < sites.size(); ++t) {
 			Tx[t] += t != id_1best[i] ? val_1best[i] : val_2best[i];
 		}
+		++partition_size[assigned(i)];
 	}
 
 }
@@ -300,4 +303,10 @@ Pointset Partition::centroid_estimation(Pointset& init_centers) {
 
 	return bestset;
 
+}
+
+// returns index and size of largest partition in current assignment
+std::tuple<unsigned int, unsigned int> Partition::get_largest_partition() {
+	auto max = std::max_element(partition_size.begin(), partition_size.end());
+	return std::tuple<unsigned int, unsigned int>(std::distance(partition_size.begin(), max),*max);
 }

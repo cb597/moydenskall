@@ -1,6 +1,7 @@
 #ifndef EXTPART_HPP
 #define EXTPART_HPP
 #include "Tools.hpp"
+#include <tuple>
 
 class Partition {
 public:
@@ -17,6 +18,7 @@ public:
 	void print_to_svg(const Pointset& sites, std::string filename);
 	void print_to_console(const Pointset& sites);
 	Pointset centroid_estimation(Pointset & init_centers);
+	std::tuple<unsigned int, unsigned int> get_largest_partition();
 private:
 	const Pointset* customers;
 	double TotalError;
@@ -26,6 +28,7 @@ private:
 	std::vector<double> val_1best;
 	std::vector<unsigned int> id_2best;
 	std::vector<double> val_2best;
+	std::vector<unsigned int> partition_size;
 	void subsetcentroids(Pointset & result, Pointset & set, Pointset & chosen, unsigned int position, unsigned int left) const;
 	double get_optimal_candidates(std::vector<Pointset> & candidates, Pointset & chosen, int cur_part, double bestval, Pointset & bestset);
 };
