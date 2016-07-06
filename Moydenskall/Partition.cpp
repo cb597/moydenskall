@@ -287,7 +287,8 @@ Pointset Partition::centroid_estimation(Pointset& init_centers) {
 		unsigned int amount2 = (int)(2 / omega);
 		//as this does not make sense we choose: //ToDo
 		amount2 = s.size() - 1;
-		subsetcentroids(blubb, s, Pointset(), 0, amount2);
+		Pointset init = Pointset();
+		subsetcentroids(blubb, s, init, 0, amount2);
 		candidates.push_back(blubb);
 	}
 
