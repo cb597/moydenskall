@@ -45,29 +45,6 @@ double eucl2dist(Point a, Point b) {
 	double ydiff = a.Y - b.Y;
 	return xdiff*xdiff + ydiff*ydiff;
 }
-
-Pointset readfile(std::string filename) {
-	
-	std::ifstream file(filename);
-	std::string line = "";
-	Pointset input_points;
-
-	while (line != "NODE_COORD_SECTION") {
-		file >> line;
-	}
-	file >> line;
-
-	double x, y;
-	int counter = 1;
-	for (std::string k = line; k != "EOF"; file >> k) {
-		file >> x >> y;
-		Point p(x, y, counter++);
-		input_points.push_back(p);
-	}
-
-	return input_points;
-}
-
 double drand() {
 	double d = 0.;
 #ifdef _WIN32

@@ -156,7 +156,7 @@ Pointset LTSeeder::seed() const {
 
 
 Pointset DSeeder::ballkmeansstep(Pointset& sites) const {
-	//shall be obsolete through Partition::ballkmeans
+	//shall become obsolete through Partition::ballkmeans
 
 	Partition extpart = Partition(&customers, sites);
 	Pointset c1 = extpart.ballkmeans(sites);
