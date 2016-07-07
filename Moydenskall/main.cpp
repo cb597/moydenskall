@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 	Instance instance = Instance(argc, argv);
 	KMeans lloyd(instance.customers);
 
-	for (unsigned int k = std::ceil(instance.D / instance.u); k <= std::log(instance.D); ++k) {
+	for (unsigned int k = (unsigned int)std::ceil(instance.D / instance.u); k <= std::log(instance.D); ++k) {
 		ESeeder eseed = ESeeder(instance.customers, k);
 		lloyd.lloyds_algo(eseed, instance.u, std::to_string(k));
 	}

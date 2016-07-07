@@ -10,6 +10,12 @@
 #include <random>
 #include <numeric>
 
+double eucl2dist(Point a, Point b) {
+	double xdiff = a.X - b.X;
+	double ydiff = a.Y - b.Y;
+	return xdiff*xdiff + ydiff*ydiff;
+}
+
 Partition::Partition(const Pointset* _customers, const Pointset& _sites) {
 	customers = _customers;
 	k = _sites.size();
@@ -125,7 +131,9 @@ void Partition::createNewPartition(const Pointset& sites) {
 		}
 	}
 
-	// calculate costs
+	// calculate costs and size of each partition
+	partition_size.clear();
+	partition_size.resize(k, 0);
 	TotalError = 0.; //cost of clustering customers around sites
 	Tx = std::vector<double>(sites.size(), 0.); // cost of clustering customers around sites\{x}
 	for (unsigned int i = 0; i < (*customers).size(); i++) {
@@ -133,6 +141,7 @@ void Partition::createNewPartition(const Pointset& sites) {
 		for (unsigned int t = 0; t < sites.size(); ++t) {
 			Tx[t] += t != id_1best[i] ? val_1best[i] : val_2best[i];
 		}
+		++partition_size[assigned(i)];
 	}
 
 }
@@ -196,6 +205,22 @@ void Partition::print_to_console(const Pointset & sites) {
 	}
 }
 
+Point Partition::centroid(Pointset& points) const {
+	if (points.size() == 0) {
+		return(Point(0, 0));
+	}
+	double x = 0.;
+	double y = 0.;
+	for (auto p : points) {
+		x += p.X;
+		y += p.Y;
+	}
+
+	x /= points.size();
+	y /= points.size();
+
+	return Point(x, y);
+}
 
 //recursive function to determine all subsetsand get their centroids
 void Partition::subsetcentroids(Pointset& result, Pointset& set, Pointset& chosen, unsigned int position, unsigned int left) const {
@@ -287,8 +312,7 @@ Pointset Partition::centroid_estimation(Pointset& init_centers) {
 		unsigned int amount2 = (int)(2 / omega);
 		//as this does not make sense we choose: //ToDo
 		amount2 = s.size() - 1;
-		Pointset init = Pointset();
-		subsetcentroids(blubb, s, init, 0, amount2);
+		subsetcentroids(blubb, s, Pointset(), 0, amount2);
 		candidates.push_back(blubb);
 	}
 
@@ -301,4 +325,10 @@ Pointset Partition::centroid_estimation(Pointset& init_centers) {
 
 	return bestset;
 
+}
+
+// returns index and size of largest partition in current assignment
+std::tuple<unsigned int, unsigned int> Partition::get_largest_partition() {
+	auto max = std::max_element(partition_size.begin(), partition_size.end());
+	return std::tuple<unsigned int, unsigned int>(std::distance(partition_size.begin(), max),*max);
 }
