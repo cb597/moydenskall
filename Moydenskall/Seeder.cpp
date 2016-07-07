@@ -113,20 +113,20 @@ Pointset SampleKSeeder::seed() const {
 
 		sites.push_back(customers[0]);
 
-		for (unsigned int i = 0; i < customers.size(); ++i) {
-			sum += probability[i] / probability_sum;
+		for (unsigned int j = 0; j < customers.size(); ++j) {
+			sum += probability[j] / probability_sum;
 			if (sum > rand) {
 				break;
 			}
-			sites.back() = customers[i];
+			sites.back() = customers[j];
 		}
 		sites.back().setId(i + 1);
 		// update probabilities
-		for (unsigned int i = 0; i < customers.size(); ++i) {
-			double d = eucl2dist(customers[i], sites.back());
-			if (probability[i] > d) {
-				probability_sum += d - probability[i];
-				probability[i] = d;
+		for (unsigned int j = 0; j < customers.size(); ++j) {
+			double d = eucl2dist(customers[j], sites.back());
+			if (probability[j] > d) {
+				probability_sum += d - probability[j];
+				probability[j] = d;
 			}
 		}
 

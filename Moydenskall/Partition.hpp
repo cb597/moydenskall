@@ -35,7 +35,7 @@ private:
 	std::vector<double> val_2best;
 	std::vector<unsigned int> partition_size;
 	void subsetcentroids(Pointset & result, Pointset & set, Pointset & chosen, unsigned int position, unsigned int left) const;
-	double get_optimal_candidates(std::vector<Pointset> & candidates, Pointset & chosen, int cur_part, double bestval, Pointset & bestset);
+	double get_optimal_candidates(std::vector<Pointset> & candidates, Pointset & chosen, unsigned int cur_part, double bestval, Pointset & bestset);
 };
 
 #endif

@@ -49,7 +49,7 @@ void Partition::delete_partition(unsigned int idx) {
 			id_1best[i] = id_2best[i];
 		}
 		if (id_2best[i] == idx) {
-			id_2best[i] = -1;
+			id_2best[i] = std::numeric_limits<unsigned int>::quiet_NaN();
 		}
 
 		//adjust indices as a partition is missing now
@@ -241,7 +241,7 @@ void Partition::subsetcentroids(Pointset& result, Pointset& set, Pointset& chose
 }
 
 // recursive function to select best elements of candidates, used in centroid_estimation
-double Partition::get_optimal_candidates(std::vector<Pointset>& candidates, Pointset& chosen, int cur_part, double bestval, Pointset& bestset) {
+double Partition::get_optimal_candidates(std::vector<Pointset>& candidates, Pointset& chosen, unsigned int cur_part, double bestval, Pointset& bestset) {
 	if (cur_part == candidates.size()) {
 		Partition part = Partition(customers, chosen);
 		if (part.TotalError < bestval) {
@@ -308,12 +308,13 @@ Pointset Partition::centroid_estimation(Pointset& init_centers) {
 	// select centroids of all subsets of size 2/omega
 	std::vector<Pointset> candidates;
 	for (auto s : random_subsets) {
-		Pointset blubb = Pointset();
 		unsigned int amount2 = (int)(2 / omega);
 		//as this does not make sense we choose: //ToDo
 		amount2 = s.size() - 1;
-		subsetcentroids(blubb, s, Pointset(), 0, amount2);
-		candidates.push_back(blubb);
+		Pointset result = Pointset();
+		Pointset chosen = Pointset();
+		subsetcentroids(result, s, chosen, 0, amount2);
+		candidates.push_back(result);
 	}
 
 
