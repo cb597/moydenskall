@@ -20,7 +20,7 @@ Instance::Instance(int argc, char * argv[]) {
 		instance_filename = argv[1];
 	}
 	else {
-		throw "invalid parameter count, usage: program filename {-f facilities} {-u capacity} {-t bool_time_measurement}";
+		throw std::runtime_error("invalid parameter count, usage: program filename {-f facilities} {-u capacity} {-time bool_time_measurement}");
 	}
 
 	// parse command line parameters
@@ -57,7 +57,6 @@ Pointset Instance::readfile(std::string filename) {
 	file >> line;
 
 	double x, y;
-	int counter = 1;
 	for (std::string k = line; k != "EOF"; file >> k) {
 		file >> x >> y;
 		Point p(x, y);

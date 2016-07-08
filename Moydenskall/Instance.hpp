@@ -1,7 +1,9 @@
 #ifndef INSTANCE_HPP
 #define INSTANCE_HPP
 #include <string>
-#include "Partition.hpp"
+#include <vector>
+#include "Point.hpp"
+using Pointset = std::vector<Point>;
 
 class Instance {
 public:

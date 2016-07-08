@@ -1,4 +1,5 @@
 #include "Partition.hpp"
+#include "Instance.hpp"
 #include <algorithm>
 #include <vector>
 #include <fstream>
@@ -195,8 +196,8 @@ void Partition::print_to_svg(const Pointset& sites, std::string filename) {
 	svgfile << "</svg>";
 }
 
-void Partition::print_to_console(const Pointset & sites) {
-	std::cout << "OBJECTIVE " << TotalError << std::endl;
+void Partition::print_to_console(const Pointset & sites, const Instance& instance) {
+	std::cout << "OBJECTIVE " << evaluation(instance.f) << std::endl;
 	for (unsigned int s = 0; s < sites.size(); ++s) {
 		std::cout << "FACILITY " << s << " " << sites[s].X << " " << sites[s].Y << std::endl;
 	}
@@ -326,4 +327,8 @@ Pointset Partition::centroid_estimation(Pointset& init_centers, double omega, do
 std::tuple<unsigned int, unsigned int> Partition::get_largest_partition() {
 	auto max = std::max_element(partition_size.begin(), partition_size.end());
 	return std::tuple<unsigned int, unsigned int>(std::distance(partition_size.begin(), max),*max);
+}
+
+double Partition::evaluation(double fixed_costs) {
+	return TotalError+k*fixed_costs;
 }

@@ -3,6 +3,7 @@
 #include <tuple>
 #include <vector>
 #include "Point.hpp"
+#include "Instance.hpp"
 using Pointset = std::vector<Point>;
 
 double eucl2dist(Point a, Point b);
@@ -20,9 +21,10 @@ public:
 	Pointset ballkmeans(const Pointset& _sites);
 	void createNewPartition(const Pointset& _sites);
 	void print_to_svg(const Pointset& sites, std::string filename);
-	void print_to_console(const Pointset& sites);
+	void print_to_console(const Pointset& sites, const Instance& instance);
 	Pointset centroid_estimation(Pointset & init_centers, double omega, double eps);
 	std::tuple<unsigned int, unsigned int> get_largest_partition();
+	double evaluation(double fixed_costs);
 private:
 	const Pointset* customers;
 	Point centroid(Pointset & points) const;
