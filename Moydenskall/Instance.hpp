@@ -5,6 +5,7 @@
 
 class Instance {
 public:
+	Instance() {}
 	Instance(int argc, char* argv[]);
 	double f;
 	std::string instance_filename;
@@ -13,6 +14,7 @@ public:
 	bool time_measurement;
 	bool svg_ouput;
 	Pointset customers;
+	double omega;
 private:
 	Pointset readfile(std::string filename); // read a file in tsp format
 };

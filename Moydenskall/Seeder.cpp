@@ -94,7 +94,7 @@ Pointset Sample2Seeder::seed() const {
 }
 
 Pointset SampleKSeeder::seed() const {
-	Pointset sites = Sample2Seeder(customers).seed();
+	Pointset sites = Sample2Seeder(instance).seed();
 
 	std::vector<double> probability(customers.size(), std::numeric_limits<int>::max());
 	double probability_sum = 0.;
@@ -164,7 +164,7 @@ Pointset LTSeeder::seed() const {
 	double p1 = sqrt(e);
 	int N = (int)(2 * k / (1 - 5 * p1) + 2 * log(2 / p1) / pow((1 - 5 * p1), 2));
 
-	SampleKSeeder swamykseeder(customers, N);
+	SampleKSeeder swamykseeder(instance, N);
 	auto S = swamykseeder.seed();
 
 	//C2
@@ -172,7 +172,7 @@ Pointset LTSeeder::seed() const {
 	Pointset sdach = partition.centroids();
 
 
-	GreedyDelSeeder greedydelseeder(customers, k);
+	GreedyDelSeeder greedydelseeder(instance, k);
 
 	return greedydelseeder.seed(sdach);
 }
@@ -193,7 +193,7 @@ Pointset DSeeder::ballkmeansstep(Pointset& sites) const {
 Pointset DSeeder::seed() const {
 
 	// D1 (obtain k initial centres using last seeding strategy)
-	Pointset init = (LTSeeder(customers, k)).seed();
+	Pointset init = (LTSeeder(instance, k)).seed();
 
 	// D2 (run a ball-k-means step)
 	return ballkmeansstep(init);
@@ -201,7 +201,7 @@ Pointset DSeeder::seed() const {
 
 
 Pointset ESeeder::seed() const {
-	SampleKSeeder swamyk(customers, k);
+	SampleKSeeder swamyk(instance, k);
 	Pointset p = swamyk.seed();
 	Partition part = Partition(&customers, p);
 	return part.centroid_estimation(p);

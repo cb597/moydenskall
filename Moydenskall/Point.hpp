@@ -13,7 +13,7 @@ public:
 	int getId();
 	void setId(int _id);
 private:
-	int ID;
+	int ID; // ToDo: Does anybody still need this?
 };
 
 #endif

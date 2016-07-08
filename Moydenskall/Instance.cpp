@@ -9,6 +9,7 @@ Instance::Instance(int argc, char * argv[]) {
 
 	//default values for command line parameters
 	f = 50;
+	omega = 0.01;
 	instance_filename = "inst1.tsp";
 	u = std::numeric_limits<unsigned int>::max();
 	time_measurement = false;
@@ -34,6 +35,9 @@ Instance::Instance(int argc, char * argv[]) {
 		}
 		if (std::string(argv[i]) == "-svg") {
 			svg_ouput = std::string(argv[i + 1]) == "true" ? true : false; //svg_ouput
+		}
+		if (std::string(argv[i]) == "-w") {
+			omega = std::stod(argv[i + 1]); //omega value
 		}
 	}
 	customers = readfile(instance_filename);

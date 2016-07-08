@@ -15,18 +15,18 @@ int main(int argc, char* argv[]) {
 	KMeans lloyd(instance.customers);
 
 	for (unsigned int k = (unsigned int)std::ceil(instance.D / instance.u); k <= std::log(instance.D); ++k) {
-		ESeeder eseed = ESeeder(instance.customers, k);
+		ESeeder eseed = ESeeder(instance, k);
 		lloyd.lloyds_algo(eseed, instance.u, std::to_string(k));
 	}
 
-	Sample2Seeder swamy2(instance.customers);
-	SampleKSeeder swamyk(instance.customers, 5);
-	StaticSeeder stat5(instance.customers, 5);
-	SubsetSeeder subset(instance.customers, 5);
-	GreedyDelSeeder gredel(instance.customers, 5);
-	LTSeeder lseed(instance.customers, 10);
-	DSeeder dseed(instance.customers, 10);
-	ESeeder eseed(instance.customers, 5);
+	Sample2Seeder swamy2(instance);
+	SampleKSeeder swamyk(instance, 5);
+	StaticSeeder stat5(instance, 5);
+	SubsetSeeder subset(instance, 5);
+	GreedyDelSeeder gredel(instance, 5);
+	LTSeeder lseed(instance, 10);
+	DSeeder dseed(instance, 10);
+	ESeeder eseed(instance, 5);
 
 	if (instance.time_measurement) {
 		double tstart = clock();
