@@ -8,6 +8,7 @@
 #include "Instance.hpp"
 #include <limits>
 #include <math.h>
+#include <chrono>
 
 int main(int argc, char* argv[]) {
 
@@ -15,15 +16,22 @@ int main(int argc, char* argv[]) {
 	KMeans lloyd(instance);
 
 	if (instance.time_measurement) {
-		double tstart = clock();
+		auto start = std::chrono::system_clock::now();
 
-		lloyd.run_lloyd_all_k();
+		if (instance.fixed_k)
+			lloyd.lloyds_algo(ESeeder(instance, instance.k), instance.u, instance.f, "_singleRun_"+std::to_string(instance.k));
+		else
+			lloyd.run_lloyd_all_k();
 
-		double tstop = clock();
-		std::cout << "needed " << (tstop - tstart) / CLOCKS_PER_SEC << " seconds" << std::endl;
+		auto end = std::chrono::system_clock::now();
+		auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+		std::cout << "needed " << elapsed.count() << " milliseconds" << std::endl;
 	}
 	else {
-		lloyd.run_lloyd_all_k();
+		if (instance.fixed_k)
+			lloyd.lloyds_algo(ESeeder(instance, instance.k), instance.u, instance.f, "_singleRun_" + std::to_string(instance.k));
+		else
+			lloyd.run_lloyd_all_k();
 	}
 
 	return 0;

@@ -17,7 +17,6 @@ public:
 private:
 	void kmeansstep(Pointset&);
 	Partition p;
-	int k; // number of customers
 	Pointset customers;
 	Instance instance;
 };

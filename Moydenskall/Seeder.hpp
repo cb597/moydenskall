@@ -9,9 +9,10 @@
 #include <string>
 #include <random>
 
+// abstract class for seeding strategies
 class Seeder {
 public:
-	Seeder(Instance& _instance, int _k) { instance = _instance; customers = instance.customers; k = _k; }
+	Seeder(Instance& _instance, int _k) : instance(_instance), customers(instance.customers), k(_k) {};
 	virtual Pointset seed() const = 0;
 	virtual std::string toString() const = 0;
 protected:

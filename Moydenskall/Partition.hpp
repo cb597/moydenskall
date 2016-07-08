@@ -11,8 +11,8 @@ double eucl2dist(Point a, Point b);
 class Partition {
 public:
 	Partition(const Pointset* _customers, const Pointset& _sites);
-	Partition(Pointset* _customers);
-	Partition();
+	Partition(Pointset* _customers) : customers(_customers) {};
+	Partition() {};
 	unsigned int getMinTx();
 	unsigned int assigned(unsigned int idx);
 	unsigned int assigned_alternative(unsigned int idx);

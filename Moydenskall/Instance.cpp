@@ -40,6 +40,10 @@ Instance::Instance(int argc, char * argv[]) {
 		if (std::string(argv[i]) == "-w") {
 			omega = std::stod(argv[i + 1]); //omega value
 		}
+		if (std::string(argv[i]) == "-k") {
+			k = std::stoi(argv[i + 1]);
+			fixed_k = true;
+		}
 	}
 	customers = readfile(instance_filename);
 	D = customers.size();

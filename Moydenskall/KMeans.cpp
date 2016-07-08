@@ -15,7 +15,6 @@ KMeans::KMeans(Instance& _instance){
 	instance = _instance;
 	p = Partition(&(_instance.customers));
 	customers = _instance.customers;
-	k = customers.size();
 }
 
 // run a given seeding strategy and a single ball-k-means step

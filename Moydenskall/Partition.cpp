@@ -17,17 +17,9 @@ double eucl2dist(Point a, Point b) {
 	return xdiff*xdiff + ydiff*ydiff;
 }
 
-Partition::Partition(const Pointset* _customers, const Pointset& _sites) {
-	customers = _customers;
+Partition::Partition(const Pointset* _customers, const Pointset& _sites) : customers(_customers) {
 	k = _sites.size();
 	createNewPartition(_sites);
-}
-
-Partition::Partition(Pointset* _customers) {
-	customers = _customers;
-}
-
-Partition::Partition() {
 }
 
 unsigned int Partition::getMinTx() {

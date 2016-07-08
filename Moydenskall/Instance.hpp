@@ -10,6 +10,8 @@ public:
 	Instance() {}
 	Instance(int argc, char* argv[]);
 	double f;
+	bool fixed_k;
+	unsigned int k;
 	std::string instance_filename;
 	unsigned int u;
 	unsigned int D;

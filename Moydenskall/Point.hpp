@@ -3,7 +3,7 @@
 #include <iostream>
 class Point {
 public:
-	Point(double, double);
+	Point(double x, double y) : X(x), Y(y) {};
 	inline bool operator==(const Point & rhs) {
 		return(X == rhs.X && Y == rhs.Y);
 	};
