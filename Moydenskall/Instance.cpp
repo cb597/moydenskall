@@ -60,7 +60,7 @@ Pointset Instance::readfile(std::string filename) {
 	int counter = 1;
 	for (std::string k = line; k != "EOF"; file >> k) {
 		file >> x >> y;
-		Point p(x, y, counter++);
+		Point p(x, y);
 		input_points.push_back(p);
 	}
 

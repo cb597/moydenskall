@@ -1,22 +1,13 @@
 #include "Point.hpp"
 #include <iostream>
 
-Point::Point(double _x, double _y, int _id) {
+Point::Point(double _x, double _y) {
 	X = _x;
 	Y = _y;
-	ID = _id;
-}
-
-int Point::getId() {
-	return ID;
-}
-
-void Point::setId(int _id){
-	ID = _id;
 }
 
 std::ostream& operator<<(std::ostream& stream, const Point& p) {
-	stream << p.ID << " " << p.X << " " << p.Y;
+	stream << p.X << " " << p.Y;
 	return stream;
 }
 

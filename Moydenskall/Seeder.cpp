@@ -28,7 +28,7 @@ double drand() {
 Pointset StaticSeeder::seed() const {
 	Pointset sites;
 	for (int i = 1; i <= k; ++i) {
-		sites.push_back(Point(i, i, i));
+		sites.push_back(Point(i, i));
 	}
 	return sites;
 }
@@ -42,7 +42,6 @@ Pointset SubsetSeeder::seed() const {
 	Pointset sites;
 	for (int i = 1; i <= k; ++i) {
 		sites.push_back(customers[permutation[i]]);
-		sites[sites.size() - 1].setId(i);
 	}
 	return sites;
 }
@@ -76,7 +75,6 @@ Pointset Sample2Seeder::seed() const {
 		sum += ((d1 + (double)customers.size()*eucl2dist(c, cen)) / (2.*(double)customers.size()*d1));
 		if (sum > random1) {
 			sites.push_back(c);
-			sites[0].setId(1);
 			break;
 		}
 	}
@@ -85,7 +83,6 @@ Pointset Sample2Seeder::seed() const {
 		sum += (eucl2dist(sites[0], c) / (d1 + (double)customers.size()*eucl2dist(cen, sites[0])));
 		if (sum > random2) {
 			sites.push_back(c);
-			sites[1].setId(2);
 			break;
 		}
 	}
@@ -120,7 +117,6 @@ Pointset SampleKSeeder::seed() const {
 			}
 			sites.back() = customers[j];
 		}
-		sites.back().setId(i + 1);
 		// update probabilities
 		for (unsigned int j = 0; j < customers.size(); ++j) {
 			double d = eucl2dist(customers[j], sites.back());
