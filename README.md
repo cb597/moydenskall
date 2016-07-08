@@ -27,7 +27,7 @@ filename is an instance in the tsplib format
 * `-u <int>` facility capacity, max number of customers per facility  (optional parameter, default: 0)
 * `-time <bool>` turn time measurement on and off  (optional parameter, default: false)
 * `-svg <bool>` create svg visualization in result.svg (optional parameter, default: false)
-* [soon to be implemented: `-w <double>` omega parameter for centroid estimation (optional parameter, default: ??) ]
+* `-w <double>` omega parameter for centroid estimation (optional parameter, default: ??)
 
 ###Code Analysis
 * g++ with -Wall -Wextra --pedantic flags : no warnings

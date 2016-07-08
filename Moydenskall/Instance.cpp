@@ -9,7 +9,8 @@ Instance::Instance(int argc, char * argv[]) {
 
 	//default values for command line parameters
 	f = 50;
-	omega = 0.01;
+	eps = 0.0005; //ToDo: get some useful value here
+	omega = 4 / (3.1* 25 / (25 + 256 * eps*eps));
 	instance_filename = "inst1.tsp";
 	u = std::numeric_limits<unsigned int>::max();
 	time_measurement = false;

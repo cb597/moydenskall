@@ -261,11 +261,9 @@ double Partition::get_optimal_candidates(std::vector<Pointset>& candidates, Poin
 	return bestval;
 }
 
-Pointset Partition::centroid_estimation(Pointset& init_centers) {
+Pointset Partition::centroid_estimation(Pointset& init_centers, double omega, double eps) {
 
-	double eps = 0.5; // ToDo get real value
-	double beta = 1 / (1 + 144 * eps*eps);
-	double omega = 0.07; // Todo get real value
+	double beta = 25 / (25 + 256 * eps*eps);
 
 	// define ddach(i) = min_{j!=i}(||c_j = c_i||) where c_i are init_centers
 	std::vector<double> ddach = std::vector<double>(k, std::numeric_limits<double>::infinity());
@@ -289,8 +287,6 @@ Pointset Partition::centroid_estimation(Pointset& init_centers) {
 	//random subset
 	std::vector<Pointset> random_subsets; // denoted as "S" in paper
 	unsigned int amount = (int)(4 / (beta*omega));
-	//as this is pretty weird we choose (ToDo)
-	amount = 3;
 	for (auto region : expanded_voronoi_regions) {
 		Pointset subset = Pointset();
 		std::vector<unsigned int> indices(region.size());
@@ -308,12 +304,10 @@ Pointset Partition::centroid_estimation(Pointset& init_centers) {
 	// select centroids of all subsets of size 2/omega
 	std::vector<Pointset> candidates;
 	for (auto s : random_subsets) {
-		unsigned int amount2 = (int)(2 / omega);
-		//as this does not make sense we choose: //ToDo
-		amount2 = s.size() - 1;
+		unsigned int subsetsize = (int)(2 / omega);
 		Pointset result = Pointset();
 		Pointset chosen = Pointset();
-		subsetcentroids(result, s, chosen, 0, amount2);
+		subsetcentroids(result, s, chosen, 0, subsetsize);
 		candidates.push_back(result);
 	}
 

@@ -21,7 +21,7 @@ public:
 	void createNewPartition(const Pointset& _sites);
 	void print_to_svg(const Pointset& sites, std::string filename);
 	void print_to_console(const Pointset& sites);
-	Pointset centroid_estimation(Pointset & init_centers);
+	Pointset centroid_estimation(Pointset & init_centers, double omega, double eps);
 	std::tuple<unsigned int, unsigned int> get_largest_partition();
 private:
 	const Pointset* customers;

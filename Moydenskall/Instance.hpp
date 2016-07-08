@@ -15,6 +15,7 @@ public:
 	bool svg_ouput;
 	Pointset customers;
 	double omega;
+	double eps;
 private:
 	Pointset readfile(std::string filename); // read a file in tsp format
 };
