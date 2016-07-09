@@ -1,10 +1,13 @@
 # Moydenskall
 (anagram for Lloyd's k-means)
 
-this page currently refers to commit 3c2fcf99ab3a6fdee37d1e90871752dbfa14e2d0 (07.07.2016)
+this page currently refers to commit bcb512adfdf44ec7ad7d3fda72a7278df8a0cfda (08.07.2016)
 ###Project Moydenskall
 
 This project will solve instances of the facility location problem as stated in http://www.or.uni-bonn.de/~held/praktikum/facility/aufgabe.pdf
+
+Almost all implemented algorithms of this project are described and analyzed in this paper:
+https://www.math.uwaterloo.ca/~cswamy/papers/kmeans-journ.pdf
 
 ###Compile hints
 developed and tested with Microsoft Visual C++ Compiler  
@@ -28,6 +31,7 @@ filename is an instance in the tsplib format
 * `-time <bool>` turn time measurement on and off  (optional parameter, default: false)
 * `-svg <bool>` create svg visualization in result.svg (optional parameter, default: false)
 * `-w <double>` omega parameter for centroid estimation (optional parameter, default: ??)
+* `-k <int>` use algorithm to only run with a given k (turn off trying several k, good for quick test runs)
 
 ###Code Analysis
 * g++ with -Wall -Wextra --pedantic flags : no warnings
