@@ -21,11 +21,11 @@ KMeans::KMeans(Instance& _instance){
 void KMeans::swamy(const Seeder& seeder) {
 	Pointset sites = seeder.seed();
 	p.createNewPartition(sites);
+	if (instance.svg_ouput) p.print_to_svg(sites, seeder.toString() + "_init.svg");
 	// cluster customers within ball to one of the two sites
-	p.print_to_svg(sites, seeder.toString() + "_init.svg");
-	// move sites to centroid of points within ball
-	sites = p.centroids();
-	p.print_to_svg(sites, seeder.toString() + "_result.svg");
+	// and move sites to centroid of points within ball
+	sites = p.ballkmeans(sites);
+	if (instance.svg_ouput) p.print_to_svg(sites, seeder.toString() + "_result.svg");
 }
 
 // seed and run lloyds algo until capacity limit is repected
@@ -35,7 +35,7 @@ double KMeans::lloyds_algo(const Seeder& seeder, unsigned int capacity_limit, do
 	Pointset sites = seeder.seed();
 	kmeansstep(sites);
 	p.createNewPartition(sites);
-	p.print_to_svg(sites, "lloyd_" + seeder.toString() + "_init.svg");
+	if (instance.svg_ouput) p.print_to_svg(sites, "lloyd_" + seeder.toString() + "_init.svg");
 
 	// loop while largest partition violates capacity constraint
 	std::tuple<unsigned int, unsigned int> largest_partition = p.get_largest_partition();
@@ -55,7 +55,7 @@ double KMeans::lloyds_algo(const Seeder& seeder, unsigned int capacity_limit, do
 		largest_partition = p.get_largest_partition();
 	}
 	//final output
-	p.print_to_svg(sites, "lloyd_" + seeder.toString() + "_final"+filenamesuffix+".svg");
+	if (instance.svg_ouput) p.print_to_svg(sites, "lloyd_" + seeder.toString() + "_final"+filenamesuffix+".svg");
 	return p.evaluation(fixed_costs);
 }
 
@@ -85,15 +85,15 @@ void KMeans::kmeansstep(Pointset& sites) {
 void KMeans::seed_and_run(const Seeder& seeder) {
 	Pointset sites = seeder.seed();
 	p.createNewPartition(sites);
-	p.print_to_svg(sites, seeder.toString()+"init.svg");
+	if (instance.svg_ouput) p.print_to_svg(sites, seeder.toString()+"init.svg");
 	run_kmeans(sites, 5);
-	p.print_to_svg(sites, seeder.toString() + "result.svg");
+	if (instance.svg_ouput) p.print_to_svg(sites, seeder.toString() + "result.svg");
 	p.print_to_console(sites, instance);
 }
 
 void KMeans::run_kmeans(Pointset& sites, int steps) {
 	for (int i = 0; i < steps; ++i) {
 		kmeansstep(sites);
-		p.print_to_svg(sites, std::to_string(i).append(".svg"));
+		if (instance.svg_ouput) p.print_to_svg(sites, std::to_string(i).append(".svg"));
 	}
 }
