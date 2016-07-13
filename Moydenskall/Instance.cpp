@@ -20,7 +20,7 @@ Instance::Instance(int argc, char * argv[]) {
 		instance_filename = argv[1];
 	}
 	else {
-		throw std::runtime_error("invalid parameter count, usage: program filename {-f facilities} {-u capacity} {-time bool_time_measurement}");
+		throw std::runtime_error("invalid parameter count, usage: program filename {-f facilities} {-u capacity} {-time bool_time_measurement} {-svg bool_svg_ouput}");
 	}
 
 	// parse command line parameters
