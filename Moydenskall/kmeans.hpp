@@ -13,7 +13,7 @@ public:
 	void run_kmeans(Pointset&, int);
 	void swamy(const Seeder&);
 	double lloyds_algo(const Seeder& seeder, unsigned int capacity_limit, double fixed_costs, std::string filenamesuffix);
-	void run_lloyd_all_k();
+	int run_lloyd_all_k();
 private:
 	void kmeansstep(Pointset&);
 	Partition p;

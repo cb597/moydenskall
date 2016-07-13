@@ -59,7 +59,7 @@ double KMeans::lloyds_algo(const Seeder& seeder, unsigned int capacity_limit, do
 	return p.evaluation(fixed_costs);
 }
 
-void KMeans::run_lloyd_all_k() {
+int KMeans::run_lloyd_all_k() {
 	//Sample2Seeder swamy2(instance);
 	//SampleKSeeder swamyk(instance, 5);
 	//StaticSeeder stat5(instance, 5);
@@ -71,10 +71,15 @@ void KMeans::run_lloyd_all_k() {
 
 	unsigned int startk = (unsigned int)std::ceil(instance.D / instance.u);
 	unsigned int lg = (unsigned int)std::log(instance.D);
+	std::vector<double> results = std::vector<double>();
 	for (unsigned int k = startk; k <= lg + startk; ++k) {
 		ESeeder eseed = ESeeder(instance, k);
-		lloyds_algo(eseed, instance.u, instance.f, std::to_string(k));
+		results.push_back(lloyds_algo(eseed, instance.u, instance.f, std::to_string(k)));
 	}
+
+	//get best result
+	unsigned int best_id = std::distance(results.begin(), std::min_element(results.begin(), results.end()));
+	return best_id;
 }
 
 void KMeans::kmeansstep(Pointset& sites) {
