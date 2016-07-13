@@ -168,7 +168,7 @@ Pointset LTSeeder::seed() const {
 	Pointset sdach = partition.centroids();
 
 
-	GreedyDelSeeder greedydelseeder(instance, k);
+	GreedyDelSeeder greedydelseeder(instance);
 
 	return greedydelseeder.seed(sdach);
 }
@@ -189,7 +189,7 @@ Pointset DSeeder::ballkmeansstep(Pointset& sites) const {
 Pointset DSeeder::seed() const {
 
 	// D1 (obtain k initial centres using last seeding strategy)
-	Pointset init = (LTSeeder(instance, k)).seed();
+	Pointset init = (LTSeeder(instance)).seed();
 
 	// D2 (run a ball-k-means step)
 	return ballkmeansstep(init);
@@ -197,7 +197,7 @@ Pointset DSeeder::seed() const {
 
 
 Pointset ESeeder::seed() const {
-	SampleKSeeder swamyk(instance, k);
+	SampleKSeeder swamyk(instance);
 	Pointset p = swamyk.seed();
 	Partition part = Partition(&customers, p);
 	return part.centroid_estimation(p, instance.omega, instance.eps);

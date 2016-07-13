@@ -48,7 +48,8 @@ public:
 // Stage I Seeding procedure (described in chapter 4.1.1)
 class SampleKSeeder : public Seeder {
 public:
-	SampleKSeeder(Instance instance, int _k) : Seeder(instance) {};
+	SampleKSeeder(Instance instance) : Seeder(instance) {};
+	SampleKSeeder(Instance instance, unsigned int _k) : Seeder(instance) { k = _k; };
 	Pointset seed() const;
 	std::string toString() const { return "SampleKSeeder"; }
 };
@@ -56,7 +57,7 @@ public:
 // greedy deletion seeder, given a init Pointset delete successively
 class GreedyDelSeeder : public Seeder {
 public:
-	GreedyDelSeeder(Instance instance, int _k) : Seeder(instance) {};
+	GreedyDelSeeder(Instance instance) : Seeder(instance) {};
 	Pointset seed() const;
 	Pointset seed(Pointset init) const;
 	std::string toString() const { return "GreedyDelSeeder"; }
@@ -65,7 +66,7 @@ public:
 // seeding algo in linear time (chapter 4.1.3)
 class LTSeeder : public Seeder {
 public:
-	LTSeeder(Instance instance, int _k) : Seeder(instance) {};
+	LTSeeder(Instance instance) : Seeder(instance) {};
 	Pointset seed() const;
 	std::string toString() const { return "LTSeeder"; }
 };
@@ -73,7 +74,7 @@ public:
 // linear time constant factor approximation algorithm (chapter 4.3)
 class DSeeder : public Seeder {
 public:
-	DSeeder(Instance instance, int _k) : Seeder(instance) {};
+	DSeeder(Instance instance) : Seeder(instance) {};
 	Pointset seed() const;
 	std::string toString() const { return "DSeeder"; }
 private:
@@ -83,7 +84,7 @@ private:
 // PTAS (chapter 4.4)
 class ESeeder : public Seeder {
 public:
-	ESeeder(Instance instance, int _k) : Seeder(instance) {};
+	ESeeder(Instance instance) : Seeder(instance) {};
 	Pointset seed() const;
 	std::string toString() const { return "ESeeder"; }
 };

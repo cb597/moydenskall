@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 		auto start = std::chrono::system_clock::now();
 		int bestrun = -1;
 		if (instance.fixed_k)
-			lloyd.lloyds_algo(ESeeder(instance, instance.k), instance.u, instance.f, "_singleRun_"+std::to_string(instance.k));
+			lloyd.lloyds_algo(ESeeder(instance), instance.u, instance.f, "_singleRun_"+std::to_string(instance.k));
 		else
 			bestrun = lloyd.run_lloyd_all_k();
 
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 	}
 	else {
 		if (instance.fixed_k)
-			lloyd.lloyds_algo(ESeeder(instance, instance.k), instance.u, instance.f, "_singleRun_" + std::to_string(instance.k));
+			lloyd.lloyds_algo(ESeeder(instance), instance.u, instance.f, "_singleRun_" + std::to_string(instance.k));
 		else
 			lloyd.run_lloyd_all_k();
 	}

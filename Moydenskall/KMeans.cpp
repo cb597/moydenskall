@@ -73,7 +73,7 @@ int KMeans::run_lloyd_all_k() {
 	unsigned int lg = (unsigned int)std::log(instance.D);
 	std::vector<double> results = std::vector<double>();
 	for (unsigned int k = startk; k <= lg + startk; ++k) {
-		ESeeder eseed = ESeeder(instance, k);
+		ESeeder eseed = ESeeder(instance);
 		results.push_back(lloyds_algo(eseed, instance.u, instance.f, std::to_string(k)));
 	}
 
