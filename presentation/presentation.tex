@@ -1,0 +1,161 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+
+\usepackage{listings}
+\usepackage{color}
+\usepackage{verbatim}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},   
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{blue},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+\title{Seeding Strategies for Lloyd`s kmeans}
+\subtitle{C++ implementation of Ostrovsky, Rabani, Schulman and Swamy`s ideas}
+\author{Mirko Speth}
+\date{22.07.2016}
+\subject{Computer Science}
+
+\begin{document}
+
+  \frame{\titlepage}
+  \begin{frame}
+    \frametitle{Overview}
+    Five approaches to seed Lloyd`s k-means
+    \begin{itemize}
+        \item{A: Random Sampling}
+        \item{B: Greedy Deletion}
+        \item{C: Linear time algorithm}
+        \item{D: Linear time constant factor algorithm}
+        \item{E: Polynomial Time Approximation Scheme (PTAS)}
+    \end{itemize}
+  \end{frame}
+  
+  
+  
+  
+  \begin{frame}
+    \frametitle{A: Random Sampling}
+    \framesubtitle{$O(knd)$}
+    \begin{enumerate}
+        \item Select two random points $c_1$ and $c_2$ with probability $||c_1-c_2||^2$
+        \item Perform a ball-k-means step
+        \item Repeat: add another point $c_{i+1}$ with probability $min_{j\in\{1...i\}}{||c_{i+1}-c_j||^2}$
+    \end{enumerate}
+  \end{frame}
+  
+  
+  \begin{frame}[fragile]
+    \frametitle{B: Greedy Deletion}
+\begin{lstlisting}[language=C++]
+Pointset GreedyDelSeeder::seed(Pointset init) const {
+	Pointset sites = init;
+	while (sites.size() > (unsigned int) k) {
+
+		// B1: get best and second best center for each customer
+		Partition part = Partition(&customers, sites);
+
+		// B2: pick the center for which Tx is minimum
+		int bestid = part.getMinTx();
+
+		// B3: delete chosen partition and move points to centroid of voronoi region
+		part.delete_set_from_partition(bestid);
+		sites = part.centroids();
+	}
+	return sites;
+}
+\end{lstlisting}
+\end{frame}
+
+
+
+  \begin{frame}
+    \frametitle{B: Greedy Deletion}
+    Running time: outer loop $(n-k)$ iterations $\Rightarrow O(n)$\\
+    \newline
+    Partitioning: $O(n^2d)$\\
+    \newline
+    No speed loss for second best\\
+    \newline
+    $\Rightarrow$ together: $O(n^3d)$
+  \end{frame}
+
+  
+    \begin{frame}[fragile]
+
+    \frametitle{C: Linear time algorithm}
+\begin{lstlisting}[language=C++]
+Pointset LTSeeder::seed() const {
+
+	//C1
+	double e = 0.0123; //ToDo get real value
+	double p1 = sqrt(e);
+	int N = (int)(2 * k / (1 - 5 * p1) + 2 * log(2 / p1) / pow((1 - 5 * p1), 2));
+
+	SampleKSeeder swamykseeder(instance, N);
+	Pointset S = swamykseeder.seed();
+
+	//C2
+	Partition partition = Partition(&customers, S);
+	Pointset sdach = partition.centroids();
+
+	GreedyDelSeeder greedydelseeder(instance, k);
+
+	return greedydelseeder.seed(sdach);
+}
+\end{lstlisting}
+\end{frame}
+  
+      \begin{frame}[fragile]
+
+    \frametitle{D: Linear time constant factor algorithm}
+\begin{lstlisting}[language=C++]
+Pointset DSeeder::seed() const {
+    // D1 (obtain k initial centres using last seeding strategy)
+	Pointset init = (LTSeeder(instance, k)).seed();
+
+	// D2 (run a ball-k-means step)
+	return ballkmeansstep(init);
+}
+\end{lstlisting}
+\end{frame}
+  
+        \begin{frame}[fragile]
+
+    \frametitle{E: Polynomial Time Approximation Scheme (PTAS)}
+\begin{lstlisting}[language=C++]
+Pointset ESeeder::seed() const {
+	SampleKSeeder swamyk(instance, k);
+	Pointset p = swamyk.seed();
+	Partition part = Partition(&customers, p);
+	return part.centroid_estimation(p, instance.omega, instance.eps);
+}
+\end{lstlisting}
+\end{frame}
+
+
+\end{document}
