@@ -10,13 +10,12 @@ class KMeans {
 public:
 	KMeans(Instance&);
 	void seed_and_run(const Seeder&);
-	void run_kmeans(Pointset&, int);
+	void run_kmeans(Partition&, unsigned int);
 	void swamy(const Seeder&);
-	double lloyds_algo(const Seeder& seeder, unsigned int capacity_limit, double fixed_costs, std::string filenamesuffix);
-	int run_lloyd_all_k();
+	Partition lloyds_algo(const Seeder& seeder, std::string filenamesuffix);
+	Partition run_lloyd_all_k();
 private:
-	void kmeansstep(Pointset&);
-	Partition p;
+	void kmeansstep(Partition&);
 	Pointset customers;
 	Instance instance;
 };

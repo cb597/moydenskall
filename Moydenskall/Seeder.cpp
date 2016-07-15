@@ -174,25 +174,14 @@ Pointset LTSeeder::seed() const {
 }
 
 
-
-Pointset DSeeder::ballkmeansstep(Pointset& sites) const {
-	//shall become obsolete through Partition::ballkmeans
-
-	Partition extpart = Partition(&customers, sites);
-	Pointset c1 = extpart.ballkmeans(sites);
-
-	return c1;
-}
-
-
-
 Pointset DSeeder::seed() const {
 
 	// D1 (obtain k initial centres using last seeding strategy)
 	Pointset init = (LTSeeder(instance)).seed();
-
+	Partition p = Partition(&customers, init);
+	p.ballkmeans();
 	// D2 (run a ball-k-means step)
-	return ballkmeansstep(init);
+	return p.getSites();
 }
 
 

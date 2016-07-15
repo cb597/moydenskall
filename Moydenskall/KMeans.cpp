@@ -13,53 +13,41 @@
 
 KMeans::KMeans(Instance& _instance){
 	instance = _instance;
-	p = Partition(&(_instance.customers));
 	customers = _instance.customers;
 }
 
 // run a given seeding strategy and a single ball-k-means step
 void KMeans::swamy(const Seeder& seeder) {
 	Pointset sites = seeder.seed();
-	p.createNewPartition(sites);
-	if (instance.svg_ouput) p.print_to_svg(sites, seeder.toString() + "_init.svg");
+	Partition p = Partition(&customers, sites);
+	p.setSites(sites);
+	if (instance.svg_output) p.print_to_svg(seeder.toString() + "_init.svg");
 	// cluster customers within ball to one of the two sites
 	// and move sites to centroid of points within ball
-	sites = p.ballkmeans(sites);
-	if (instance.svg_ouput) p.print_to_svg(sites, seeder.toString() + "_result.svg");
+	p.ballkmeans();
+	if (instance.svg_output) p.print_to_svg(seeder.toString() + "_result.svg");
 }
 
 // seed and run lloyds algo until capacity limit is repected
-double KMeans::lloyds_algo(const Seeder& seeder, unsigned int capacity_limit, double fixed_costs, std::string filenamesuffix) {
+Partition KMeans::lloyds_algo(const Seeder& seeder, std::string filenamesuffix) {
+	
+	Partition p = Partition(&customers, seeder.seed());
 
 	//seed
-	Pointset sites = seeder.seed();
-	kmeansstep(sites);
-	p.createNewPartition(sites);
-	if (instance.svg_ouput) p.print_to_svg(sites, "lloyd_" + seeder.toString() + "_init.svg");
+	kmeansstep(p);
+	if (instance.svg_output) p.print_to_svg("lloyd_" + seeder.toString() + "_init.svg");
 
 	// loop while largest partition violates capacity constraint
-	std::tuple<unsigned int, unsigned int> largest_partition = p.get_largest_partition();
-	while (std::get<1>(largest_partition) > capacity_limit) {
-
-		//duplicate site
-		Point& site_to_duplicate = sites[std::get<0>(largest_partition)];
-		Point new_site = Point(site_to_duplicate.X, site_to_duplicate.Y);
-
-		//move slightly to get nonempty voronoi region
-		new_site.X = std::nextafter(new_site.X, new_site.X + 42);
-		sites.push_back(new_site);
-
-		//single kmeansstep and re-evaluation
-		kmeansstep(sites);
-		p.createNewPartition(sites);
-		largest_partition = p.get_largest_partition();
+	while (p.capacity_check_and_clone(instance.u)) {
+		kmeansstep(p);
 	}
+
 	//final output
-	if (instance.svg_ouput) p.print_to_svg(sites, "lloyd_" + seeder.toString() + "_final"+filenamesuffix+".svg");
-	return p.evaluation(fixed_costs);
+	if (instance.svg_output) p.print_to_svg("lloyd_" + seeder.toString() + "_final"+filenamesuffix+".svg");
+	return p;
 }
 
-int KMeans::run_lloyd_all_k() {
+Partition KMeans::run_lloyd_all_k() {
 	//Sample2Seeder swamy2(instance);
 	//SampleKSeeder swamyk(instance, 5);
 	//StaticSeeder stat5(instance, 5);
@@ -71,34 +59,38 @@ int KMeans::run_lloyd_all_k() {
 
 	unsigned int startk = (unsigned int)std::ceil(instance.D / instance.u);
 	unsigned int lg = (unsigned int)std::log(instance.D);
-	std::vector<double> results = std::vector<double>();
+	std::vector<Partition> results = std::vector<Partition>();
 	for (unsigned int k = startk; k <= lg + startk; ++k) {
 		ESeeder eseed = ESeeder(instance);
-		results.push_back(lloyds_algo(eseed, instance.u, instance.f, std::to_string(k)));
+		results.push_back(lloyds_algo(eseed, std::to_string(k)));
 	}
 
 	//get best result
-	unsigned int best_id = std::distance(results.begin(), std::min_element(results.begin(), results.end()));
-	return best_id;
+	unsigned int best_id = 0;
+	double val = std::numeric_limits<double>::max();
+	for (unsigned int i = 0; i < results.size(); ++i) {
+		if (results[i].evaluation(instance.f) < val) {
+			best_id = i;
+		}
+	}
+	return results[best_id];
 }
 
-void KMeans::kmeansstep(Pointset& sites) {
-	p.createNewPartition(sites);
-	sites = p.centroids();
+void KMeans::kmeansstep(Partition& p) {
+	p.setSites(p.centroids());
 }
 
 void KMeans::seed_and_run(const Seeder& seeder) {
-	Pointset sites = seeder.seed();
-	p.createNewPartition(sites);
-	if (instance.svg_ouput) p.print_to_svg(sites, seeder.toString()+"init.svg");
-	run_kmeans(sites, 5);
-	if (instance.svg_ouput) p.print_to_svg(sites, seeder.toString() + "result.svg");
-	p.print_to_console(sites, instance);
+	Partition p = Partition(&customers, seeder.seed());
+	if (instance.svg_output) p.print_to_svg(seeder.toString()+"init.svg");
+	run_kmeans(p, 5);
+	if (instance.svg_output) p.print_to_svg(seeder.toString() + "result.svg");
+	p.print_to_console(instance);
 }
 
-void KMeans::run_kmeans(Pointset& sites, int steps) {
-	for (int i = 0; i < steps; ++i) {
-		kmeansstep(sites);
-		if (instance.svg_ouput) p.print_to_svg(sites, std::to_string(i).append(".svg"));
+void KMeans::run_kmeans(Partition& p, unsigned int steps) {
+	for (unsigned int i = 0; i < steps; ++i) {
+		kmeansstep(p);
+		if (instance.svg_output) p.print_to_svg(std::to_string(i).append(".svg"));
 	}
 }

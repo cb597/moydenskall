@@ -77,8 +77,6 @@ public:
 	DSeeder(Instance instance) : Seeder(instance) {};
 	Pointset seed() const;
 	std::string toString() const { return "DSeeder"; }
-private:
-	Pointset ballkmeansstep(Pointset& sites) const;
 };
 
 // PTAS (chapter 4.4)

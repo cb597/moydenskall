@@ -18,15 +18,17 @@ public:
 	unsigned int assigned_alternative(unsigned int idx);
 	void delete_partition(unsigned int idx);
 	Pointset centroids();
-	Pointset ballkmeans(const Pointset& _sites);
-	void createNewPartition(const Pointset& _sites);
-	void print_to_svg(const Pointset& sites, std::string filename);
-	void print_to_console(const Pointset& sites, const Instance& instance);
+	void ballkmeans();
+	void setSites(const Pointset& _sites);
+	void print_to_svg(std::string filename);
+	void print_to_console(const Instance& instance);
 	Pointset centroid_estimation(Pointset & init_centers, double omega, double eps);
-	std::tuple<unsigned int, unsigned int> get_largest_partition();
 	double evaluation(double fixed_costs);
+	Pointset getSites();
+	bool capacity_check_and_clone(unsigned int limit);
 private:
 	const Pointset* customers;
+	Pointset sites;
 	Point centroid(Pointset & points) const;
 	double TotalError;
 	std::vector<double> Tx;

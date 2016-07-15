@@ -14,7 +14,7 @@ Instance::Instance(int argc, char * argv[]) {
 	instance_filename = "inst1.tsp";
 	u = std::numeric_limits<unsigned int>::max();
 	time_measurement = false;
-	svg_ouput = false;
+	svg_output = false;
 
 	if (argc >= 2 && argc % 2 == 0) {
 		instance_filename = argv[1];
@@ -35,7 +35,7 @@ Instance::Instance(int argc, char * argv[]) {
 			time_measurement = std::string(argv[i + 1]) == "true" ? true : false; //time measurement
 		}
 		if (std::string(argv[i]) == "-svg") {
-			svg_ouput = std::string(argv[i + 1]) == "true" ? true : false; //svg_ouput
+			svg_output = std::string(argv[i + 1]) == "true" ? true : false; //svg_ouput
 		}
 		if (std::string(argv[i]) == "-w") {
 			omega = std::stod(argv[i + 1]); //omega value
@@ -61,7 +61,7 @@ Pointset Instance::readfile(std::string filename) {
 	file >> line;
 
 	double x, y;
-	for (std::string k = line; k != "EOF"; file >> k) {
+	for (std::string l = line; l != "EOF"; file >> l) {
 		file >> x >> y;
 		Point p(x, y);
 		input_points.push_back(p);

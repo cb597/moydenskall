@@ -16,7 +16,7 @@ public:
 	unsigned int u;
 	unsigned int D;
 	bool time_measurement;
-	bool svg_ouput;
+	bool svg_output;
 	Pointset customers;
 	double omega;
 	double eps;

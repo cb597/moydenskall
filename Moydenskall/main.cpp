@@ -17,22 +17,24 @@ int main(int argc, char* argv[]) {
 
 	if (instance.time_measurement) {
 		auto start = std::chrono::system_clock::now();
-		int bestrun = -1;
+		Partition p;
 		if (instance.fixed_k)
-			lloyd.lloyds_algo(ESeeder(instance), instance.u, instance.f, "_singleRun_"+std::to_string(instance.k));
+			p = lloyd.lloyds_algo(ESeeder(instance), "_singleRun_"+std::to_string(instance.k));
 		else
-			bestrun = lloyd.run_lloyd_all_k();
+			p = lloyd.run_lloyd_all_k();
 
 		auto end = std::chrono::system_clock::now();
 		auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 		std::cout << "needed " << elapsed.count() << " milliseconds" << std::endl;
-		if (!instance.fixed_k) std::cout << "best result provided by k=" << bestrun << std::endl;
+		p.print_to_console(instance);
 	}
 	else {
+		Partition p;
 		if (instance.fixed_k)
-			lloyd.lloyds_algo(ESeeder(instance), instance.u, instance.f, "_singleRun_" + std::to_string(instance.k));
+			p = lloyd.lloyds_algo(ESeeder(instance), "_singleRun_" + std::to_string(instance.k));
 		else
-			lloyd.run_lloyd_all_k();
+			p = lloyd.run_lloyd_all_k();
+		p.print_to_console(instance);
 	}
 
 	return 0;

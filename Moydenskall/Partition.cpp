@@ -19,7 +19,7 @@ double eucl2dist(Point a, Point b) {
 
 Partition::Partition(const Pointset* _customers, const Pointset& _sites) : customers(_customers) {
 	k = _sites.size();
-	createNewPartition(_sites);
+	setSites(_sites);
 }
 
 unsigned int Partition::getMinTx() {
@@ -69,7 +69,7 @@ Pointset Partition::centroids() {
 }
 
 // ball-k-means step as described in 4.2 (A) 
-Pointset Partition::ballkmeans(const Pointset & sites) {
+void Partition::ballkmeans() {
 	std::vector<double> ddach(k, std::numeric_limits<double>::infinity());
 	for (unsigned int i = 0; i < sites.size() - 1; ++i) {
 		for (unsigned int j = i + 1; j < sites.size(); ++j) {
@@ -79,7 +79,6 @@ Pointset Partition::ballkmeans(const Pointset & sites) {
 		}
 	}
 
-	auto backup = id_1best;
 	for (unsigned int i = 0; i < id_1best.size();++i) {
 		id_1best[i] = k;
 	}
@@ -91,14 +90,13 @@ Pointset Partition::ballkmeans(const Pointset & sites) {
 			}
 		}
 	}
-	Pointset p = centroids();
-	id_1best = backup;
-	return p;
+	sites = centroids();
+	return;
 }
 
 // calculate Voronoi regions and errors 
-void Partition::createNewPartition(const Pointset& sites) {
-
+void Partition::setSites(const Pointset& _sites) {
+	sites = _sites;
 	k = sites.size();
 
 	//init all vectors
@@ -139,7 +137,7 @@ void Partition::createNewPartition(const Pointset& sites) {
 
 }
 
-void Partition::print_to_svg(const Pointset& sites, std::string filename) {
+void Partition::print_to_svg(std::string filename) {
 	std::ofstream svgfile(filename);
 
 	// get bounding rectangle
@@ -188,13 +186,14 @@ void Partition::print_to_svg(const Pointset& sites, std::string filename) {
 	svgfile << "</svg>";
 }
 
-void Partition::print_to_console(const Pointset & sites, const Instance& instance) {
+void Partition::print_to_console(const Instance& instance) {
 	std::cout << "OBJECTIVE " << evaluation(instance.f) << std::endl;
 	for (unsigned int s = 0; s < sites.size(); ++s) {
 		std::cout << "FACILITY " << s << " " << sites[s].X << " " << sites[s].Y << std::endl;
 	}
+	std::cout << "ASSIGN " << std::endl;
 	for (unsigned int c = 0; c < (*customers).size(); ++c) {
-		std::cout << "ASSIGN " << c << " " << assigned(c) << std::endl;
+		std::cout << c << " " << assigned(c) << std::endl;
 	}
 }
 
@@ -315,12 +314,27 @@ Pointset Partition::centroid_estimation(Pointset& init_centers, double omega, do
 
 }
 
-// returns index and size of largest partition in current assignment
-std::tuple<unsigned int, unsigned int> Partition::get_largest_partition() {
-	auto max = std::max_element(partition_size.begin(), partition_size.end());
-	return std::tuple<unsigned int, unsigned int>(std::distance(partition_size.begin(), max),*max);
-}
-
 double Partition::evaluation(double fixed_costs) {
 	return TotalError+k*fixed_costs;
+}
+
+Pointset Partition::getSites() {
+	return sites;
+}
+
+bool Partition::capacity_check_and_clone(unsigned int limit) {
+	auto max = std::max_element(partition_size.begin(), partition_size.end());
+	if (*max > limit) {
+		Point& to_duplicate = sites[std::distance(partition_size.begin(), max)];
+		Point new_point = Point(to_duplicate.X, to_duplicate.Y);
+
+		//move slightly to get nonempty voronoi region
+		new_point.X += 1;// std::nextafter(new_point.X, new_point.X + 42);
+		Pointset newsites = sites;
+		newsites.push_back(new_point);
+		setSites(newsites);
+		//++k;
+		return true;
+	}
+	return false;
 }
