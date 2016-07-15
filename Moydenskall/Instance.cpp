@@ -3,6 +3,7 @@
 #include <string>
 #include <limits>
 #include <fstream>
+#include <stdexcept>
 
 
 Instance::Instance(int argc, char * argv[]) {
@@ -28,21 +29,24 @@ Instance::Instance(int argc, char * argv[]) {
 		if (std::string(argv[i]) == "-f") {
 			f = std::stoi(argv[i + 1]); //fix costs
 		}
-		if (std::string(argv[i]) == "-u") {
+		else if (std::string(argv[i]) == "-u") {
 			u = std::stoi(argv[i + 1]); //capacity
 		}
-		if (std::string(argv[i]) == "-time") {
+		else if (std::string(argv[i]) == "-time") {
 			time_measurement = std::string(argv[i + 1]) == "true" ? true : false; //time measurement
 		}
-		if (std::string(argv[i]) == "-svg") {
+		else if (std::string(argv[i]) == "-svg") {
 			svg_output = std::string(argv[i + 1]) == "true" ? true : false; //svg_ouput
 		}
-		if (std::string(argv[i]) == "-w") {
+		else if (std::string(argv[i]) == "-w") {
 			omega = std::stod(argv[i + 1]); //omega value
 		}
-		if (std::string(argv[i]) == "-k") {
+		else if (std::string(argv[i]) == "-k") {
 			k = std::stoi(argv[i + 1]);
 			fixed_k = true;
+		}
+		else {
+			throw std::runtime_error("invalid parameter given, usage: program filename {-f facilities} {-u capacity} {-time bool_time_measurement} {-svg bool_svg_ouput}");
 		}
 	}
 	customers = readfile(instance_filename);
