@@ -60,6 +60,7 @@ public:
 	GreedyDelSeeder(Instance instance) : Seeder(instance) {};
 	Pointset seed() const;
 	Pointset seed(Pointset init) const;
+	Pointset seedWeighted(Pointset init) const;
 	std::string toString() const { return "GreedyDelSeeder"; }
 };
 

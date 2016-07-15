@@ -140,14 +140,33 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 	while (sites.size() > (unsigned int)k) {
 
 		// B1 - get best and second best center for each customer
-		Partition extpart = Partition(&customers, sites);
+		Partition part = Partition(&customers, sites);
 
 		// B2 - pick the center for which Tx is minimum
-		int bestid = extpart.getMinTx();
+		int bestid = part.getMinTx();
 
 		// B3 - delete chosen partition and move points to centroid of voronoi region
-		extpart.delete_partition(bestid);
-		sites = extpart.centroids();
+		part.delete_partition(bestid);
+		sites = part.centroids();
+	}
+
+	return sites;
+}
+
+Pointset GreedyDelSeeder::seedWeighted(Pointset init) const {
+	Pointset sites = init;
+
+	while (sites.size() > (unsigned int)k) {
+
+		// B1 - get best and second best center for each customer
+		Partition part = Partition(&customers, sites);
+
+		// B2 - pick the center for which Tx*|R(x)| is minimum
+		int bestid = part.getMinWeightedTx();
+
+		// B3 - delete chosen partition and move points to centroid of voronoi region
+		part.delete_partition(bestid);
+		sites = part.centroids();
 	}
 
 	return sites;

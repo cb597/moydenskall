@@ -27,6 +27,17 @@ unsigned int Partition::getMinTx() {
 	return std::distance(std::begin(Tx), result);
 }
 
+unsigned int Partition::getMinWeightedTx() {
+	double min_val = std::numeric_limits<double>::max();
+	unsigned int min_idx = 0;
+	for (unsigned int i = 0; i < Tx.size(); ++i) {
+		if (Tx[i] * partition_size[i] < min_val) {
+			min_idx = i;
+		}
+	}
+	return min_idx;
+}
+
 unsigned int Partition::assigned(unsigned int idx) {
 	return id_1best[idx];
 }

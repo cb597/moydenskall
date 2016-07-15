@@ -14,6 +14,7 @@ public:
 	Partition(Pointset* _customers) : customers(_customers) {};
 	Partition() {};
 	unsigned int getMinTx();
+	unsigned int getMinWeightedTx();
 	unsigned int assigned(unsigned int idx);
 	unsigned int assigned_alternative(unsigned int idx);
 	void delete_partition(unsigned int idx);
