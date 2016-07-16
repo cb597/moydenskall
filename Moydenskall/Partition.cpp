@@ -12,8 +12,8 @@
 #include <numeric>
 
 double eucl2dist(Point a, Point b) {
-	double xdiff = a.X - b.X;
-	double ydiff = a.Y - b.Y;
+	double xdiff = a.x() - b.x();
+	double ydiff = a.y() - b.y();
 	return xdiff*xdiff + ydiff*ydiff;
 }
 
@@ -64,17 +64,17 @@ void Partition::delete_partition(unsigned int idx) {
 }
 
 Pointset Partition::centroids() {
-	std::vector<Point> centers(k, Point(0,0));
+	std::vector<Point> centers(k, Point(0, 0));
 	std::vector<unsigned int> counter(k, 0);
 	for (unsigned int i = 0; i < (*customers).size(); ++i) {
 		if (assigned(i) == k) continue;
-		centers[assigned(i)].X += (*customers)[i].X;
-		centers[assigned(i)].Y += (*customers)[i].Y;
+		centers[assigned(i)].move_x((*customers)[i].x());
+		centers[assigned(i)].move_y((*customers)[i].y());
 		counter[assigned(i)]++;
 	}
 	for (unsigned int i = 0; i < k; ++i) {
-		centers[i].X /= counter[i];
-		centers[i].Y /= counter[i];
+		centers[i].set_x(centers[i].x() / counter[i]);
+		centers[i].set_y(centers[i].y() / counter[i]);
 	}
 	return centers;
 }
@@ -157,16 +157,16 @@ void Partition::print_to_svg(std::string filename) {
 	double xmax = 0, ymax = 0;
 
 	for (auto c : (*customers)) {
-		xmin = std::min(xmin, c.X);
-		xmax = std::max(xmax, c.X);
-		ymin = std::min(ymin, c.Y);
-		ymax = std::max(ymax, c.Y);
+		xmin = std::min(xmin, c.x());
+		xmax = std::max(xmax, c.x());
+		ymin = std::min(ymin, c.y());
+		ymax = std::max(ymax, c.y());
 	}
 	for (auto s : sites) {
-		xmin = std::min(xmin, s.X);
-		xmax = std::max(xmax, s.X);
-		ymin = std::min(ymin, s.Y);
-		ymax = std::max(ymax, s.Y);
+		xmin = std::min(xmin, s.x());
+		xmax = std::max(xmax, s.x());
+		ymin = std::min(ymin, s.y());
+		ymax = std::max(ymax, s.y());
 	}
 
 	xmin -= 2; ymin -= 2; xmax += 2; ymax += 2;
@@ -179,17 +179,17 @@ void Partition::print_to_svg(std::string filename) {
 
 	for (unsigned int c = 0; c < (*customers).size(); ++c) {
 		//draw line to assigned site
-		svgfile << "<line x1=\"" << (*customers)[c].X << "\" y1=\"" << (*customers)[c].Y << "\" x2=\"" << sites[assigned(c)].X << "\" y2=\"" << sites[assigned(c)].Y
+		svgfile << "<line x1=\"" << (*customers)[c].x() << "\" y1=\"" << (*customers)[c].y() << "\" x2=\"" << sites[assigned(c)].x() << "\" y2=\"" << sites[assigned(c)].y()
 			<< "\" style=\"stroke:#aaa; stroke-width:" << pointsize/2 << "; \" stroke-dasharray=\"0.1, 0.1\"/>";
 	}
 	for (unsigned int c = 0; c < (*customers).size(); ++c) {
 		//draw customer
-		svgfile << "<circle cx = \"" << (*customers)[c].X << "\" cy = \"" << (*customers)[c].Y << "\" r = \""
+		svgfile << "<circle cx = \"" << (*customers)[c].x() << "\" cy = \"" << (*customers)[c].y() << "\" r = \""
 			<< pointsize << "\" style = \"fill:red\" />" << std::endl;
 	}
 	for (unsigned int s=0; s < sites.size(); ++s) {
 		//draw site
-		svgfile << "<circle cx = \"" << sites[s].X << "\" cy = \"" << sites[s].Y << "\" r = \""
+		svgfile << "<circle cx = \"" << sites[s].x() << "\" cy = \"" << sites[s].y() << "\" r = \""
 			<< pointsize << "\" style = \"fill:green\" />" << std::endl;
 	}
 
@@ -200,7 +200,7 @@ void Partition::print_to_svg(std::string filename) {
 void Partition::print_to_console(const Instance& instance) {
 	std::cout << "OBJECTIVE " << evaluation(instance.f) << std::endl;
 	for (unsigned int s = 0; s < sites.size(); ++s) {
-		std::cout << "FACILITY " << s << " " << sites[s].X << " " << sites[s].Y << std::endl;
+		std::cout << "FACILITY " << s << " " << sites[s].x() << " " << sites[s].y() << std::endl;
 	}
 	std::cout << "ASSIGN " << std::endl;
 	for (unsigned int c = 0; c < (*customers).size(); ++c) {
@@ -214,9 +214,9 @@ Point Partition::centroid(Pointset& points) const {
 	}
 	double x = 0.;
 	double y = 0.;
-	for (auto p : points) {
-		x += p.X;
-		y += p.Y;
+	for (auto point : points) {
+		x += point.x();
+		y += point.y();
 	}
 
 	x /= points.size();
@@ -337,10 +337,10 @@ bool Partition::capacity_check_and_clone(unsigned int limit) {
 	auto max = std::max_element(partition_size.begin(), partition_size.end());
 	if (*max > limit) {
 		Point& to_duplicate = sites[std::distance(partition_size.begin(), max)];
-		Point new_point = Point(to_duplicate.X, to_duplicate.Y);
+		Point new_point = Point(to_duplicate.x(), to_duplicate.y());
 
 		//move slightly to get nonempty voronoi region
-		new_point.X += 1;// std::nextafter(new_point.X, new_point.X + 42);
+		new_point.move_x(1);// std::nextafter(new_point.X, new_point.X + 42);
 		Pointset newsites = sites;
 		newsites.push_back(new_point);
 		setSites(newsites);

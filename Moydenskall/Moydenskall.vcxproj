@@ -154,7 +154,6 @@
     <ClCompile Include="Partition.cpp" />
     <ClCompile Include="KMeans.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Point.cpp" />
     <ClCompile Include="Seeder.cpp" />
   </ItemGroup>
   <ItemGroup>

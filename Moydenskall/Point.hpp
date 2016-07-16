@@ -3,13 +3,15 @@
 #include <iostream>
 class Point {
 public:
-	Point(double x, double y) : X(x), Y(y) {};
-	inline bool operator==(const Point & rhs) {
-		return(X == rhs.X && Y == rhs.Y);
-	};
-	double X;
-	double Y;
-	friend std::ostream& operator<<(std::ostream&, const Point&);
+	Point(double _x, double _y) : x_(_x), y_(_y) {};
+	double x() const { return x_; };
+	double y() const { return y_; };
+	void set_x(double x) { x_ = x; };
+	void set_y(double y) { y_ = y; };
+	void move_x(double x) { x_ += x; };
+	void move_y(double y) { y_ += y; };
+private:
+	double x_;
+	double y_;
 };
-
 #endif

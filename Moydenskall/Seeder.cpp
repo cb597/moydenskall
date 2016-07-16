@@ -53,9 +53,9 @@ Pointset Sample2Seeder::seed() const {
 
 	// get centroid of all customers...
 	double x = 0, y = 0.;
-	for (auto p : customers) {
-		x += p.X;
-		y += p.Y;
+	for (auto point : customers) {
+		x += point.x();
+		y += point.y();
 	}
 	x /= customers.size();
 	y /= customers.size();
