@@ -58,9 +58,11 @@ Partition KMeans::run_lloyd_all_k() {
 	//ESeeder eseed(instance, 5);
 
 	unsigned int startk = (unsigned int)std::ceil(instance.size() / instance.capacity_limit());
+	if(startk==0) ++startk;
 	unsigned int lg = (unsigned int)std::log(instance.size());
 	std::vector<Partition> results = std::vector<Partition>();
 	for (unsigned int k = startk; k <= lg + startk; ++k) {
+		instance.set_k(k);
 		ESeeder eseed = ESeeder(instance);
 		results.push_back(lloyds_algo(eseed, std::to_string(k)));
 	}

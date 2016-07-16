@@ -16,6 +16,7 @@ Instance::Instance(int argc, char * argv[]) {
 	capacity_limit_ = std::numeric_limits<unsigned int>::max();
 	time_measurement_ = false;
 	svg_output_ = false;
+	fixed_k_ = false;
 
 	if (argc >= 2 && argc % 2 == 0) {
 		instance_filename = argv[1];

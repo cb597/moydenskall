@@ -18,6 +18,7 @@ public:
 	bool fixed_k() const { return fixed_k_; }
 	double omega() const { return omega_; }
 	unsigned int k() const { return k_; }
+	void set_k(unsigned int k) { k_ = k; }
 	unsigned int size() const { return D_; }
 	double eps() const { return eps_; }
 private:
