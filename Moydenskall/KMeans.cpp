@@ -21,11 +21,11 @@ void KMeans::swamy(const Seeder& seeder) {
 	Pointset sites = seeder.seed();
 	Partition p = Partition(&customers, sites);
 	p.setSites(sites);
-	if (instance.svg_output) p.print_to_svg(seeder.toString() + "_init.svg");
+	if (instance.svg_output()) p.print_to_svg(seeder.toString() + "_init.svg");
 	// cluster customers within ball to one of the two sites
 	// and move sites to centroid of points within ball
 	p.ballkmeans();
-	if (instance.svg_output) p.print_to_svg(seeder.toString() + "_result.svg");
+	if (instance.svg_output()) p.print_to_svg(seeder.toString() + "_result.svg");
 }
 
 // seed and run lloyds algo until capacity limit is repected
@@ -35,15 +35,15 @@ Partition KMeans::lloyds_algo(const Seeder& seeder, std::string filenamesuffix) 
 
 	//seed
 	kmeansstep(p);
-	if (instance.svg_output) p.print_to_svg("lloyd_" + seeder.toString() + "_init.svg");
+	if (instance.svg_output()) p.print_to_svg("lloyd_" + seeder.toString() + "_init.svg");
 
 	// loop while largest partition violates capacity constraint
-	while (p.capacity_check_and_clone(instance.u)) {
+	while (p.capacity_check_and_clone(instance.capacity_limit())) {
 		kmeansstep(p);
 	}
 
 	//final output
-	if (instance.svg_output) p.print_to_svg("lloyd_" + seeder.toString() + "_final"+filenamesuffix+".svg");
+	if (instance.svg_output()) p.print_to_svg("lloyd_" + seeder.toString() + "_final"+filenamesuffix+".svg");
 	return p;
 }
 
@@ -57,8 +57,8 @@ Partition KMeans::run_lloyd_all_k() {
 	//DSeeder dseed(instance, 10);
 	//ESeeder eseed(instance, 5);
 
-	unsigned int startk = (unsigned int)std::ceil(instance.D / instance.u);
-	unsigned int lg = (unsigned int)std::log(instance.D);
+	unsigned int startk = (unsigned int)std::ceil(instance.size() / instance.capacity_limit());
+	unsigned int lg = (unsigned int)std::log(instance.size());
 	std::vector<Partition> results = std::vector<Partition>();
 	for (unsigned int k = startk; k <= lg + startk; ++k) {
 		ESeeder eseed = ESeeder(instance);
@@ -69,7 +69,7 @@ Partition KMeans::run_lloyd_all_k() {
 	unsigned int best_id = 0;
 	double val = std::numeric_limits<double>::max();
 	for (unsigned int i = 0; i < results.size(); ++i) {
-		if (results[i].evaluation(instance.f) < val) {
+		if (results[i].evaluation(instance.fixed_costs()) < val) {
 			best_id = i;
 		}
 	}
@@ -82,15 +82,15 @@ void KMeans::kmeansstep(Partition& p) {
 
 void KMeans::seed_and_run(const Seeder& seeder) {
 	Partition p = Partition(&customers, seeder.seed());
-	if (instance.svg_output) p.print_to_svg(seeder.toString()+"init.svg");
+	if (instance.svg_output()) p.print_to_svg(seeder.toString()+"init.svg");
 	run_kmeans(p, 5);
-	if (instance.svg_output) p.print_to_svg(seeder.toString() + "result.svg");
+	if (instance.svg_output()) p.print_to_svg(seeder.toString() + "result.svg");
 	p.print_to_console(instance);
 }
 
 void KMeans::run_kmeans(Partition& p, unsigned int steps) {
 	for (unsigned int i = 0; i < steps; ++i) {
 		kmeansstep(p);
-		if (instance.svg_output) p.print_to_svg(std::to_string(i).append(".svg"));
+		if (instance.svg_output()) p.print_to_svg(std::to_string(i).append(".svg"));
 	}
 }

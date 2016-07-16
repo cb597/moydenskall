@@ -198,7 +198,7 @@ void Partition::print_to_svg(std::string filename) {
 }
 
 void Partition::print_to_console(const Instance& instance) {
-	std::cout << "OBJECTIVE " << evaluation(instance.f) << std::endl;
+	std::cout << "OBJECTIVE " << evaluation(instance.fixed_costs()) << std::endl;
 	for (unsigned int s = 0; s < sites.size(); ++s) {
 		std::cout << "FACILITY " << s << " " << sites[s].x() << " " << sites[s].y() << std::endl;
 	}

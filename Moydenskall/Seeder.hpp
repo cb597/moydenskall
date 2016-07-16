@@ -12,7 +12,7 @@
 // abstract class for seeding strategies
 class Seeder {
 public:
-	Seeder(Instance& _instance) : instance(_instance), customers(instance.customers), k(instance.k) {};
+	Seeder(Instance& _instance) : instance(_instance), customers(instance.customers), k(instance.k()) {};
 	virtual Pointset seed() const = 0;
 	virtual std::string toString() const = 0;
 protected:

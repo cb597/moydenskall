@@ -208,5 +208,5 @@ Pointset ESeeder::seed() const {
 	SampleKSeeder swamyk(instance);
 	Pointset p = swamyk.seed();
 	Partition part = Partition(&customers, p);
-	return part.centroid_estimation(p, instance.omega, instance.eps);
+	return part.centroid_estimation(p, instance.omega(), instance.eps());
 }

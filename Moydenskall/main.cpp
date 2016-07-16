@@ -15,11 +15,11 @@ int main(int argc, char* argv[]) {
 	Instance instance = Instance(argc, argv);
 	KMeans lloyd(instance);
 
-	if (instance.time_measurement) {
+	if (instance.time_measurement()) {
 		auto start = std::chrono::system_clock::now();
 		Partition p;
-		if (instance.fixed_k)
-			p = lloyd.lloyds_algo(ESeeder(instance), "_singleRun_"+std::to_string(instance.k));
+		if (instance.fixed_k())
+			p = lloyd.lloyds_algo(ESeeder(instance), "_singleRun_"+std::to_string(instance.k()));
 		else
 			p = lloyd.run_lloyd_all_k();
 
@@ -30,8 +30,8 @@ int main(int argc, char* argv[]) {
 	}
 	else {
 		Partition p;
-		if (instance.fixed_k)
-			p = lloyd.lloyds_algo(ESeeder(instance), "_singleRun_" + std::to_string(instance.k));
+		if (instance.fixed_k())
+			p = lloyd.lloyds_algo(ESeeder(instance), "_singleRun_" + std::to_string(instance.k()));
 		else
 			p = lloyd.run_lloyd_all_k();
 		p.print_to_console(instance);

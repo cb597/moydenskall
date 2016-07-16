@@ -9,19 +9,28 @@ class Instance {
 public:
 	Instance() {}
 	Instance(int argc, char* argv[]);
-	double f;
-	bool fixed_k;
-	unsigned int k;
 	std::string instance_filename;
-	unsigned int u;
-	unsigned int D;
-	bool time_measurement;
-	bool svg_output;
 	Pointset customers;
-	double omega;
-	double eps;
+	double fixed_costs() const { return fixed_costs_; }
+	unsigned int capacity_limit() const { return capacity_limit_; }
+	bool time_measurement() const { return time_measurement_; }
+	bool svg_output() const { return svg_output_; }
+	bool fixed_k() const { return fixed_k_; }
+	double omega() const { return omega_; }
+	unsigned int k() const { return k_; }
+	unsigned int size() const { return D_; }
+	double eps() const { return eps_; }
 private:
 	Pointset readfile(std::string filename); // read a file in tsp format
+	double fixed_costs_;
+	bool fixed_k_;
+	unsigned int k_;
+	unsigned int capacity_limit_;
+	unsigned int D_;
+	bool time_measurement_;
+	bool svg_output_;
+	double omega_;
+	double eps_;
 };
 
 #endif
