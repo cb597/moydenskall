@@ -150,18 +150,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Instance.cpp" />
-    <ClCompile Include="Partition.cpp" />
-    <ClCompile Include="KMeans.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Seeder.cpp" />
+    <ClCompile Include="instance.cc" />
+    <ClCompile Include="partition.cc" />
+    <ClCompile Include="kmeans.cc" />
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="seeder.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Instance.hpp" />
-    <ClInclude Include="kmeans.hpp" />
-    <ClInclude Include="Partition.hpp" />
-    <ClInclude Include="Point.hpp" />
-    <ClInclude Include="Seeder.hpp" />
+    <ClInclude Include="instance.h" />
+    <ClInclude Include="kmeans.h" />
+    <ClInclude Include="partition.h" />
+    <ClInclude Include="point.h" />
+    <ClInclude Include="seeder.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="inst1.tsp" />

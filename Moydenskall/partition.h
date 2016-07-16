@@ -2,8 +2,8 @@
 #define PART_HPP
 #include <tuple>
 #include <vector>
-#include "Point.hpp"
-#include "Instance.hpp"
+#include "point.h"
+#include "instance.h"
 using Pointset = std::vector<Point>;
 
 double eucl2dist(Point a, Point b);

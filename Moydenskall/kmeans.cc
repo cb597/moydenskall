@@ -1,13 +1,13 @@
-#include "kmeans.hpp"
+#include "kmeans.h"
 #include <limits>
 #include <algorithm>
 #include <ctime>        // std::time
 #include <cstdlib>      // std::rand, std::srand
 #include <string>
 #include <random>
-#include "Seeder.hpp"
-#include "Partition.hpp"
-#include "Instance.hpp"
+#include "seeder.h"
+#include "partition.h"
+#include "instance.h"
 #include <tuple>
 #include <math.h>
 

@@ -1,7 +1,7 @@
 #ifndef SEEDER_HPP
 #define SEEDER_HPP
-#include "Partition.hpp"
-#include "Instance.hpp"
+#include "partition.h"
+#include "instance.h"
 #include <limits>
 #include <algorithm>
 #include <ctime>        // std::time

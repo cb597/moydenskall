@@ -1,10 +1,10 @@
 #ifndef KMEANS_HPP
 #define KMEANS_HPP
 #include <vector>
-#include "Point.hpp"
-#include "Seeder.hpp"
-#include "Partition.hpp"
-#include "Instance.hpp"
+#include "point.h"
+#include "seeder.h"
+#include "partition.h"
+#include "instance.h"
 
 class KMeans {
 public:

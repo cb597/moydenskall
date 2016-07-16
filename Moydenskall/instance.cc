@@ -1,4 +1,4 @@
-#include "Instance.hpp"
+#include "instance.h"
 #include <iostream>
 #include <string>
 #include <limits>

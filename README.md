@@ -14,13 +14,13 @@ developed and tested with Microsoft Visual C++ Compiler
 tested with g++ and clang++3.5 (Ubuntu 14.04)
 
 compile command for linux systems:  
-`g++ ./*.cpp ./*.hpp -o moydenskall -O3 -std=c++11`
+`g++ ./*.cc ./*.h -o moydenskall -std=c++11`
 
-`clang++-3.5 ./*.cpp ./*.hpp -std=c++11 -O3`
+`clang++-3.5 ./*.cc ./*.h -std=c++11`
 
 ###Execution and command line parameter
 sample execution for both linux and windows systems:  
-`./moydenskall instance.tsp -f 50 -u 5`
+`./moydenskall instances/instance.tsp -f 50 -u 5`
 
 #### Synopsis
 `./programname <filename> [options]`
@@ -38,12 +38,12 @@ filename is an instance in the tsplib format
 * Valgrind: `All heap blocks were freed -- no leaks are possible`
 
 ## Source Overview
-* `main.cpp` starting point of the application  
-* `Instance.cpp` represents an instance of a kmeans problem. Usually initialised by file in tsp format and other CLI parameters
-* `Point.cpp` representation of points (x,y coordinates, ID)
-* `Partition.cpp` represents a map of customers to sites and contains many functions to create such a map and provide useful data on this map
-* `Seeder.cpp` abstract class and several derived classes of possible seeding strategies for a kmeans algorithm
-* `KMeans.cpp` makes use of instance parameters and seeder objects to run kmeans
+* `main.cc` starting point of the application  
+* `Instance.cc` represents an instance of a kmeans problem. Usually initialised by file in tsp format and other CLI parameters
+* `Point.cc` representation of points (x,y coordinates, ID)
+* `Partition.cc` represents a map of customers to sites and contains many functions to create such a map and provide useful data on this map
+* `Seeder.cc` abstract class and several derived classes of possible seeding strategies for a kmeans algorithm
+* `KMeans.cc` makes use of instance parameters and seeder objects to run kmeans
 
 
 

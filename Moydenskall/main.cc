@@ -1,11 +1,8 @@
-#include <vector>
-#include "Point.hpp"
-#include <time.h>
 #include <iostream>
 #include <string>
-#include "Seeder.hpp"
-#include "kmeans.hpp"
-#include "Instance.hpp"
+#include "seeder.h"
+#include "kmeans.h"
+#include "instance.h"
 #include <limits>
 #include <math.h>
 #include <chrono>

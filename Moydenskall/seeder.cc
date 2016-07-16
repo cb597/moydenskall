@@ -1,14 +1,14 @@
-#include "kmeans.hpp"
+#include "kmeans.h"
 #include <limits>
 #include <algorithm>
 #include <ctime>        // std::time
 #include <cstdlib>      // std::rand, std::srand
 #include <string>
 #include <random>
-#include "Seeder.hpp"
+#include "seeder.h"
 #include <tuple>
 #include <numeric>
-#include "Partition.hpp"
+#include "partition.h"
 
 // give a random double in [0,1] according to what current OS can do
 double drand() {

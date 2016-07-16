@@ -2,7 +2,7 @@
 #define INSTANCE_HPP
 #include <string>
 #include <vector>
-#include "Point.hpp"
+#include "point.h"
 using Pointset = std::vector<Point>;
 
 class Instance {

@@ -15,36 +15,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="instance.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="KMeans.cpp">
+    <ClCompile Include="kmeans.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Seeder.cpp">
+    <ClCompile Include="main.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Partition.cpp">
+    <ClCompile Include="partition.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Instance.cpp">
+    <ClCompile Include="seeder.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Point.hpp">
+    <ClInclude Include="instance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="kmeans.hpp">
+    <ClInclude Include="kmeans.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Seeder.hpp">
+    <ClInclude Include="partition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Partition.hpp">
+    <ClInclude Include="point.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Instance.hpp">
+    <ClInclude Include="seeder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
