@@ -21,6 +21,7 @@ public:
 	void set_k(unsigned int k) { k_ = k; }
 	unsigned int size() const { return D_; }
 	double eps() const { return eps_; }
+	double seeder() const { return seeder_; }
 private:
 	Pointset readfile(std::string filename); // read a file in tsp format
 	double fixed_costs_;
@@ -32,6 +33,7 @@ private:
 	bool svg_output_;
 	double omega_;
 	double eps_;
+	unsigned int seeder_;
 };
 
 #endif

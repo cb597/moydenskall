@@ -17,6 +17,7 @@ Instance::Instance(int argc, char * argv[]) {
 	time_measurement_ = false;
 	svg_output_ = false;
 	fixed_k_ = false;
+	seeder_ = 5;
 
 	if (argc >= 2 && argc % 2 == 0) {
 		instance_filename = argv[1];
@@ -41,6 +42,9 @@ Instance::Instance(int argc, char * argv[]) {
 		}
 		else if (std::string(argv[i]) == "-w") {
 			omega_ = std::stod(argv[i + 1]); //omega value
+		}
+		else if (std::string(argv[i]) == "-seeder") {
+			seeder_ = std::stoi(argv[i + 1]); //omega value
 		}
 		else if (std::string(argv[i]) == "-k") {
 			k_ = std::stoi(argv[i + 1]);

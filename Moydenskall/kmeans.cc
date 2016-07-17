@@ -48,6 +48,9 @@ Partition KMeans::lloyds_algo(const Seeder& seeder, std::string filenamesuffix) 
 }
 
 Partition KMeans::run_lloyd_all_k() {
+
+	Seeder* seeder;
+
 	//Sample2Seeder swamy2(instance);
 	//SampleKSeeder swamyk(instance, 5);
 	//StaticSeeder stat5(instance, 5);
@@ -63,8 +66,29 @@ Partition KMeans::run_lloyd_all_k() {
 	std::vector<Partition> results = std::vector<Partition>();
 	for (unsigned int k = startk; k <= lg + startk; ++k) {
 		instance.set_k(k);
-		ESeeder eseed = ESeeder(instance);
-		results.push_back(lloyds_algo(eseed, std::to_string(k)));
+
+		if(instance.seeder()==1){
+			GreedyDelSeeder gredel = GreedyDelSeeder(instance);
+			seeder = &gredel;
+		}
+		else if(instance.seeder()==2){
+			DSeeder dseed = DSeeder(instance);
+			seeder = &dseed;
+		}
+		else if(instance.seeder()==3){
+			ESeeder eseed = ESeeder(instance);
+			seeder = &eseed;
+		}
+		else if(instance.seeder()==4){
+			LTSeeder ltseed = LTSeeder(instance);
+			seeder = &ltseed;
+		}
+		else if(instance.seeder()==5){
+			ESeeder eseed = ESeeder(instance);
+			seeder = &eseed;
+		}
+		
+		results.push_back(lloyds_algo((*seeder), std::to_string(k)));
 	}
 
 	//get best result
