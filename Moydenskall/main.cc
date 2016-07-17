@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 		auto start = std::chrono::system_clock::now();
 		Partition p;
 		if (instance.fixed_k()){
-			p = lloyd.lloyds_algo(ESeeder(instance), "_singleRun_"+std::to_string(instance.k()));
+			p = lloyd.lloyds_algo("_singleRun_"+std::to_string(instance.k()));
 		}
 		else{
 			p = lloyd.run_lloyd_all_k();
@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 	else {
 		Partition p;
 		if (instance.fixed_k())
-			p = lloyd.lloyds_algo(ESeeder(instance), "_singleRun_" + std::to_string(instance.k()));
+			p = lloyd.lloyds_algo("_singleRun_" + std::to_string(instance.k()));
 		else
 			p = lloyd.run_lloyd_all_k();
 		p.print_to_console(instance);

@@ -9,15 +9,17 @@
 class KMeans {
 public:
 	KMeans(Instance&);
-	void seed_and_run(const Seeder&);
+	void seed_and_run();
 	void run_kmeans(Partition&, unsigned int);
-	void swamy(const Seeder&);
-	Partition lloyds_algo(const Seeder& seeder, std::string filenamesuffix);
+	void swamy();
+	Partition lloyds_algo(std::string filenamesuffix);
 	Partition run_lloyd_all_k();
+	void setSeeder();
 private:
 	void kmeansstep(Partition&);
 	Pointset customers;
 	Instance instance;
+	Seeder seeder;
 };
 
 #endif
