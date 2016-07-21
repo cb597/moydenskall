@@ -68,6 +68,14 @@
     \end{enumerate}
   \end{frame}
   
+  \begin{frame}[fragile]
+\frametitle{A: Random Sampling}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.4]{SamplekSeeder_pbl395.PNG}
+	\caption{SVG-Output of SamplekSeeder on pbl395.tsp (k=6)}
+\end{figure}
+\end{frame}
   
   \begin{frame}[fragile]
     \frametitle{B: Greedy Deletion}
@@ -96,11 +104,8 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
   \begin{frame}
     \frametitle{B: Greedy Deletion}
     Running time: outer loop $(n-k)$ iterations $\Rightarrow O(n)$\\
-    \newline
     Partitioning: $O(n^2d)$\\
-    \newline
     No speed loss for second best\\
-    \newline
     $\Rightarrow$ together: $O(n^3d)$
   \end{frame}
 
@@ -112,12 +117,12 @@ Pointset GreedyDelSeeder::seed(Pointset init) const {
 Pointset LTSeeder::seed() const {
 
 	//C1
-	double e = 0.0123; //ToDo get real value
+	double e = instance.eps();
 	double p1 = sqrt(e);
 	int N = (int)(2 * k / (1 - 5 * p1) + 2 * log(2 / p1) / pow((1 - 5 * p1), 2));
 
-	SampleKSeeder swamykseeder(instance, N);
-	Pointset S = swamykseeder.seed();
+	SampleKSeeder samplekseeder(instance, N);
+	Pointset S = samplekseeder.seed();
 
 	//C2
 	Partition partition = Partition(&customers, S);
@@ -129,6 +134,22 @@ Pointset LTSeeder::seed() const {
 }
 \end{lstlisting}
 \end{frame}
+
+\begin{frame}[fragile]
+\frametitle{C: Linear time algorithm}
+$O(nkd +k^3d)$
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.2]{LTSeeder_complexity_in_n.png}
+	\caption{complexity in \#customers}
+\end{figure}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.2]{LTSeeder_complexity_in_k.png}
+	\caption{complexity in \#sites}
+\end{figure}
+\end{frame}
+
   
       \begin{frame}[fragile]
 
@@ -143,19 +164,79 @@ Pointset DSeeder::seed() const {
 }
 \end{lstlisting}
 \end{frame}
-  
-        \begin{frame}[fragile]
 
+\begin{frame}[fragile]
+\frametitle{D: Linear time algorithm}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.4]{DSeeder_pbl395.PNG}
+	\caption{SVG-Output of DSeeder on pbl395.tsp (k=6)}
+\end{figure}
+\end{frame}
+
+  
+\begin{frame}[fragile]
     \frametitle{E: Polynomial Time Approximation Scheme (PTAS)}
 \begin{lstlisting}[language=C++]
 Pointset ESeeder::seed() const {
-	SampleKSeeder swamyk(instance, k);
-	Pointset p = swamyk.seed();
-	Partition part = Partition(&customers, p);
-	return part.centroid_estimation(p, instance.omega, instance.eps);
+	SampleKSeeder samplek(instance, k);
+	Partition part = Partition(&customers, samplek.seed());
+	return part.centroid_estimation(instance.omega, instance.eps);
 }
 \end{lstlisting}
 \end{frame}
 
+
+\begin{frame}[fragile]
+\frametitle{centroid estimation}
+\begin{lstlisting}[language=C++]
+for s in sites:
+    select expanded Voronoi region V[s]
+    choose a random subset R[s] of V[s] of size 4/wb
+    foreach subset A of size 1/wb:
+        add centroid(A) to T[s]
+foreach set B in {{x1,...xk} : xi in T[i]}:
+    if error(B) < error (best) then best = B
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{PTAS analysis}
+Ostrovski et al:\\ 
+error at most $(1+\omega)*OPT$ with probability $\gamma^k$\\ 
+(for some constant $\gamma$)
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{E: PTAS}
+$O(2^{(\frac{4k}{\beta\omega})}n*d)$
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.2]{ESeeder_complexity_in_n.png}
+	\caption{complexity in \#customers}
+\end{figure}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.2]{ESeeder_complexity_in_k.png}
+	\caption{complexity in \#sites}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Comparison}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.1]{resultcompare.png}
+	\caption{error comparison}
+\end{figure}
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.1]{runtimecompare.png}
+	\caption{runtime comparison}
+\end{figure}
+\end{frame}
+
+
+  
 
 \end{document}

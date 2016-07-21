@@ -6,3 +6,11 @@ Moydenskall/Debug/Moydenskall.bsc
 Moydenskall/Debug/vc140.idb
 Moydenskall/moydenskall
 Moydenskall/.vscode/*
+presentation/presentation.aux
+*.nav
+*.out
+*.snm
+*.gz
+*.toc
+*.vrb
+*.enc
