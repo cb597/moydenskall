@@ -6,11 +6,16 @@
 #include <limits>
 #include <math.h>
 #include <chrono>
+#include <random>
 
 int main(int argc, char* argv[]) {
 
 	Instance instance = Instance(argc, argv);
 	KMeans lloyd(instance);
+	std::srand(time(NULL));
+
+
+
 
 	if (instance.time_measurement()) {
 		auto start = std::chrono::system_clock::now();

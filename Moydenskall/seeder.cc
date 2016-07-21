@@ -9,14 +9,17 @@
 #include <tuple>
 #include <numeric>
 #include "partition.h"
+#include <iostream>
 
 // give a random double in [0,1] according to what current OS can do
 double drand() {
 	double d = 0.;
 #ifdef _WIN32
-	d = (double)rand() / (double)RAND_MAX;
+	//d = (double)rand() / (double)RAND_MAX;
+	std::cout << "WIN32 Stuff";
 #else
 	d = drand48();
+	//std::cout << "LINUX Stuff";
 #endif
 	return d;
 }
@@ -35,7 +38,6 @@ Pointset StaticSeeder::seed() const {
 
 // select a random subset of the customers as init sites
 Pointset SubsetSeeder::seed() const {
-	std::srand(unsigned(std::time(NULL)));
 	std::vector<int> permutation;
 	for (unsigned int i = 0; i < customers.size(); permutation.push_back(i++));
 	std::random_shuffle(permutation.begin(), permutation.end());
@@ -49,7 +51,6 @@ Pointset SubsetSeeder::seed() const {
 
 
 Pointset Sample2Seeder::seed() const {
-	std::srand(unsigned(std::time(NULL)));
 
 	// get centroid of all customers...
 	double x = 0, y = 0.;
