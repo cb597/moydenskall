@@ -1,0 +1,13 @@
+SampleKSeeder
+u=30000
+f=0
+incl kmeans(8)
+22033 milliseconds
+9.42935e12 Objective
+
+SampleKSeeder
+u=30000
+f=0
+incl kmeans(8)
+needed 364273 milliseconds
+OBJECTIVE 9.22608e+12
