@@ -10,6 +10,8 @@
 #include "instance.h"
 #include <tuple>
 #include <math.h>
+#include <fstream>
+#include <chrono>
 
 KMeans::KMeans(Instance& _instance){
 	instance = _instance;
@@ -30,8 +32,17 @@ void KMeans::swamy(const Seeder& seeder) {
 
 // seed and run lloyds algo until capacity limit is repected
 Partition KMeans::lloyds_algo(const Seeder& seeder, std::string filenamesuffix) {
+
+
+	std::ofstream fout("analysis.txt", std::fstream::app);
+	auto start = std::chrono::system_clock::now();
 	
 	Partition p = Partition(&customers, seeder.seed());
+	kmeansstep(p);
+
+	auto end = std::chrono::system_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	fout << elapsed.count() << std::endl;
 
 	//seed
 	kmeansstep(p);
@@ -57,14 +68,17 @@ Partition KMeans::run_lloyd_all_k() {
 	//DSeeder dseed(instance, 10);
 	//ESeeder eseed(instance, 5);
 
+
 	unsigned int startk = (unsigned int)std::ceil(instance.size() / instance.capacity_limit());
 	if(startk==0) ++startk;
 	unsigned int lg = (unsigned int)std::log(instance.size());
 	std::vector<Partition> results = std::vector<Partition>();
 	for (unsigned int k = startk; k <= lg + startk; ++k) {
 		instance.set_k(k);
-		ESeeder eseed = ESeeder(instance);
+		LTSeeder eseed = LTSeeder(instance);
 		results.push_back(lloyds_algo(eseed, std::to_string(k)));
+
+
 	}
 
 	//get best result

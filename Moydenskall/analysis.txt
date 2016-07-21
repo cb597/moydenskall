@@ -1,0 +1,8 @@
+Customers SampleKSeeder	LTSeeder	DSeeder	ESeeder	Greedy
+14	0	0	0	0	0
+261	0	4	6	7	67
+3869	1	25	59	62	66893
+11041	2	67	67	74	
+41645	9	262	266	345	
+45242	4	268	275	313	
+
